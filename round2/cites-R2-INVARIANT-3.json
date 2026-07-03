@@ -1,0 +1,30 @@
+{
+  "in": {
+    "invariant-rust-solver-fallback-class": [
+      "avoid-deferred-fk0m-state-mixin-unification"
+    ],
+    "invariant-rustbv-clone-cheap": [
+      "gan1-memory-load-clone-not-hot"
+    ],
+    "invariant-state-metadata-dataclass": [
+      "avoid-deferred-fk0m-state-mixin-unification"
+    ],
+    "invariant-v5a5-lineage-mutex-shape": [
+      "invariant-doc-mirror-pattern-2026-06-01"
+    ]
+  },
+  "out": {
+    "invariant-rust-raise-option-names": [
+      "invariant-default-symbolic-mode-tracks"
+    ],
+    "invariant-rust-simgr-monkey-patch-guard": [
+      "strcpy-find-regression-root-cause"
+    ],
+    "invariant-rustbv-clone-cheap": [
+      "gan1-memory-load-clone-not-hot"
+    ],
+    "invariant-shellcode-binary-regions-test": [
+      "load-shellcode-blob-binary-none"
+    ]
+  }
+}

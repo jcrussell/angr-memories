@@ -1,0 +1,1 @@
+{"key": "pre-pinning-dangerous", "verdict": "forget", "reason": "Subsumed by constraint-export-no-pre-pin (mandatory-keep covers same rule).", "batch": "R2-CATCH-3"}

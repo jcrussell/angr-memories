@@ -1,0 +1,2 @@
+{"key": "invariant-rst-heading-underline-em-dash", "verdict": "forget", "reason": "Trivial unicode-width gotcha — Sphinx would warn, len() trick is basic. Caught once during docs edit.", "batch": "R2-INVARIANT-3"}
+{"key": "invariant-rust-solver-fallback-class", "verdict": "forget", "reason": "Class-existence note — 'use this class instead of inline closures'. Code-describes-itself; deferred bead avoid-deferred-fk0m... is the real anchor.", "batch": "R2-INVARIANT-3"}

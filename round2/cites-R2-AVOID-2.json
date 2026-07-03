@@ -1,0 +1,28 @@
+{
+  "in": {
+    "avoid-pre-pinning-recovered-symbols": [
+      "solver-fallback-architecture"
+    ],
+    "avoid-prepinning-export-constraints": [
+      "boundary-4scu-simmem-spike"
+    ],
+    "avoid-update-baseline-without-verification": [
+      "benchmark-fairlight-2026-05-18"
+    ],
+    "avoid-z3-parallel-enable": [
+      "iaol1-seed-pin-empirically-broken",
+      "parallel-exploration-recommendation"
+    ]
+  },
+  "out": {
+    "avoid-weakref-callbacks": [
+      "pyo3-pyclass-cycle-leak"
+    ],
+    "avoid-z3-solver-set-params-for-random-seed": [
+      "iaol1-seed-pin-empirically-broken"
+    ],
+    "avoid-z3-solver-translate-same-context": [
+      "z3-solver-translate-same-context-bug-z3-solver"
+    ]
+  }
+}

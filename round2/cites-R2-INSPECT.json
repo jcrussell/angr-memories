@@ -1,0 +1,11 @@
+{
+  "in": {
+    "inspect-enabled-clone-pitfall": [
+      "invariant-pycallbacks-mutable-fields"
+    ],
+    "inspect-mem-dispatch-surfaces": [
+      "uq4n4-mem-write-dispatch"
+    ]
+  },
+  "out": {}
+}

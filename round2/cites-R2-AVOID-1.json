@@ -1,0 +1,71 @@
+{
+  "in": {
+    "avoid-deferred-wqao-rust-manager-decomposition": [
+      "avoid-deferred-wqao1-disk-cache-save-extract",
+      "avoid-deferred-wqao2-disk-cache-load-extract",
+      "avoid-deferred-wqao4-init-pipeline-phases"
+    ],
+    "avoid-deferred-wqao1-disk-cache-save-extract": [
+      "avoid-deferred-wqao2-disk-cache-load-extract",
+      "avoid-deferred-wqao4-init-pipeline-phases"
+    ],
+    "avoid-fixing-only-one-native-dispatch-path": [
+      "avoid-deferred-4j5u-rustexploration-decomposition"
+    ],
+    "avoid-lazy-solver-fork": [
+      "avoid-lazy-fork-assume-no-impact"
+    ]
+  },
+  "out": {
+    "avoid-bd-remember-positional": [
+      "2j5v-counter-architecture"
+    ],
+    "avoid-bd-remember-without-key-flag": [
+      "bd-update-notes-overwrites"
+    ],
+    "avoid-deferred-4j5u-rustexploration-decomposition": [
+      "avoid-fixing-only-one-native-dispatch-path",
+      "invariant-no-return-deadend",
+      "invariant-stepping-decomposition"
+    ],
+    "avoid-deferred-fk0m-state-mixin-unification": [
+      "callstack-rebuild-pattern",
+      "disk-cache-register-filter",
+      "flareon5-post-exploration-constraints",
+      "invariant-callstack-sync-export-pipeline",
+      "invariant-rust-solver-fallback-class",
+      "invariant-state-metadata-dataclass"
+    ],
+    "avoid-deferred-wqao-rust-manager-decomposition": [
+      "deadend-drops-deferred-forks",
+      "disk-cache-register-filter",
+      "disk-cache-symbolic-guard",
+      "explore-predicate-loop-termination",
+      "invariant-disk-cache-key-axes",
+      "invariant-init-cache-lazy-regions-order",
+      "shared-solver-for-callbacks",
+      "symwrite-rustbv-to-claripy-bottleneck"
+    ],
+    "avoid-deferred-wqao1-disk-cache-save-extract": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "avoid-deferred-wqao2-disk-cache-load-extract": [
+      "avoid-deferred-wqao-rust-manager-decomposition",
+      "avoid-deferred-wqao1-disk-cache-save-extract"
+    ],
+    "avoid-deferred-wqao4-init-pipeline-phases": [
+      "avoid-deferred-wqao-rust-manager-decomposition",
+      "avoid-deferred-wqao1-disk-cache-save-extract"
+    ],
+    "avoid-dfs-coupling-for-shared-lineage": [
+      "v5a5-step-3a-predictor-2026-05-24",
+      "v5ht-landed-2026-05-24"
+    ],
+    "avoid-enabling-native-read": [
+      "invariant-3tek2-replay-ordering"
+    ],
+    "avoid-lazy-fork-assume-no-impact": [
+      "avoid-lazy-solver-fork"
+    ]
+  }
+}

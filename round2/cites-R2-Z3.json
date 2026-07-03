@@ -1,0 +1,19 @@
+{
+  "in": {
+    "z3-solver-translate-same-context-bug-z3-solver": [
+      "avoid-z3-solver-translate-same-context"
+    ],
+    "z3-spec-replay-test-template": [
+      "iop-avg-vs-hadd-distinction",
+      "vavg-rounding-impl-pattern",
+      "vpolynomial-mul-impl-pattern",
+      "vpw-pairwise-impl-pattern",
+      "z3-universality-parity-test-template"
+    ]
+  },
+  "out": {
+    "z3-universality-parity-test-template": [
+      "z3-spec-replay-test-template"
+    ]
+  }
+}

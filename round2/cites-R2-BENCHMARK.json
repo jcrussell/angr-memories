@@ -1,0 +1,37 @@
+{
+  "in": {
+    "benchmark-arc-concretize-cache": [
+      "sym-write-regression-bisect"
+    ],
+    "benchmark-bimodal-variance-rules": [
+      "rust-engine-claude-md-pointer",
+      "sokohashv2-two-bugs"
+    ],
+    "benchmark-fairlight-2026-05": [
+      "invariant-bimodal-variance-benchmarks"
+    ],
+    "benchmark-fairlight-2026-05-18": [
+      "invariant-bimodal-variance-benchmarks"
+    ],
+    "benchmark-phase41-symwrite": [
+      "sym-write-regression-bisect"
+    ],
+    "benchmark-regression-noise-floor": [
+      "kwpi2-baseline-drift-pre-existing"
+    ],
+    "benchmark-sokohashv2-2026-05-18": [
+      "invariant-bimodal-variance-benchmarks"
+    ]
+  },
+  "out": {
+    "benchmark-bimodal-variance-rules": [
+      "invariant-bimodal-variance-benchmarks"
+    ],
+    "benchmark-fairlight-2026-05-18": [
+      "avoid-update-baseline-without-verification"
+    ],
+    "benchmark-phase41-symwrite": [
+      "phase3-cache-residual-gap"
+    ]
+  }
+}

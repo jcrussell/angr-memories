@@ -1,0 +1,431 @@
+{
+  "2j5v-counter-architecture": [
+    "pdq8-counter-overhead-validated"
+  ],
+  "3uye-2-call-stack-empty-as-unconstrained-trigger": [
+    "3uye-stack-page-eager-materialization"
+  ],
+  "4pm1-root-cause": [
+    "invariant-set-register-symbolic-no-cache"
+  ],
+  "angr-9l1y-closed-2026-05-23": [
+    "sokohashv2-no-transcendental-hits-2026-05-23"
+  ],
+  "angr-b00q-aggregate-counters": [
+    "xtse.1-most-callback-types-never-fire"
+  ],
+  "angr-ed7j-doc-resolution": [
+    "avoid-silent-zero-raw-fallback",
+    "invariant-bimodal-variance-benchmarks",
+    "mma-howtouse-cache-clear-speedup",
+    "mma-howtouse-leak-source"
+  ],
+  "angr-hyiz-epic-closed": [
+    "angr-ed7j-doc-resolution"
+  ],
+  "angr-pfy4-resolution": [
+    "benchmark-unbreakable_1-2026-05-22"
+  ],
+  "autonomous-loop-queue-drained-2026-05-24": [
+    "avoid-stale-parking-beads"
+  ],
+  "avoid-491g-already-implemented": [
+    "benchmark-2026-05-05-sweep",
+    "mma-howtouse-leak-source"
+  ],
+  "avoid-bd-remember-key-only": [
+    "v5a5-slice-3b-landed"
+  ],
+  "avoid-bd-remember-positional": [
+    "2j5v-counter-architecture"
+  ],
+  "avoid-bd-remember-without-key-flag": [
+    "v5a5-bare-z3-push-depth-counter-design"
+  ],
+  "avoid-deferred-4j5u-rustexploration-decomposition": [
+    "avoid-fixing-only-one-native-dispatch-path",
+    "invariant-no-return-deadend",
+    "invariant-stepping-decomposition"
+  ],
+  "avoid-deferred-csd1-pythoncallbacks-trait-split": [
+    "avoid-silent-no-op-callback-fallbacks",
+    "deadend-drops-deferred-forks",
+    "shared-solver-for-callbacks",
+    "symwrite-rustbv-to-claripy-bottleneck"
+  ],
+  "avoid-deferred-fk0m-state-mixin-unification": [
+    "callstack-rebuild-pattern",
+    "disk-cache-register-filter",
+    "flareon5-post-exploration-constraints",
+    "invariant-callstack-sync-export-pipeline",
+    "invariant-rust-solver-fallback-class",
+    "invariant-state-metadata-dataclass"
+  ],
+  "avoid-deferred-v2cl-binop-trait": [
+    "avoid-deferred-qrhl-vex-trait-dispatcher"
+  ],
+  "avoid-deferred-wqao-rust-manager-decomposition": [
+    "deadend-drops-deferred-forks",
+    "disk-cache-register-filter",
+    "disk-cache-symbolic-guard",
+    "explore-predicate-loop-termination",
+    "invariant-disk-cache-key-axes",
+    "invariant-init-cache-lazy-regions-order",
+    "shared-solver-for-callbacks",
+    "symwrite-rustbv-to-claripy-bottleneck"
+  ],
+  "avoid-deferred-wqao1-disk-cache-save-extract": [
+    "avoid-deferred-wqao-rust-manager-decomposition"
+  ],
+  "avoid-deferred-wqao2-disk-cache-load-extract": [
+    "avoid-deferred-wqao-rust-manager-decomposition",
+    "avoid-deferred-wqao1-disk-cache-save-extract"
+  ],
+  "avoid-deferred-wqao4-init-pipeline-phases": [
+    "avoid-deferred-wqao-rust-manager-decomposition",
+    "avoid-deferred-wqao1-disk-cache-save-extract"
+  ],
+  "avoid-dfs-coupling-for-shared-lineage": [
+    "v5a5-step-3a-predictor-2026-05-24",
+    "v5ht-landed-2026-05-24"
+  ],
+  "avoid-enabling-native-read": [
+    "invariant-3tek2-replay-ordering"
+  ],
+  "avoid-lazy-fork-assume-no-impact": [
+    "avoid-lazy-solver-fork"
+  ],
+  "avoid-snapshot-ptr-dedup-py-vs-rustbv": [
+    "snapshot-solver-smtlib2-design"
+  ],
+  "avoid-stale-bug-bead-acceptance": [
+    "avoid-stale-perf-bead-acceptance"
+  ],
+  "avoid-step-outcome-trait-refactor": [
+    "invariant-step-error-not-thiserror"
+  ],
+  "avoid-trusting-stale-cache-clear-speedup": [
+    "mma-howtouse-cache-clear-speedup"
+  ],
+  "avoid-weakref-callbacks": [
+    "pyo3-pyclass-cycle-leak"
+  ],
+  "avoid-z3-solver-set-params-for-random-seed": [
+    "iaol1-seed-pin-empirically-broken"
+  ],
+  "avoid-z3-solver-translate-same-context": [
+    "z3-solver-translate-same-context-bug-z3-solver"
+  ],
+  "bench-add-constraint-dedup-distribution": [
+    "zdho-structural-duplicate-rate"
+  ],
+  "bench-cmu-binary-bomb-broken": [
+    "bench-cmu-binary-bomb-partial",
+    "rust-veritesting-silently-unsupported"
+  ],
+  "bench-simple-heap-overflow-blocked": [
+    "apre-root-cause"
+  ],
+  "bench-simprocedure-fallback-distribution": [
+    "bench-syscall-fallback-zero-coverage"
+  ],
+  "benchmark-2026-05-05-sweep": [
+    "fairlight-bottleneck",
+    "fairlight-bottleneck-2026-05"
+  ],
+  "benchmark-2026-05-17-regression": [
+    "benchmark-mma-howtouse-leak-fix"
+  ],
+  "benchmark-baseline-refresh-fresh-bench-calibration": [
+    "benchmark-baseline-refresh-tactic"
+  ],
+  "benchmark-bimodal-variance-rules": [
+    "invariant-bimodal-variance-benchmarks"
+  ],
+  "benchmark-fairlight-2026-05-18": [
+    "avoid-update-baseline-without-verification"
+  ],
+  "benchmark-flareon2015-2-baseline-drift": [
+    "gate-noise-floor-15pct"
+  ],
+  "benchmark-hackcon-reverse-fix-invalidated-2026-05-19": [
+    "benchmark-hackcon2016-2026-05-17-variance",
+    "hackcon-regression-root-cause-fced54a07",
+    "hackcon-z3-ast-structure"
+  ],
+  "benchmark-mma-howtouse-2026-05-18": [
+    "benchmark-mma-howtouse-2026-05-17-final"
+  ],
+  "benchmark-mma-howtouse-leak-fix": [
+    "mma-howtouse-cache-clear-speedup"
+  ],
+  "benchmark-new-examples-apr13": [
+    "codegate-constraint-divergence"
+  ],
+  "benchmark-phase41-symwrite": [
+    "phase3-cache-residual-gap"
+  ],
+  "benchmark-unbreakable-1-baseline-refresh": [
+    "benchmark-update-variance"
+  ],
+  "benchmark-unbreakable_1-2026-05-18": [
+    "benchmark-unbreakable_1-2026-05-22"
+  ],
+  "benchmark-unbreakable_1-2026-05-22": [
+    "benchmark-unbreakable_1-2026-05-18"
+  ],
+  "boundary-4scu-simmem-spike": [
+    "avoid-prepinning-export-constraints",
+    "invariant-3tek2-replay-ordering",
+    "rust-state-proxy-write-through"
+  ],
+  "build-z3-header-resolution": [
+    "venv-rebuild-cargo-direct-copy"
+  ],
+  "ci-gate-rust-feature-flags-pr": [
+    "invariant-ci-gate-hygiene"
+  ],
+  "clippy-allow-vs-fix-rule": [
+    "step-error-size-numbers"
+  ],
+  "concat-balanced-not-hot-path": [
+    "invariant-rustbv-clone-cheap"
+  ],
+  "dcas-irexpr-binop-addr-hi": [
+    "cas-llsc-recursion-limit"
+  ],
+  "dead-code-placeholder-verification-shortcut": [
+    "dead-code-bd-ticket-policy"
+  ],
+  "dead-fallback-deletion-pattern": [
+    "rust-write-through-supersedes-diff-push"
+  ],
+  "dead-vs-superseded-pattern": [
+    "dead-code-bd-ticket-policy"
+  ],
+  "decision-c3zm-rustposixstate-defer-2026-05-09": [
+    "avoid-enabling-native-read"
+  ],
+  "decision-v1-no-posix-dump-fd": [
+    "decision-v1-no-real-multiprocess",
+    "decision-v1-single-threaded"
+  ],
+  "decision-v1-no-real-multiprocess": [
+    "decision-v1-single-threaded"
+  ],
+  "decision-v1-single-threaded": [
+    "avoid-z3-parallel-enable"
+  ],
+  "docs-native-coverage-matrix": [
+    "bench-simprocedure-fallback-distribution",
+    "bench-syscall-fallback-zero-coverage"
+  ],
+  "fauxware-q7ij-root-cause": [
+    "fauxware-rust-empty-output",
+    "invariant-record-stdin-symbol-required"
+  ],
+  "fp-concrete-fast-path-complete": [
+    "fairlight-bottleneck",
+    "fairlight-bottleneck-2026-05"
+  ],
+  "fxhash-interpreter-cb-arc-maps": [
+    "invariant-fxhash-internal-keys"
+  ],
+  "gan1-memory-load-clone-not-hot": [
+    "invariant-rustbv-clone-cheap"
+  ],
+  "hackcon-pure-rust-slow": [
+    "hackcon-z3-ast-structure"
+  ],
+  "hackcon-regression-root-cause-fced54a07": [
+    "hackcon-z3-ast-structure"
+  ],
+  "iaol-z3-seed-gap": [
+    "avoid-z3-parallel-enable"
+  ],
+  "iaol1-seed-pin-empirically-broken": [
+    "avoid-z3-parallel-enable"
+  ],
+  "inspection-system": [
+    "invariant-rust-inspect-unsupported"
+  ],
+  "invariant-angr-ecosystem-deps-pin": [
+    "avoid-pip-install-deps",
+    "libz3-soname-mismatch-root-cause"
+  ],
+  "invariant-bimodal-variance-benchmarks": [
+    "benchmark-fairlight-2026-05",
+    "benchmark-fairlight-2026-05-18",
+    "benchmark-sokohashv2-2026-05-18"
+  ],
+  "invariant-cb-sync-constraints-deferred-path": [
+    "dgz6-tracker-removal"
+  ],
+  "invariant-defcamp-r100-pre-existing-drift": [
+    "defcamp-r100-bisect-result"
+  ],
+  "invariant-doc-mirror-callback-sync-2026-06-01": [
+    "invariant-doc-mirror-pattern-2026-06-01",
+    "invariant-doc-mirror-state-metadata-2026-06-01"
+  ],
+  "invariant-doc-mirror-pattern-2026-06-01": [
+    "avoid-dfs-coupling-for-shared-lineage",
+    "invariant-v5a5-lineage-mutex-shape"
+  ],
+  "invariant-exploration-mod-line-floor": [
+    "invariant-pyo3-single-pymethods-impl"
+  ],
+  "invariant-hk7k-design-options": [
+    "avoid-z3-solver-translate-same-context"
+  ],
+  "invariant-int-recip-est-fresh-symbolic": [
+    "invariant-recip-rsqrt-fresh-symbolic"
+  ],
+  "invariant-mips-n64-cc-2026-05-10": [
+    "invariant-mips-no-calling-convention"
+  ],
+  "invariant-multi-load-collapse": [
+    "invariant-mem-ite-depth-counter"
+  ],
+  "invariant-neon-unimplemented-not-panic": [
+    "invariant-neon-scaffolding-panic-not-fallback"
+  ],
+  "invariant-pending-writes-defer-then-flush": [
+    "lazy-memory-load-overlay-fails"
+  ],
+  "invariant-pycallbacks-mutable-fields": [
+    "inspect-enabled-clone-pitfall"
+  ],
+  "invariant-rust-raise-option-names": [
+    "invariant-default-symbolic-mode-tracks"
+  ],
+  "invariant-rust-simgr-monkey-patch-guard": [
+    "strcpy-find-regression-root-cause"
+  ],
+  "invariant-rustbv-clone-cheap": [
+    "gan1-memory-load-clone-not-hot"
+  ],
+  "invariant-shellcode-binary-regions-test": [
+    "load-shellcode-blob-binary-none"
+  ],
+  "iop-avg-vs-hadd-distinction": [
+    "z3-spec-replay-test-template"
+  ],
+  "j4hl-stats-key-count-snapshot": [
+    "j4hl-counter-dump-cli"
+  ],
+  "kwpi2-baseline-drift-pre-existing": [
+    "benchmark-regression-noise-floor"
+  ],
+  "l9h7-add-state-profile-2026-05-11": [
+    "add-state-init-breakdown-2026-05-11"
+  ],
+  "lazy-memory-sidecar-architecture": [
+    "invariant-mem-ite-depth-counter"
+  ],
+  "lineage-chase-final-verdict": [
+    "v5ht-threshold-justification-2026-05-25"
+  ],
+  "no-native-exit-simprocs": [
+    "invariant-no-return-deadend"
+  ],
+  "nt4q-proxy-writes-deferred": [
+    "avoid-state-copy-optimization"
+  ],
+  "parallel-exploration-recommendation": [
+    "avoid-z3-parallel-enable"
+  ],
+  "pending-writes-scaffold-inactive-not-the-path": [
+    "lazy-memory-load-overlay-fails"
+  ],
+  "pre-existing-dcas-test-failure": [
+    "invariant-ret-empty-callstack-test-fixture"
+  ],
+  "rst-heading-validation-no-sphinx": [
+    "invariant-rst-heading-underline-em-dash"
+  ],
+  "rust-engine-claude-md-pointer": [
+    "benchmark-bimodal-variance-rules",
+    "characterization-vs-fix-pattern",
+    "constraint-export-no-pre-pin",
+    "core-goal-design-philosophy",
+    "rust-proxy-architecture-decision",
+    "rust-python-boundary-audit"
+  ],
+  "rust-solver-unsat-semantics": [
+    "satisfiable-wrong-answer"
+  ],
+  "rust-write-through-supersedes-diff-push": [
+    "proxy-writes-design-verdict"
+  ],
+  "s35o-savings-bottleneck": [
+    "vec-ops-savings-bottleneck"
+  ],
+  "serde-json-byte-keyed-map-trap": [
+    "snapshot-rustsimstate-envelope-shape"
+  ],
+  "sokohashv2-two-bugs": [
+    "benchmark-bimodal-variance-rules"
+  ],
+  "solver-fallback-architecture": [
+    "avoid-pre-pinning-recovered-symbols",
+    "constraint-export-no-pre-pin",
+    "pre-pinning-dangerous"
+  ],
+  "strict-page-access-wiring": [
+    "invariant-mem-perm-check-points",
+    "invariant-nx-block-fetch"
+  ],
+  "sym-write-regression-bisect": [
+    "9maq-bisect-method",
+    "arc-concretize-cache",
+    "benchmark-arc-concretize-cache",
+    "benchmark-phase41-symwrite"
+  ],
+  "syscall-access-handler": [
+    "syscall-vs-procedure-dispatch"
+  ],
+  "syscalls-stub-fallback-parity": [
+    "syscall-stub-fresh-symbolic-pattern"
+  ],
+  "uq4n4-mem-write-dispatch": [
+    "inspect-mem-dispatch-surfaces"
+  ],
+  "v5a5-alt-a-lifo-hypothesis-confirmed": [
+    "v5a5-bare-z3-push-depth-counter-design"
+  ],
+  "v5a5-flavor-1-step-2-landed": [
+    "v5a5-bare-z3-push-depth-counter-design"
+  ],
+  "v5a5-iter5-confirmed-bfs-thrash-fundamental": [
+    "v5a5-bare-z3-push-depth-counter-design",
+    "v5a5-slice-4c.3-retry-failed-bfs-thrash-fundamental"
+  ],
+  "v5a5-step-2-canary-2026-05-24": [
+    "v5a5-slice-4c.3-retry-failed-bfs-thrash-fundamental"
+  ],
+  "vavg-rounding-impl-pattern": [
+    "z3-spec-replay-test-template"
+  ],
+  "vpolynomial-mul-impl-pattern": [
+    "z3-spec-replay-test-template"
+  ],
+  "vpw-pairwise-impl-pattern": [
+    "z3-spec-replay-test-template"
+  ],
+  "xfvf-spike-conclusion": [
+    "angr-pfy4-resolution",
+    "avoid-lazy-fork-assume-no-impact",
+    "benchmark-bimodal-variance-rules",
+    "invariant-hk7k-design-options"
+  ],
+  "z3-array-bindings-available-in-pinned-version": [
+    "invariant-lazy-mem-deferred-2026-05-09"
+  ],
+  "z3-lazy-fork-solver-discipline": [
+    "z3-solver-translate-same-context-bug-z3-solver"
+  ],
+  "z8xa-sync-regs-bottleneck": [
+    "register-sync-bottleneck"
+  ]
+}

@@ -1,0 +1,166 @@
+{"key": "05xj-symbolic-cc-architecture", "verdict": "keep", "reason": "architecture", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "2j5v-sample-counter-dump", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "2k64-ancestor-walk-fix", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "3tek-root-cause", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "3uye-stack-page-eager-materialization", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "414i-retry-three-attempts-clarifies-noise-vs-drift", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "4o7d-snapshot-orphan-bvs-dead", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "4pm1-root-cause", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "62li-large-or-regresses-flareon", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "9jly-snapshot-to-angr-audit", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "9maq-bisect-method", "verdict": "keep", "reason": "mandatory-keep", "batch": "B4-c1"}
+{"key": "aarch64-no-getelem-emit", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "add-constraint-raw-dedup-83pct-csaw", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "agents-md-copilot-twins", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "analyses-incompat-uniform-failure-mode", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "analyses-no-simgr-backward-slice-ddg-vfg", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-341r-audit-result", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-3gog-leak-check-landed", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-90of-stack-chk-fail-native", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-b00q-aggregate-counters", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-examples-dir-env", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-obrm-cb-counter-parity", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-rhe2-zero-fill-registers-matches-by-default", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "angr-syscall-mips-o32-table-divergence", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "angr-z3-simplify-stride-env", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "api-stability-policy-conventions", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "api-stability-snapshot-pattern", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "apply-loadg-truncation-bug", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "arch-microsoftx64-yagni-removal", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "arch-register-table-savings-bottleneck", "verdict": "keep", "reason": "architecture", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "arm-neon-pairwise-arities", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "arm64-asm-generic-gaps", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "audit-close-pattern-arch-coverage", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "audit-non-ffi-unsafe-blocks-2026-06-03", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "audit-panic-counts-before-claiming", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "audit-pyo3-send-sync-2026-06-01", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "audit-shadow-structures-2026-05-10", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "audit-strncmp-strncpy-unmapped-memory-error", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "audit-vex-engine-z3-cfg-gating", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-any-on-bytes-for-zero-check", "verdict": "keep", "reason": "explicit-rule", "batch": "B4-c1"}
+{"key": "avoid-arithmetic-cc-op-decoder", "verdict": "keep", "reason": "architecture", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "avoid-arm-rust-engine-mgr-run", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-bd-remember-positional", "verdict": "keep", "reason": "architecture", "batch": "B4-c1"}
+{"key": "avoid-cargo-fmt-whole-crate", "verdict": "keep", "reason": "architecture", "batch": "B4-c1"}
+{"key": "avoid-clippy-approx-constant", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-deep-ite-arm-grouping", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "avoid-deferred-csd1-pythoncallbacks-trait-split", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-deferred-qrhl-vex-trait-dispatcher", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-deferred-v2cl-binop-trait", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-enabling-native-read", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "avoid-inline-elf-base-addr-confusion", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-lazy-fork-assume-no-impact", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "avoid-monkeypatching-pyo3-classes", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-naive-max-merge-sync", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-pip-install-deps", "verdict": "keep", "reason": "mandatory-keep", "batch": "B4-c1"}
+{"key": "avoid-porting-full-simprocedure-body-without-checking-entry-vs-continuation", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-prepinning-export-constraints", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "avoid-proxy-test-addr-eq-source-state", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "avoid-record-stdin-symbol-mismatch", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-redundant-thrash-tests", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-rust-mgr-extra-pages-symbolic-skip", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "avoid-rust-mips-symbolic-accumulation-bench", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "avoid-set-of-simstateoptions", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-silent-cc-fallback", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-silent-fallback-masks-coverage-gaps", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-solver-bridge-protocol", "verdict": "keep", "reason": "substantial-design", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "avoid-state-regs-iter-in-init", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stdin-tracking-fix-for-codegate", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "avoid-step-outcome-trait-refactor", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-store-side-fix-for-wider-sym-drift", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "avoid-strict-2-cache-bound-without-overlay", "verdict": "keep", "reason": "explicit-rule", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-32ky", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-3tek", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-3uye", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-3zhl", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-8s4b", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-bkcs", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-hjs2", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-is4x", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-mmdh", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-ufez", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-uq4n.3", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-stuck-angr-vt0t", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-trait-over-macro-for-uniform-binops", "verdict": "keep", "reason": "architecture", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "avoid-trusting-stale-cache-clear-speedup", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-uniform-page-policy-rust-sync", "verdict": "keep", "reason": "cross-component", "promote_target": "docs/boundary.rst", "batch": "B4-c1"}
+{"key": "avoid-z3-sat-preprocess-tactic", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "avoid-z3-solver-set-params-for-random-seed", "verdict": "keep", "reason": "explicit-rule", "batch": "B4-c1"}
+{"key": "avoid-z3-tactic-cond-overhead", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "b58a-extra-pages-root-cause", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "bd-task-stale-description-check", "verdict": "keep", "reason": "architecture", "batch": "B4-c1"}
+{"key": "bench-add-constraint-dedup-distribution", "verdict": "keep", "reason": "substantial-design", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "bench-concretize-distribution", "verdict": "keep", "reason": "substantial-design", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "benchmark-2026-05-17-regression", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-9maq-fix-2026-05-17", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-aarch64-jzn8", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-arc-wrap-fork", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-arm-le-branch", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-ast-shrink-unmasks-z3-bimodal", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-baseline-refresh-2026-05-25", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-baseline-refresh-fresh-bench-calibration", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-fauxware-2026-05-11", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-fxhash-interpreter-cb", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-fxhash-register-heap", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "benchmark-gate-single-sample-noise", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-gate-state-2026-05-06", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-google2016-unbreakable-1-regression", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-hackcon-reverse-fix-invalidated-2026-05-19", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-hackcon2016-2026-05-17-variance", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-kol7-no-visible-change", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-md0m-baseline-fallback-counts", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-mips32-2xfz", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-mips64-le-branch", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-mma-howtouse-2026-05-17-final", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-mma-howtouse-2026-05-18", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-mma-howtouse-2026-05-20-b58a", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "benchmark-q7r0-symwrite-recovered", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-staleness-verification", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-stdio-shim-impact", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-sync-back-per-callback-2026-05-22", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-unbreakable_1-2026-05-05", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "benchmark-yrhh-native-libc-start-main", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "bisect-helper-pinned-runtime", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "block-cache-stats-counters", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "boundary-4scu-gate-install", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "boundary-4scu-simmem-spike", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "boundary-8dop2-gap-stubs", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "boundary-8oiw-gate-install", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "boundary-qj30-gate-install", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "boundary-rust-memory-ast-layout", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "boundary-t3mr-simproc-fork-via-rust", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "boundary-yk2g-export-callstack-proxy-gate", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "bs71-telemetry-readings", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "build-ite-callbacks-refactor-pattern", "verdict": "keep", "reason": "architecture", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "build-perf-spike-codegen-units", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "build-rebuild-fast-flag", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "bypass-simoption-classification", "verdict": "keep", "reason": "substantial-design", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "bzsc-mma-sync-phase-breakdown", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "callback-solver-install-explicit-contract", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "campaign-child-close-refresh-matrix", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "cargo-fmt-file-args-bug", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "cascmp-string-path-gap-root-cause", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "cc-blank-register-file-bug", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "ccall-fallback-symmetry-vex-vs-callback", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "ccall-sign-extend-helper-scope", "verdict": "keep", "reason": "architecture", "batch": "B4-c1"}
+{"key": "characterization-vs-fix-pattern", "verdict": "keep", "reason": "mandatory-keep", "batch": "B4-c1"}
+{"key": "ci-gate-bench-regression-medium", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "ci-gate-property-fuzzer-quick", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "ci-gate-rss-leak-smoke", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "ci-gate-rust-feature-flags-pr", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "claripy-bridge-bools-gap", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "claripy-irop-coverage-gaps", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "claripy_to_rustbv-supported-ops", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "claude-md-drift-refresh-recipe", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "clippy-allow-vs-fix-rule", "verdict": "keep", "reason": "rationale", "batch": "B4-c1"}
+{"key": "clippy-backlog-campaign-progress", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "clippy-collapsible-if-comments", "verdict": "keep", "reason": "architecture", "batch": "B4-c1"}
+{"key": "clippy-doc-lint-fix-patterns", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "clippy-too-many-arguments-decision", "verdict": "keep", "reason": "architecture", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "concat-balanced-not-hot-path", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "constraint-sync-single-pass-at-init", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "copy-semantics-decision-2zwy", "verdict": "keep", "reason": "substantial-design", "promote_target": "docs/design.rst", "batch": "B4-c1"}
+{"key": "cow-fork-scaling-2026-06-03", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "dcas-test-shellcode-and-alignment", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "dead-code-placeholder-verification-shortcut", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}
+{"key": "dead-export-changes", "verdict": "forget", "reason": "bead-closure-scrap", "batch": "B4-c1"}

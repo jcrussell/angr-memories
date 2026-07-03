@@ -1,0 +1,2 @@
+{"key": "deadend-drops-deferred-forks", "verdict": "forget", "reason": "Fixed-in-commit receipt; cited only by a refactor task.", "batch": "R2-CATCH-2"}
+{"key": "disk-cache-symbolic-guard", "verdict": "forget", "reason": "Body is literally the key string; corrupt/empty memory.", "batch": "R2-CATCH-2"}

@@ -1,0 +1,35 @@
+{
+  "in": {
+    "invariant-3tek2-replay-ordering": [
+      "boundary-4scu-simmem-spike"
+    ],
+    "invariant-bimodal-variance-benchmarks": [
+      "benchmark-bimodal-variance-rules"
+    ],
+    "invariant-callstack-sync-export-pipeline": [
+      "avoid-deferred-fk0m-state-mixin-unification"
+    ],
+    "invariant-default-symbolic-mode-tracks": [
+      "invariant-rust-raise-option-names"
+    ],
+    "invariant-disk-cache-key-axes": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "invariant-fxhash-internal-keys": [
+      "fxhash-interpreter-cb-arc-maps"
+    ],
+    "invariant-init-cache-lazy-regions-order": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ]
+  },
+  "out": {
+    "invariant-bimodal-variance-benchmarks": [
+      "benchmark-fairlight-2026-05",
+      "benchmark-fairlight-2026-05-18",
+      "benchmark-sokohashv2-2026-05-18"
+    ],
+    "invariant-doc-mirror-pattern-2026-06-01": [
+      "invariant-v5a5-lineage-mutex-shape"
+    ]
+  }
+}

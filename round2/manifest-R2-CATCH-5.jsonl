@@ -1,0 +1,63 @@
+{"key": "stack-page-concrete-load", "verdict": "keep", "reason": "Captures non-obvious anti-pattern (importing wide symbolic objects causes 2.5x regression) — actionable for future memory-sync work", "batch": "R2-CATCH-5"}
+{"key": "state-export-constraint-skip", "verdict": "forget", "reason": "Iteration receipt; the skip is documented in code and rust_proxy_writes_design.rst", "batch": "R2-CATCH-5"}
+{"key": "state-roots-every-fork", "verdict": "keep", "reason": "Durable invariant about fork sites; short and actionable", "batch": "R2-CATCH-5"}
+{"key": "stdio-feof-ferror-fputs-impl", "verdict": "forget", "reason": "Implementation receipt — details are in native/angr/src/procedures/stdio.rs; native_coverage_matrix covers the high-level status", "batch": "R2-CATCH-5"}
+{"key": "stdout-buffer-arch", "verdict": "forget", "reason": "Implementation detail discoverable in code via grep stdout_buffer", "batch": "R2-CATCH-5"}
+{"key": "step-error-size-numbers", "verdict": "keep", "reason": "Cited by clippy-allow-vs-fix-rule; captures non-obvious tradeoff (#[allow] vs Box) with empirical numbers", "batch": "R2-CATCH-5"}
+{"key": "strcpy-find-regression-root-cause", "verdict": "keep", "reason": "Cited by invariant-rust-simgr-monkey-patch-guard; rationale for the guard not obvious from code", "batch": "R2-CATCH-5"}
+{"key": "strict-page-access-wiring", "verdict": "forget", "reason": "Refactor receipt with commit hashes; wiring is straightforward to rediscover in code", "batch": "R2-CATCH-5"}
+{"key": "strtod-fp-return-xmm0", "verdict": "forget", "reason": "Implementation detail in native/angr/src/procedures/strtod.rs with explicit constant; rediscoverable", "batch": "R2-CATCH-5"}
+{"key": "strtoll-ilp32-fallback", "verdict": "forget", "reason": "Implementation comment belongs in code; gate behavior trivially visible at the source site", "batch": "R2-CATCH-5"}
+{"key": "sym-write-7s-bottleneck-is-275-z3-concretization", "verdict": "merge", "merged_into": "symwrite-eager-vs-lazy-memory", "reason": "Same root cause as symwrite-eager-vs-lazy-memory", "batch": "R2-CATCH-5"}
+{"key": "sym-write-regression-bisect", "verdict": "forget", "reason": "Bisect receipt for one specific regression; the methodology lives in 9maq-bisect-method", "batch": "R2-CATCH-5"}
+{"key": "symwrite-eager-vs-lazy-memory", "verdict": "keep", "reason": "Architectural insight on eager-vs-lazy memory model gap; explains a known slow benchmark in CLAUDE.md", "batch": "R2-CATCH-5"}
+{"key": "symwrite-rustbv-to-claripy-bottleneck", "verdict": "keep", "reason": "Cited by avoid-deferred-wqao-rust-manager-decomposition; captures non-obvious P11 fallback skip rationale", "batch": "R2-CATCH-5"}
+{"key": "sync-memory-pipeline-phases", "verdict": "keep", "reason": "11-phase pipeline overview useful for navigating rust_state_sync.py; not duplicated in docs", "batch": "R2-CATCH-5"}
+{"key": "sync-symbolic-page-concrete-overlay", "verdict": "forget", "reason": "Detailed change-log entry; the (a)/(b) logic is now in rust_state_sync.py", "batch": "R2-CATCH-5"}
+{"key": "syscalls-extract-concrete-arg-helper", "verdict": "forget", "reason": "Refactor receipt for a helper that is easily discoverable via grep", "batch": "R2-CATCH-5"}
+{"key": "terminal-state-stash-divergence", "verdict": "keep", "reason": "Subtle engine divergence (Rust uses deadended, Python uses unconstrained) — non-obvious for test authors", "batch": "R2-CATCH-5"}
+{"key": "test-count-grep-vs-pytest", "verdict": "forget", "reason": "CLAUDE.md already documents the grep-vs-pytest discrepancy with embedded commands", "batch": "R2-CATCH-5"}
+{"key": "test-isolation-class-property-monkeypatch", "verdict": "keep", "reason": "Subtle test pollution gotcha caught only once; future re-occurrence would waste debugging time", "batch": "R2-CATCH-5"}
+{"key": "test-monkeypatch-pyo3-readonly", "verdict": "keep", "reason": "PyO3 read-only attr gotcha with workaround — non-obvious test pattern", "batch": "R2-CATCH-5"}
+{"key": "test-pattern-python-procedure", "verdict": "forget", "reason": "Test pattern discoverable in test_rust_exploration.py::_setup_amd64_python_proc_test", "batch": "R2-CATCH-5"}
+{"key": "thread-subclass-no-stop-name", "verdict": "forget", "reason": "Generic Python gotcha; one-off script issue, not angr-specific", "batch": "R2-CATCH-5"}
+{"key": "tkbr2-unmapped-vex-op-typed-error", "verdict": "forget", "reason": "Bead-scoped refactor receipt; the IROp::Unmapped variant lives in code", "batch": "R2-CATCH-5"}
+{"key": "tool-bimodal-variance-py-general-use", "verdict": "keep", "reason": "Tool usage note — not obvious from the script's --help; explicit recommendation to use BEFORE deciding bimodal vs regression", "batch": "R2-CATCH-5"}
+{"key": "tool-rebuild-rust-script", "verdict": "forget", "reason": "Duplicates CLAUDE.md 'Stale .so file' section verbatim", "batch": "R2-CATCH-5"}
+{"key": "toolarge-concretization-fix", "verdict": "forget", "reason": "Fix receipt with the SymbolicAddress error path now in code", "batch": "R2-CATCH-5"}
+{"key": "unsat-load-fallback-stash", "verdict": "keep", "reason": "Engine divergence with concrete test reference; non-obvious behavior under STRICT_PAGE_ACCESS", "batch": "R2-CATCH-5"}
+{"key": "unwrap-audit-result", "verdict": "forget", "reason": "Audit receipt with date; specifics decay quickly as code changes", "batch": "R2-CATCH-5"}
+{"key": "uq4n3-mem-read-dispatch", "verdict": "forget", "reason": "Bead-scoped implementation receipt; the helper+state_id plumbing is in code", "batch": "R2-CATCH-5"}
+{"key": "uq4n4-mem-write-dispatch", "verdict": "forget", "reason": "Bead-scoped implementation receipt; survey of mem-dispatch sites lives in linked inspect-mem-dispatch-surfaces", "batch": "R2-CATCH-5"}
+{"key": "v5ht-landed-2026-05-24", "verdict": "forget", "reason": "Bead-scoped iteration receipt for a shipped feature with commit hash", "batch": "R2-CATCH-5"}
+{"key": "v5ht-sampler-tick-bottleneck", "verdict": "keep", "reason": "Subtle gotcha on hook placement in run_loop; would be re-encountered by anyone adding another sampler", "batch": "R2-CATCH-5"}
+{"key": "value-rs-fp-helper-recurring-wrap-pattern", "verdict": "forget", "reason": "Speculative refactor candidate; not done, not blocking", "batch": "R2-CATCH-5"}
+{"key": "vavg-rounding-impl-pattern", "verdict": "forget", "reason": "Op implementation receipt; details live in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "vcnt-vclz-vcls-impl-pattern", "verdict": "forget", "reason": "Op implementation receipt; details live in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "vec-float-scalar-ssemax-ite", "verdict": "keep", "reason": "Non-obvious IEEE-754 vs SSE NaN semantics divergence — captures the ITE encoding rationale for future FP work", "batch": "R2-CATCH-5"}
+{"key": "vec-mul-lo-sign-extend-equiv", "verdict": "forget", "reason": "Local code-correctness justification; belongs in a code comment, not durable memory", "batch": "R2-CATCH-5"}
+{"key": "vec-ops-savings-bottleneck", "verdict": "keep", "reason": "Cited by s35o-savings-bottleneck; estimate-vs-actual lesson useful for sizing future refactor tasks", "batch": "R2-CATCH-5"}
+{"key": "vec-scalar-lane-pattern", "verdict": "forget", "reason": "Op implementation pattern discoverable by reading existing SSE scalar ops in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "venv-binaries-can-disappear", "verdict": "merge", "merged_into": "env-venv-corruption", "reason": "Same topic as mandatory-keep env-venv-corruption", "batch": "R2-CATCH-5"}
+{"key": "venv-no-pip-executable", "verdict": "forget", "reason": "CLAUDE.md bootstrap notes already recommend python -m pip; small note", "batch": "R2-CATCH-5"}
+{"key": "venv-script-syspath", "verdict": "forget", "reason": "Generic Python sys.path note; not durable architecture", "batch": "R2-CATCH-5"}
+{"key": "vex-atomic-ops-already-implemented", "verdict": "keep", "reason": "Saves future implementers from chasing non-existent Iop_CmpxChg/AtomicLoad/AtomicStore; points at Stmt:: dispatch instead", "batch": "R2-CATCH-5"}
+{"key": "vex-binop-family-split-2026-05", "verdict": "forget", "reason": "Refactor receipt with commit hash; the 6-helper structure is now self-evident in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "vex-engine-z3-integration-test-pattern", "verdict": "forget", "reason": "Test pattern; discoverable from existing integration tests under cfg(feature=vex-engine-z3)", "batch": "R2-CATCH-5"}
+{"key": "vex-irop-scope-verification", "verdict": "keep", "reason": "Verification step before scoping new VEX op work; cheap reminder that prevents wasted bead descriptions", "batch": "R2-CATCH-5"}
+{"key": "vex-op-coverage-matrix-maintenance", "verdict": "forget", "reason": "Doc-maintenance reminder; belongs as a comment in rust_vex_ops.rst itself", "batch": "R2-CATCH-5"}
+{"key": "vex-parse-opcode-10-subrouters", "verdict": "forget", "reason": "Doc count maintenance note; rust_vex_ops.rst is the source of truth", "batch": "R2-CATCH-5"}
+{"key": "vpolynomial-mul-impl-pattern", "verdict": "forget", "reason": "Op implementation receipt; details live in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "vpw-pairwise-impl-pattern", "verdict": "forget", "reason": "Op implementation receipt; details live in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "vqshl-sat-impl-pattern", "verdict": "forget", "reason": "Op implementation receipt; details live in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "vreverse-impl-pattern", "verdict": "forget", "reason": "Op implementation receipt; details live in vex/ops.rs and vex/opcode_map.rs", "batch": "R2-CATCH-5"}
+{"key": "vshift-parser-collision-rule", "verdict": "forget", "reason": "Specific parser routing detail; self-evident from reading parse_shift + parse_vector", "batch": "R2-CATCH-5"}
+{"key": "vshift-vec-impl-pattern", "verdict": "forget", "reason": "Op implementation receipt; details live in vex/ops.rs", "batch": "R2-CATCH-5"}
+{"key": "vt0t-2-categorization-stats", "verdict": "forget", "reason": "Bead-scoped categorization snapshot from one date; stats decay as code changes", "batch": "R2-CATCH-5"}
+{"key": "vt0t-3-categorization-stats", "verdict": "forget", "reason": "Bead-scoped categorization snapshot from one date; stats decay as code changes", "batch": "R2-CATCH-5"}
+{"key": "wide-load-endianness", "verdict": "keep", "reason": "Short, durable invariant about wide symbolic loads — non-obvious BVS identity gotcha", "batch": "R2-CATCH-5"}
+{"key": "x86g_use_seg_selector-impl", "verdict": "forget", "reason": "Implementation receipt with commit hash; lives in vex/ccall.rs", "batch": "R2-CATCH-5"}
+{"key": "xmllint-uses-rust-fuzzer-not-symex", "verdict": "keep", "reason": "Saves future time on a tempting bench addition that won't work without enabling fuzzer feature", "batch": "R2-CATCH-5"}
+{"key": "xtse.1-most-callback-types-never-fire", "verdict": "keep", "reason": "Concrete data on which callback paths are exercised by the corpus — guides future plugin-API decisions", "batch": "R2-CATCH-5"}
+{"key": "zdho-structural-duplicate-rate", "verdict": "keep", "reason": "Measurement data with bead-promotion rationale; informs hash-consing decisions", "batch": "R2-CATCH-5"}
+{"key": "venv-rebuild-cargo-direct-copy", "verdict": "keep", "reason": "Mandatory keep-list (CLAUDE.md)", "batch": "R2-CATCH-5"}

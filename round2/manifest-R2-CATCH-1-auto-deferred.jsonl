@@ -1,0 +1,2 @@
+{"key": "add-state-init-breakdown-2026-05-11", "verdict": "forget", "reason": "Specific timing breakdown from 2026-05-11 with bead context (angr-34w.30 closed); numbers drift and future profilers should re-measure rather than trust a stale snapshot.", "batch": "R2-CATCH-1"}
+{"key": "arc-concretize-cache", "verdict": "forget", "reason": "Implementation detail receipt; the Arc<ConcretizationResult> pattern is in interpreter_cb/mod.rs and self-documenting.", "batch": "R2-CATCH-1"}

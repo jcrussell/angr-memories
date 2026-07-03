@@ -1,0 +1,38 @@
+# Merge subordinates -> canonical anchors
+
+avoid-bd-remember-key-only -> avoid-bd-remember-without-key-flag  [round1] same footgun as avoid-bd-remember-without-key-flag; both cited v5a5 keys as witness examples — merge
+avoid-bd-remember-positional -> avoid-bd-remember-without-key-flag  [round2] Same footgun as avoid-bd-remember-without-key-flag (mandatory-keep); the without-key-flag version is
+avoid-cargo-fmt-cross-file-leak -> avoid-cargo-fmt-scope-creep  [round2] Three near-identical cargo-fmt memos (cross-file-leak, scope-creep, whole-crate) describe same works
+avoid-cargo-fmt-whole-crate -> avoid-cargo-fmt-scope-creep  [round2] Same workspace-wide reformat footgun.
+avoid-deferred-4j5u-rustexploration-decomposition -> avoid-deferred-wqao-rust-manager-decomposition  [round2] Same deferral template; subsumed by parent wqao deferral plus its own template references.
+avoid-deferred-wqao1-disk-cache-save-extract -> avoid-deferred-wqao-rust-manager-decomposition  [round2] Inherits parent verdict explicitly; redundant.
+avoid-deferred-wqao2-disk-cache-load-extract -> avoid-deferred-wqao-rust-manager-decomposition  [round2] Inherits parent verdict explicitly; redundant.
+avoid-deferred-wqao4-init-pipeline-phases -> avoid-deferred-wqao-rust-manager-decomposition  [round2] Inherits parent verdict explicitly; redundant.
+avoid-lazy-fork-assume-no-impact -> avoid-lazy-solver-fork  [round2] Confirms/extends avoid-lazy-solver-fork; both describe the same finding that callback paths invariab
+avoid-pre-pinning-recovered-symbols -> avoid-prepinning-export-constraints  [round2] Duplicate of avoid-prepinning-export-constraints; both cover the same don't-add-ast==BVV pattern ref
+bimodal-bench-ab-method -> benchmark-bimodal-variance-rules  [round2] Methodology for A/B-testing on bimodal benches is naturally part of the canonical bimodal-variance r
+invariant-perf-gains-can-widen-bimodal-variance -> benchmark-bimodal-variance-rules  [round2] Bimodal-bench reviewer rule duplicates mandatory-keep benchmark-bimodal-variance-rules. The specific
+solver-fallback-architecture -> constraint-export-no-pre-pin  [round2] Mostly subsumed by mandatory-keep anchor constraint-export-no-pre-pin (per CLAUDE.md table). Detaile
+venv-binaries-can-disappear -> env-venv-corruption  [round2] Same topic as mandatory-keep env-venv-corruption
+fairlight-bottleneck-2026-05 -> fairlight-bottleneck  [round2] Same finding, different date.
+fairlight-bottleneck-analysis -> fairlight-bottleneck  [round2] Same finding, different framing (regression).
+invariant-arch-register-offsets -> invariant-arch-register-tables  [round2] Subset of arch-register-tables; the canonical entry covers both the no-hand-coded-match rule and the
+invariant-cargo-pyo3-fork-tests -> invariant-fork-needs-python-init  [round2] Same root cause (cargo test --lib lacks Python interp); fork-needs-python-init is more general and l
+invariant-profile-rust-bench-script -> invariant-profile-rust-bench-list-vs-criterion  [round2] Subsumed by CLAUDE.md's profile_rust_bench.sh section which already documents strip/debug overrides,
+invariant-int-recip-est-fresh-symbolic -> invariant-recip-rsqrt-fresh-symbolic  [round2] Companion memory; both describe fresh-symbolic-per-lane policy for unsupported recip/rsqrt ops.
+invariant-rustbv-arc-operands-shared -> invariant-rustbv-clone-cheap  [round2] Arc<[RustBV]> sharing rationale is already in rustbv-clone-cheap (canonical for the inline-Arc layou
+invariant-vsetelem-bench-via-binop-with-rm -> invariant-vsetelem-non-rm-triop  [round2] Duplicate scope — both describe VSetElem as non-rm-bearing Triop dispatched via binop_with_rm
+invariant-proxy-readonly -> rust-proxy-architecture-decision  [round2] Read-only proxy contract is the core decision in the mandatory-keep rust-proxy-architecture-decision
+invariant-rust-engine-loud-failures -> rust-proxy-architecture-decision  [round2] Loud-vs-silent unsupported-feature rule is core to the proxy/engine architecture decision; same poli
+invariant-rust-proxy-symbolic-load-eval -> rust-proxy-architecture-decision  [round2] Single-solution-eval vs multi-solution-ITE proxy semantic is part of the proxy architecture contract
+invariant-rust-state-proxy-solver-add-fork-only -> rust-proxy-architecture-decision  [round2] Restates the read-only-proxy contract: proxy.solver.add lands on a fork, not the underlying state. P
+rust-state-proxy-write-through -> rust-state-proxy-capabilities  [round2] Subset of rust-state-proxy-capabilities — both describe the live mutable view write-through contract
+rust-write-through-supersedes-diff-push -> rust-state-proxy-capabilities  [round2] Same write-through architectural directive as rust-state-proxy-write-through; folded into the canoni
+shared-solver-architecture -> shared-solver-for-callbacks  [round2] Overlaps heavily with shared-solver-for-callbacks; both describe shared solver mechanism
+solver-tests-z3-context -> shared-z3-context-setup-required  [round2] Same rule as shared-z3-context-setup-required (test setup_class requirement)
+sokohashv2-fv81-root-cause -> sokohashv2-two-bugs  [round2] Single-bug detail subsumed by sokohashv2-two-bugs summary
+sokohashv2-rust-hash-divergence -> sokohashv2-two-bugs  [round2] Symptom diagnosis subsumed by sokohashv2-two-bugs
+sym-write-7s-bottleneck-is-275-z3-concretization -> symwrite-eager-vs-lazy-memory  [round2] Same root cause as symwrite-eager-vs-lazy-memory
+avoid-z3-solver-translate-same-context -> z3-solver-translate-same-context-bug-z3-solver  [round2] Thin wrapper around its citee; pure 'do not propose clone-based fork' restatement of the underlying 
+z3-roundtrip-test-pattern-for-rewrites -> z3-universality-test-patterns  [round2] Z3-roundtrip test pattern — merges with universality-parity and spec-replay templates into one canon
+z3-universality-vs-python-parity -> z3-universality-test-patterns  [round2] Python-parity variant of universality test — merge with spec-replay and roundtrip variants into sing

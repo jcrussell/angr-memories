@@ -1,0 +1,45 @@
+{
+  "in": {
+    "constraint-export-no-pre-pin": [
+      "avoid-prepinning-export-constraints",
+      "rust-engine-claude-md-pointer",
+      "solver-fallback-architecture"
+    ],
+    "core-goal-design-philosophy": [
+      "rust-engine-claude-md-pointer"
+    ],
+    "deadend-drops-deferred-forks": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "disk-cache-register-filter": [
+      "avoid-deferred-fk0m-state-mixin-unification",
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "disk-cache-symbolic-guard": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "explore-predicate-loop-termination": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "flareon5-post-exploration-constraints": [
+      "avoid-deferred-fk0m-state-mixin-unification"
+    ],
+    "gan1-memory-load-clone-not-hot": [
+      "invariant-rustbv-clone-cheap"
+    ]
+  },
+  "out": {
+    "dcas-irexpr-binop-addr-hi": [
+      "cas-llsc-recursion-limit"
+    ],
+    "dead-fallback-deletion-pattern": [
+      "rust-write-through-supersedes-diff-push"
+    ],
+    "fxhash-interpreter-cb-arc-maps": [
+      "invariant-fxhash-internal-keys"
+    ],
+    "gan1-memory-load-clone-not-hot": [
+      "invariant-rustbv-clone-cheap"
+    ]
+  }
+}

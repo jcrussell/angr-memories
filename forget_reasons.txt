@@ -1,0 +1,362 @@
+# Forget-reason histogram (top reasons by frequency)
+
+ 122  bead-closure-scrap
+  60  closed-only AND status-shape: iteration receipt for closed bead
+  58  Closed-bead fix description
+  56  Bead/commit closure note
+  52  status-shape
+  27  iteration receipt; closed bead angr-v5a5
+  23  Low-signal scrap
+  22  Stale dated snapshot (≤May 2026)
+  17  Pure benchmark snapshot, no design rule or gotcha
+  12  Location anchor or code pointer
+  11  Code location pointer
+  10  stale-file-ref
+   6  Implementation detail / closed-bead status note with no durable rule
+   6  Op implementation receipt; details live in vex/ops.rs
+   4  Empty stub (body equals key or blank)
+   3  iteration receipt; closed bead angr-3ms1
+   3  Stale temporal measurement
+   3  originally B4 forget; deferred for citation. Citers now gone.
+   3  originally B4-c3 forget; deferred for citation. Citers now gone.
+   3  dated bench snapshot; superseded by baseline_timings.json
+   2  Flakiness symptom without fix pattern
+   2  Test/benchmark status
+   2  originally B4-c2 forget; deferred for citation. Citers now gone.
+   2  future-date
+   2  Bead-scoped categorization snapshot from one date; stats decay as code changes
+   1  iteration receipt; closed beads angr-3ms1, angr-v5a5
+   1  superseded by v5a5-slice-4c.3-retry-failed-bfs-thrash-fundamental
+   1  single-bench measurement; superseded by v5a5-step-3a-predictor-2026-05-24 which compares ais3 vs baby-re in detail
+   1  empty stub (38 chars, body equals key)
+   1  hypothesis superseded by v5a5-alt-a-lifo-hypothesis-confirmed which has the measurement result
+   1  fully duplicated by CLAUDE.md 'Z3 dev headers' build-config section; CLAUDE.md is canonical
+   1  memory explicitly cites docs/advanced-topics/rust_engine.rst::v1.0 scope (lines 94-111) as canonical home
+   1  memory explicitly cites docs/advanced-topics/rust_engine.rst::v1.0 scope as canonical home
+   1  memory explicitly cites docs/advanced-topics/rust_engine.rst v1.0 scope (lines 113-131) as canonical home
+   1  use_rust_engine inheritance contract documented in docs/advanced-topics/rust_engine.rst (per-analysis verdict) and pinne
+   1  rename to native/angr/src/interpreter/ + VEXInterpreter reflected in CLAUDE.md 'Key Files' section; all linked beads clo
+   1  4-char stub (body equals 'view')
+   1  memory explicitly cites docs/extending-angr/rust_vex_ops.rst::'x87 transcendental ops' as canonical home
+   1  do-not-reopen note for closed bead angr-491g; the optimization is in concretize.rs as a default; the closure rationale i
+   1  fully duplicated by CLAUDE.md pyproject.toml dep-pin section (==9.2.209 rationale)
+   1  memory body explicitly says 'this memory is now historical context only — the gate should pass on defcamp_r100 going for
+   1  do-not-reopen note for closed angr-pufm hard-error sites; the closure is in commits 0c90d4962 + b1qq fix; live work trac
+   1  verification log for closed angr-agvl; the invariant is pinned by tests test_fork_constraint_bidirectional_isolation + t
+   1  historical sweep snapshot from 2026-05-05; baseline_timings.json is the authoritative source
+   1  Micro-snippet
+   1  Short content without durable signals
+   1  Feature flag status
+   1  Empty/stub memory (body equals key)
+   1  dated snapshot of arch matrix; CLAUDE.md 'Architecture Support Matrix' is the live canonical source per the memory's own
+   1  bug-fix anchor; the merge-roots-into-live invariant is now baked into the cleanup code (commit 7fe7baf79). Closed bead c
+   1  Malformed body
+   1  originally B9-c1 forget; deferred for citation. Citers now gone.
+   1  Opcode encoding reference table — derivable from the ARMv8 ARM manual in <5 min, or from git log on test_aarch64_explore
+   1  Trivial Rust compiler error (E0277) any contributor discovers in <1min; not a real invariant.
+   1  ARM opcode reference table — derivable from ARM ARM manual in minutes; encoding facts not forward-looking invariants. Lo
+   1  Narrow integration-test note conflating arch-promotion status with a specific test (test_arm32_explore_real_binary). The
+   1  Single-guard rule — RustSolverFallback.attach() already enforces it. Code is self-documenting at the call site.
+   1  Mirrors an existing pattern visible in the three named call sites; new contributors will see the pattern when grepping f
+   1  Implementation history (date + commit hash); the code is the answer — adding ARM tests would surface coverage automatica
+   1  Receipt for angr-ygpm cleanup (commit a9f5030f3 deleted dead mixin override); the code is the answer. The metadata-clear
+   1  Receipt for angr-713d adding SAFETY comments (commit 601769c5c, 2026-05-31). The 'add // SAFETY' rule is standard Rust p
+   1  bd-workflow receipt for closing a single bead (angr-a2br.1). Not architecture; not forward-looking for code contributors
+   1  Iteration receipt for angr-a2br.1.3 (dated 2026-06-01). The pattern lives in the rustdoc itself now; this is a process l
+   1  Iteration receipt for angr-a2br.1.4 (commit 3bfe94c44, 2026-06-01). The C1-C6 numbered block is in claripy_bridge.rs rus
+   1  Iteration receipt for angr-a2br.1.2 (dated 2026-06-01). Subsumed by the canonical invariant-doc-mirror-pattern-2026-06-0
+   1  Refactor receipt for angr-xhyp (commit 86ee3dfa8). The 'don't collapse back' rule is weak — the shape is enforced by the
+   1  Receipt-update memory listing applied sites in state.rs (2026-05-03). The rule 'prefer filter_map over unwrap at FFI bou
+   1  Implementation history of three macros with commit hashes (f278e1da9, 93e48d954, d0377abb9). The trait pattern is visibl
+   1  Narrow 'commit ca6f2de3a wired FSqrt' fix narrative; the code already encodes the dispatch — a future reader looks at op
+   1  Refactor receipt — one-time signature unification across modules; future signature changes follow compiler-driven matche
+   1  Research-spike receipt from 2026-05-21; recommendation already filed as angr-v5a5 — the decision lives in that bead.
+   1  Generic Rust pattern (labeled-break for instrument-once-on-return); any Rust dev can synthesize this in under a minute.
+   1  Trivial — .venv doesn't have ruff so use pre-commit; ModuleNotFoundError tells you immediately.
+   1  Standard Rust module-privacy fact (descendants see parent private items); any Rust dev hits this once and moves on.
+   1  Code-reorg receipt ('memory/tests.rs split into 4 subfiles on 2026-05-30'); the directory layout IS the answer.
+   1  Implementation narrative for Phase 1.4 wiring; reads as 'how we wired it' not a future-facing invariant. Code IS the ans
+   1  Implementation narrative for Phase 1.2 (right-fold collapse); the code in load.rs is the canonical version.
+   1  Implementation receipt for Phase 1.3 merge semantics; the helper IS the documentation.
+   1  Document already exists at native/angr/NAMING_CONVENTIONS.md; memory just points at it.
+   1  Strip receipt for P/GAP-prefixed comments; CLAUDE.md style rule covers this generally, no need for a separate memory.
+   1  Standard two's complement behavior; (~x+1) on N-bit rolls over — basic CS, not a hidden invariant.
+   1  Single test-fixture trick (using 8208-byte BV to span 3 pages); the test itself encodes the answer.
+   1  Refactor receipt — encodes glibc semantics already in code (NativeMemalign/NativePosixMemalign) plus reference to a stat
+   1  Investigation receipt — 'same fix pattern applies' with bead reference. If the bug is fixed it's stale; if not, the bead
+   1  Code describes itself: two fields with distinct purposes and named accessors. Reader trivially discovers from state.rs:6
+   1  Basic Rust visibility 101 — pub(super) vs pub(crate). Any contributor would discover from rustc errors in under a minute
+   1  Criterion --filter substring-matching is standard criterion behavior; gotcha discoverable from --list + one re-run. Enco
+   1  Refactor receipt — 'don't cleanup field access pattern as separate task'. Once-only deferral note, not durable guidance.
+   1  Basic Python __setattr__ pattern — any contributor hits infinite recursion in dev and finds the standard solution in <1 
+   1  Standard documented PyO3 behavior — AttributeError surfaces it in <1 min during test development.
+   1  Single test-pattern memo — 'replace whole _rust_mgr with SimpleNamespace'. Test file already has the pattern.
+   1  Operational tip about pytest OOM on 8GB — discoverable, and run_leak_check / -k filtering are well-documented in CLAUDE.
+   1  Code-describes-itself — the macro signature plus per-arch tables in syscalls/mod.rs make this self-evident to readers.
+   1  Test-fixture memo — save_unconstrained=True for ret-from-blank-state tests. Discoverable from existing tests + one debug
+   1  Standard documented Rust semantics since 1.45; tests already pin the behavior. Reader doesn't need a memory to confirm R
+   1  Basic Rust visibility rules — child modules see parent privates. Any decomposition refactor surfaces this from compiler 
+   1  Marked OBSOLETE in body — most ops have moved to Z3 FP. Only float_neg/abs remain concrete; the body is mostly a histori
+   1  Drift-class memo grouped with posix_brk/mmap_base; acceptable today, no rule. Stale-acceptable-today notes age out.
+   1  Trivial property-vs-method gotcha; TypeError surfaces it in seconds.
+   1  Test-fixture memo for native SimProc dispatch — pattern is in existing tests, discoverable by example.
+   1  Implementation detail of one proxy method; reader inspects rust_state_proxy.py directly.
+   1  Defensive-stub rationale for an essentially-unreachable path; not load-bearing for any future work.
+   1  Refactor history with criterion before/after numbers — code is in the current state; commit message captures the change.
+   1  debug_assert_eq! is in the code; rustc/test catches mismatches. Standard discipline once you read the function signature
+   1  Subsumed by invariant-pycallbacks-mutable-fields which kept Clone-derive desync rule canonical.
+   1  Single-bug fix narrative — 'set_detailed_history must trim too'. Once-fixed-in-code receipt.
+   1  Standard macro_rules! hygiene — $crate:: paths are documented Rust practice for cross-module macros.
+   1  Refactor-receipt detail tied to specific line numbers; future refactor will look at code anyway
+   1  Tells you where state_api.rs lives; grep/file structure makes this trivially discoverable
+   1  Just says where files live; trivially discoverable by grep
+   1  Implementation receipt for a single SimProc; the code IS the answer
+   1  Refactor receipt — describes a one-time change to delegate to Rust; current code is canonical
+   1  Documents API shape of a single function; signature + comments in code are sufficient
+   1  Implementation receipt of specific callback wiring at past commit; test code is canonical
+   1  Tells you that helpers exist with names; grep finds them faster
+   1  How-to for adding a row to a macro; the macro itself is self-explanatory once read
+   1  Clippy allow rationale — the allow attribute with comment in code is the canonical artifact
+   1  Iteration receipt: 'DONE 2026-05-08'. Superseded by invariant-syscall-outcome-symbolic
+   1  Narrow test-design tip with corrupted body (placeholders missing); single-test scope
+   1  Bug-fix receipt for angr-7vcx; code now uses symbolic_data dict and is canonical
+   1  Slice 1c implementation receipt with conditional 'if step 2 fails' branches; spike-scoped
+   1  How-to for using one Self::concat_le_elements helper; the helper signature is self-documenting
+   1  Justifies one design decision (concretize-to-taken) with reference to Python equivalent; code comment is sufficient
+   1  How-to for using two convenience macros; the macros are self-documenting when seen
+   1  Single VEX-op family detail; resize-to-elem-width is obvious from compile errors
+   1  Verification receipt — one test passes; signal is in the test, not the memory
+   1  Refactor receipt of angr-1yw9 cleanup — the decision (explicit table over arithmetic decoder) is documented in the code 
+   1  Narrow fix retrospective — atoi/strtol symbolic-prefix handling is now in code with tests; bug class won't recur silentl
+   1  Narrow script-usage note for collect_simproc_fallbacks.py — bench list is encoded in the script's default; running the s
+   1  Design-choice retrospective for angr-269l (sibling-collapse over Or-of-equalities) — the approach is now in code and obv
+   1  Cosmetic deferral (StateId/Address newtypes); pyapi.rs already deleted, bead stale. Future re-proposer will reread the b
+   1  Cosmetic refactor deferral with thin variant-overlap evidence; future reproposer would redo the same trivial audit.
+   1  Title says 'avoid enabling' but body documents they ARE enabled by default with cache-sync fix in place; misleading key.
+   1  Compiler error (no From<&String> for Arc<str>) surfaces in <1min; the fix (impl AsRef<str>) is obvious from error messag
+   1  Pre-existing clippy nit at a specific line, easy to grep/fix; will be resolved by the next clippy-clean push. Refactor r
+   1  Narrow test-writing tip discovered while writing one specific test (TestStashProxyAccessors); pattern would be obvious f
+   1  Memory body explicitly marks [FIXED 2026-05-14 by angr-g9hy commit ceba7816b]; the workaround is no longer required and 
+   1  Single-line refactor lesson with a clear AttributeError symptom that any contributor would diagnose in <1 minute from th
+   1  Trivial subprocess argv splitting bug; the lesson 'use *args for subprocess flags' is basic Python and any contributor w
+   1  Reads as a stale TODO/bottleneck note with line numbers from old exploration.rs; either fixed long ago or superseded by 
+   1  Narrow off-by-one pitfall guarded by an existing test (test_strdup_empty_string); the test itself prevents the regressio
+   1  Narrow test-helper pitfall discovered while debugging one specific test (test_strcmp_symbolic_byte_solver_evaluation_equ
+   1  Narrow test-writing pitfall (root cause uninvestigated); the failure pattern was removed and is unlikely to recur becaus
+   1  Speculative note about future Phase 3 of lazy-memory plan; no current consumer (no Array usage); recoverable by grep if 
+   1  Duplicates rust_z3_sharing.rst 'Why a single libz3.so is mandatory' / 'Thread-local Z3 context' sections — same Z3_trans
+   1  add_constraint_ast fast path is now documented in rust_z3_sharing.rst (z3_ast_build counter + raw-AST passthrough); comm
+   1  Audit receipt promoted to rust_engine.rst 'Solver incremental discipline' section; concrete counters from ais3_crackme a
+   1  Optimization landed (commit 44fdf6450). Counter (z3_branch_model_hit) and behavior covered in rust_z3_sharing.rst counte
+   1  Minor API discovery note (Solver::from_string + Display already exist). Recoverable by grep of native/z3-patched
+   1  Duplicates rust_z3_sharing.rst counter cheat-sheet (z3_site_<name>_count / time_ns enumeration of CheckSite variants)
+   1  Internal z3-rs 0.19 macro behavior note. Recoverable from impl_ast! source. Low forward value
+   1  Tiny naming gotcha (towards vs toward) — surfaces as compile error, easy to fix in minutes when encountered
+   1  Build-system note that the default 'just works' path uses pkg-config; CLAUDE.md Build Commands section + setup.py::_reso
+   1  Overlap with z3-ast-construction-c-api-z3-mk-bvadd (th_rewriter delegates to bv_rewriter). Keep the broader one; this is
+   1  Refactor receipt for angr-pkxv (deleted dead from_u64/from_u32 delegates); rule against re-introducing dead ctors is obv
+   1  Code-shape note about not duplicating pymethods accessors; the source file is the answer and pyo3 conventions cover this
+   1  Implementation receipt for angr-1rx1 decorator pattern; code in angr/exploration/_deprecation.py + test fixture is the a
+   1  Duplicates CLAUDE.md's 'User-facing documentation' section verbatim — pointer-only memory whose content is already in CL
+   1  Implementation receipt for angr-zcjx __version__ pattern; bump-version recipe is one line and the test contract document
+   1  Generic Rust 2024 edition / clippy tooling tip with no angr-specific durable value; rustfmt/clippy docs cover this.
+   1  Generic Rust macro_rules scoping rule (legacy textual scoping); not angr-specific durable insight, available in Rust ref
+   1  Implementation receipt for angr-gbk6 _simproc_dispatch_name helper; code in rust_callback_dispatch.py:18 + tests are sel
+   1  Trivially short (one-sentence) and the principle is fully covered by rust-proxy-architecture-decision and rust-state-pro
+   1  Implementation receipt for eval_with_fallback ordering + byte-level decomposition — code is the answer; superseded by co
+   1  Implementation receipt for angr-f16h.5 (commit 5dd503476) describing strrchr/strpbrk/strspn/strcspn shipping and their t
+   1  Time-stamped characterization sweep (2026-06-02); per-bench dedup counter data is snapshot-only. Conclusion was 'no code
+   1  Time-stamped iter-79 callback-profile receipt; conclusion 'don't expect shift on existing benches' is subsumed by bench-
+   1  Iteration receipt (8% improvement on fairlight). Per-exit timing snapshot is stale; Z3-dominates conclusion is in rust_b
+   1  Iteration receipt with commit hash (26a9a6676) for FxHasher swap on RegisterFile/HeapMetadata. Pattern guidance is captu
+   1  Time-stamped (2026-05-20, commit 47bf6284b) snapshot of mma_howtouse post-angr-b58a. Current speedup is in CLAUDE.md; me
+   1  Time-stamped (2026-05-02) baseline refresh snapshot of peak_memory_mb values. baseline_timings.json holds current values
+   1  Phase 4.3 iteration receipt (commit e5c594fe1) with per-bench timings. Snapshot data superseded by current baseline_timi
+   1  Time-stamped (2026-04-14) sym-write fix receipt with two specific commits. Historical snapshot — current sym-write state
+   1  Time-stamped sym-write regression-fix receipt (commit aaaa25779, 2026-05-05). Snapshot data; ccall handler is now in cod
+   1  Time-stamped baseline-refresh receipt (commit db6ea164d). Current values in baseline_timings.json; the systemic '8 other
+   1  Self-marked SUPERSEDED 2026-05-22 by benchmark-unbreakable_1-2026-05-22.
+   1  Time-stamped re-bimodalization receipt (HEAD 14187073d, 2026-05-22). Current bimodal status (unbreakable_1 in BIMODAL_BE
+   1  Time-stamped baseline-drift snapshot (2026-05-19 -> 2026-05-23). Baseline already refreshed at 868be2609; root-cause was
+   1  Time-stamped (2026-05-20) angr-yrhh receipt for native __libc_start_main. Mechanism (deadend via no_return=true) is now 
+   1  Iteration receipt for angr-lge2 widening; decision-history bullet in rust_engine.rst:2152-2162 already covers the Atomic
+   1  Iteration receipt for angr-4ai9 u8->u16 widening; rust_engine.rst:2124-2128 decision history covers this widening and th
+   1  Implementation-detail receipt for angr-4ai9 call/return wiring; rust_engine.rst:2124-2128 decision history names it and 
+   1  Iteration receipt for angr-d46u listing dispatch site line numbers (5-touchpoint pattern). rust_engine.rst:2101-2109 alr
+   1  Duplicates rust_engine.rst:1972+ Python-dispatch paragraph that documents BP_BEFORE mutations not honored, simprocedure_
+   1  Iteration receipt for angr-64pi tmp_read/tmp_write wiring (RdTmp/WrTmp arms). rust_engine.rst:2135-2141 decision history
+   1  Implementation receipt for commit d74cbcb21 (angr-aig2). Code is the answer; simprocedures.rst already documents fcntl/i
+   1  Implementation receipt with commit 4de707b75 (angr-poao). simprocedures.rst already lists lstat/newfstatat as native in 
+   1  Implementation receipt for angr-6gmc. simprocedures.rst documents legacy mmap/mmap2 inline above the Memory table. Code 
+   1  Reference data trivially recoverable from angr/procedures/definitions/linux_kernel.py. Memory itself instructs reader to
+   1  Implementation receipt commit b57f08b22 (angr-k3ol.4). simprocedures.rst lists stat as native in File path 11/11. conten
+   1  Refactor receipt commit a510ddaf2 (angr-j2ni). Code already in mod.rs at pub(crate) scope. Future-syscall guidance trivi
+   1  Specific to closed angr-9o4n task; the general 'grep before implementing' rule is basic and any contributor would discov
+   1  Dated point-in-time audit (HEAD d163efb67) with follow-on beads already filed (angr-ywu7/dtr0/pjio/sqte/rbcf). The CI wo
+   1  Iteration receipt: ralph iter 85 no-op streak triage on 2026-06-03. Bead state moves on; not durable design or rule.
+   1  Spike-closing receipt citing commit 5e59ff48b with specific criterion sample medians; next-step plan is operational, not
+   1  Spike-specific bench harness tip (baby-re canary for lineage thrashing); the v5a5 spike is closed so the canary no longe
+   1  SharedLineageSolver design detail (FrameId vs Arc::ptr_eq) from a closed spike; not in mandatory-keep list and the Share
+   1  Slice 4c.3-prep design refinement for a spike that did not land; superseded by the spike-closing conclusion in v5a5-slic
+   1  Slice 4 blocker enumeration listing concrete line numbers (eval_upto:1824, etc.) from a moment-in-time codebase; the spi
+   1  Iteration receipt for angr-05xj fix landed in commit 0abdae97f; the dispatch logic and ARM quirks (C-flag complement, NZ
+   1  Refactor receipt for the same angr-05xj/commit 0abdae97f — the mirror-concrete-path pattern is visible in ccall.rs itsel
+   1  Root-cause investigation receipt for angr-3tek.1 fix landed as angr-3tek.2; the replay pipeline (_pending_memory_load_pa
+   1  Narrow test-tuning receipt; if the cap is wrong, the test fails loudly and a contributor inspects the asserted addresses
+   1  Misdiagnosis correction for a closed bead (cbc6c3e92 fixed load_prefetch_cache). The actual fix is in code; the cache di
+   1  Audit receipt for closed angr-9jly (commit a50275f0d); call-site classifications can be re-derived by grepping _snapshot
+   1  Generic dev-process tip for inspecting Claude session JSONLs; any contributor can rediscover by ls ~/.claude/projects/ i
+   1  Basic shell hygiene rule (use -f flags); contributor learns this immediately when a hang happens. Not angr-specific.
+   1  One-off observation of a Claude rate-limit hit; not actionable — the ralph loop config (.ralph/config.toml) is the canon
+   1  Feature memo for bench_diff.py; the script, baseline_counters.json, and the run_regression.py --update-counters flag are
+   1  Refactor retrospective for angr-zjr7; the MIPS multi-arm match vs single-name table tradeoff is visible in the code toda
+   1  ARM cc_op/condition encoding is documented in libvex headers and in ccall.rs comments; the C-flag-as-NO-borrow gotcha is
+   1  Pre-fix diagnosis of a specific bench; if the bench still has the symptom it's reproducible. Conclusion (store RustBV::E
+   1  Bench-specific bottleneck note from a prior characterization; the Concat-vs-SignExt canonicalization gap is covered by t
+   1  Audit was promoted to docs/advanced-topics/rust_engine.rst as ':ref:`rust-engine-ffi-ownership-audit`' (see body text). 
+   1  Send/Sync audit findings landed in docs/advanced-topics/rust_parallel_design.rst (per audit-pyo3-ffi-ownership body refe
+   1  Implementation detail (batch_size=50, callback-as-1-step counting) discoverable in rust_manager.py and run_loop.rs.
+   1  Bisect-script tactic with /tmp paths from angr-8t45; superseded by the documented bisect pattern in 9maq-bisect-method (
+   1  Sandbox-blocker note for one specific evaluation task (angr-kq43, 2026-06-02); not durable infra knowledge.
+   1  Spike-design plan for angr-4scu (a still-pending refactor); the plan content is on the bead itself. If/when the refactor
+   1  Refactor receipt for closed angr-qrw2 (commit 398a46955); the helpers (try_convert_symbolic_value, convert_load_result) 
+   1  Generic dev tactic (reverse-index insertion, script over Edit calls); any contributor would discover this on the first t
+   1  API doc for export_callback_bundle; redundant with the function signature and pyapi.rs source. Future change to the bund
+   1  Helper-function summary for _snapshot_registers_from_bundle; self-documenting from rust_state_sync.py.
+   1  Fix retrospective (removed debug section, count-comparison fast path); fix is in code, won't regress silently.
+   1  Single test flake observation (test_add_constraint_raw_dedup_repeat_skips_push). If still flaky, it's still flaky; if fi
+   1  Refactor receipt for execute_cas_stmt (commit 2fd6ab596); the DcasState bundling pattern is visible in interpreter/state
+   1  Narrow refactor receipt for angr-c61m (helper only applies to 2 sites in calc_flags_smul, not a third lookalike). Not du
+   1  Narrow clippy interaction note (comments between outer/inner if suppress collapsible_if). One-off encounter in angr-6ls8
+   1  Clippy version-specific note (1.94) with stale per-file counts; counts drift. If contributor runs cargo clippy --fix the
+   1  Refactor decision receipt for closed angr-rq8s (10 sites cleared 2026-06-02). The decision (allow over builder/struct) i
+   1  Verification receipt during codegate investigation (try_read_concrete_memory does not intercept 0x1000-0x1020). Investig
+   1  Sub-investigation step under codegate-constraint-divergence; the symbol-identity-fixed claim is stale relative to the ke
+   1  Detailed VEX-tracing result (422/435 symbolic, 6 mem_*) duplicates the conclusion already in codegate-constraint-diverge
+   1  Implementation receipt — code-level description of Rust concretizer read/write split with file paths; in code now.
+   1  Iteration receipt with commit hash; reframes an old task — no durable insight.
+   1  Bead-id-scoped decision receipt; outcome (NotImplementedError) is in code and the docs row.
+   1  Commit-hash receipt; helper pattern lives in code at ctype.rs.
+   1  Implementation trick description; in code at execute_cas_stmt with comments.
+   1  Bead-id-scoped (angr-jufh, angr-34w.22, angr-tvpk) refactor receipt; pattern is generic 'verify before deleting' which a
+   1  Bench-specific finding; normalization is in run_regression.py.
+   1  Implementation description of HistoryEntry struct — in code with named API surfaces; grep finds it.
+   1  Feature description of disk init cache; covered by code in rust_manager.py.
+   1  Fixed-in-commit receipt (commit 51e46b325); op now exists.
+   1  Bookmark to a docs section; next sweep author would find the section via grep.
+   1  Dependency-config note; the actual config is in Cargo.toml + engine.rs and won't need rederivation.
+   1  Bead-id refactor receipt (angr-u7v5, commit e6c81f093) — implementation description that's now in code; very long body l
+   1  Fixed-in-commit description; eval_upto_wide path exists in solver.rs.
+   1  Iteration receipt about extract_concrete_arg helper; lesson 'check existing helpers' is trivial.
+   1  Implementation list of rules in value.rs; code is authoritative.
+   1  Implementation receipt (17 rules + commit hash 6f5518426); code has them.
+   1  Dated profiling snapshot; the 'irreducible 99ms Python SimProcedure' insight is now self-evident from the bench numbers.
+   1  Dated cost-breakdown receipt; covered/superseded by docs and current benchmark table in CLAUDE.md.
+   1  Overlaps with mandatory-keep 'characterization-vs-fix-pattern'; redundant.
+   1  Implementation receipt for FileSystem struct with commit hash; code is authoritative.
+   1  Single-instance routing pattern from one op; future cases would discover the same trick by reading vex/ops.rs.
+   1  Status snapshot of fuzzer pass-set; numbers will drift and the audit task captures the work.
+   1  Backlog item (audit candidate); should be a bd task, not a memory.
+   1  Refactor receipt with commit hash; remaining candidates list is a backlog snapshot — invariant-fxhash-internal-keys alre
+   1  Bead-id triage receipt (angr-vhot/angr-5aj8); decision in commit, follow-up task created.
+   1  Backfill receipt with commit hash; baseline_timings.json is authoritative now.
+   1  Iteration-scoped crash report on grub; root cause analysis incomplete and downstream work has moved past it.
+   1  Refactor receipt cites commit 24311a484; landed change visible in git log.
+   1  Historical 67s figure superseded by current 11.7s baseline; merged content into hackcon-z3-ast-structure.
+   1  Iteration receipt for commit b40768356 macro shape; pattern visible in opcode_map.rs source.
+   1  Iteration receipt; profile harness preserved in tools/, decision (no code change) is point-in-time.
+   1  Iteration receipt; fix landed (684ms→19ms) and visible in get_symbolic_addrs codepath.
+   1  Module-structure description; first 60 chars trivially discoverable by ls/grep on rust_irsb_serializer.py.
+   1  Iteration receipt for angr-kkpr; conclusion (small impact) doesn't constrain future work.
+   1  Per-iteration regression triage; baseline-drift methodology covered by benchmark-regression-noise-floor.
+   1  Snapshot profile dated 2026-05-11; superseded by later attribution and ongoing optimizations.
+   1  Refactor receipt for commit cb3dac5bd; behavior visible in SymContext::fork source.
+   1  Bug fix receipt for commit 25b3244f4; explore-time re-check is now in code.
+   1  Iteration-time baseline measurement; CLAUDE.md already documents leak-check threshold guidance.
+   1  Niche measurement recipe for v5a5 spike; spike is documented in bd v5a5 series.
+   1  One-time refactor receipt; pattern (git mv + sed) is a 30-second discovery.
+   1  Methodology recipe for one-off profiling task; covered by perf_report tooling.
+   1  Validation receipt with test patch and synthetic bench landed; encoded in test_mips64_explore_be_real_elf.
+   1  Hypothesis invalidated per CLAUDE.md status table (Rust-side cache hook delivered 0%).
+   1  Investigation now obsolete — Callable leak fixed in 293aa8163 per CLAUDE.md; root cause shifted.
+   1  Superseded by invariant-no-return-deadend (cited as out-link); itself says 'supersedes' prior memory.
+   1  Operational fix already encoded in run_single.py and CLAUDE.md (4GB RLIMIT_AS).
+   1  Iteration receipt of a fixed bug; lesson (route through arch helpers) is general practice already discoverable in code
+   1  Refactor receipt with commit citation; current code shows the pattern
+   1  Audit findings already promoted to docs/advanced-topics/rust_engine.rst 'PyO3 API trust model' section per body text
+   1  Bare LOC/method counts; out-of-date snapshot of architecture without durable insight
+   1  Trivial Cargo.toml advice discoverable in <1min by any contributor
+   1  Iteration receipt with old measurements; behavior is in code
+   1  Iteration-specific tooling pitfall; general lesson is trivial (verify replace_all matches)
+   1  Fixed-bug receipt with commit hash bbdb2451e; covered by unit tests in code
+   1  Trivial RST style hint discoverable from existing docs
+   1  Bare line citation that drifts; investigation hint without durable insight
+   1  Trivial CI operational hint; would be discovered immediately by running cargo fmt --all
+   1  Iteration receipt with commit hash; lesson is captured in canonical vec-ops-savings-bottleneck (cited)
+   1  Refactor receipt with commit hash; pattern is in code
+   1  Implementation detail with line cite; trivial to rediscover from code
+   1  Fixed-bug receipt; behavior is in current code
+   1  Iteration receipt with old measurements; current behavior is in code
+   1  Implementation detail of one function; refactor receipt with commit hash
+   1  Implementation detail merged into solver-fallback-architecture knowledge cluster
+   1  Bare invariant with commit hash; covered by solver-fork-o-n-root-cause-symcontext-fork
+   1  Iteration receipt; the skip is documented in code and rust_proxy_writes_design.rst
+   1  Implementation receipt — details are in native/angr/src/procedures/stdio.rs; native_coverage_matrix covers the high-leve
+   1  Implementation detail discoverable in code via grep stdout_buffer
+   1  Refactor receipt with commit hashes; wiring is straightforward to rediscover in code
+   1  Implementation detail in native/angr/src/procedures/strtod.rs with explicit constant; rediscoverable
+   1  Implementation comment belongs in code; gate behavior trivially visible at the source site
+   1  Bisect receipt for one specific regression; the methodology lives in 9maq-bisect-method
+   1  Detailed change-log entry; the (a)/(b) logic is now in rust_state_sync.py
+   1  Refactor receipt for a helper that is easily discoverable via grep
+   1  CLAUDE.md already documents the grep-vs-pytest discrepancy with embedded commands
+   1  Test pattern discoverable in test_rust_exploration.py::_setup_amd64_python_proc_test
+   1  Generic Python gotcha; one-off script issue, not angr-specific
+   1  Bead-scoped refactor receipt; the IROp::Unmapped variant lives in code
+   1  Duplicates CLAUDE.md 'Stale .so file' section verbatim
+   1  Fix receipt with the SymbolicAddress error path now in code
+   1  Audit receipt with date; specifics decay quickly as code changes
+   1  Bead-scoped implementation receipt; the helper+state_id plumbing is in code
+   1  Bead-scoped implementation receipt; survey of mem-dispatch sites lives in linked inspect-mem-dispatch-surfaces
+   1  Speculative refactor candidate; not done, not blocking
+   1  Local code-correctness justification; belongs in a code comment, not durable memory
+   1  Op implementation pattern discoverable by reading existing SSE scalar ops in vex/ops.rs
+   1  CLAUDE.md bootstrap notes already recommend python -m pip; small note
+   1  Generic Python sys.path note; not durable architecture
+   1  Refactor receipt with commit hash; the 6-helper structure is now self-evident in vex/ops.rs
+   1  Test pattern; discoverable from existing integration tests under cfg(feature=vex-engine-z3)
+   1  Doc-maintenance reminder; belongs as a comment in rust_vex_ops.rst itself
+   1  Doc count maintenance note; rust_vex_ops.rst is the source of truth
+   1  Op implementation receipt; details live in vex/ops.rs and vex/opcode_map.rs
+   1  Specific parser routing detail; self-evident from reading parse_shift + parse_vector
+   1  Implementation receipt with commit hash; lives in vex/ccall.rs
+   1  Time-stamped (2026-05-05) per-bench snapshot of Arc-concretize-cache impact. Conclusion 'within noise' has no forward us
+   1  Phase 4.1 iteration receipt (2026-05-15, commit a1d9f5593) — sym-write timing snapshot. Phase 4.2/4.3 superseded this; s
+   1  Specific timing breakdown from 2026-05-11 with bead context (angr-34w.30 closed); numbers drift and future profilers sho
+   1  Implementation detail receipt; the Arc<ConcretizationResult> pattern is in interpreter_cb/mod.rs and self-documenting.
+   1  Dated status snapshot ('as of 207th loop audit'); decisions already enacted in angr-pogf; obsolete tracking note.
+   1  Date-stamped 2026-05-07 deferral receipt with stale line-count audit (2.8x off) and superseded extraction history (mixin
+   1  Date-stamped 2026-05-07/2026-05-16 deferral receipt enumerating current mixin shape. Same deferral template as wqao; not
+   1  Narrative about closed angr-ua1i proposal and v5ht runtime detection that already shipped (commit 971d35545). Receipt, n
+   1  Date-stamped 2026-06-01 narrative documenting a rustdoc-mirror pattern that landed (commits 717583fa3 / 3bfe94c44). Iter
+   1  Date-stamped 2026-05-10 commit receipt (commit 8bd93978c shipped). Calling-convention details are in native/angr/src/arc
+   1  Date-stamped commit receipt (a4ab7e64e, 2026-05-25) restating dispatch behavior that lives in the code. The durable 'do 
+   1  Narrative anecdote about angr-gcfa first draft; mostly subsumed by invariant-rst-heading-underline-em-dash (the actual r
+   1  Date-stamped 2026-05-05 verification of behavior covered by tests in test_rust_exploration.py (test_contradictory_constr
+   1  Fixed-in-commit receipt; cited only by a refactor task.
+   1  Body is literally the key string; corrupt/empty memory.
+   1  Subsumed by constraint-export-no-pre-pin (mandatory-keep covers same rule).
+   1  Fixed-bug receipt with two commit hashes; principle is general (don't swallow exceptions as UNSAT)
+   1  Bead-scoped iteration receipt for a shipped feature with commit hash
+   1  'Preserve original ordering as cheap insurance' — too narrow, says nothing actively required; refactor receipt.
+   1  Explicitly marked OBSOLETE; superseded by invariant-mips-n64-cc-2026-05-10 and Mips O32 wiring landed.
+   1  Superseded by invariant-neon-unimplemented-not-panic (panic → typed error per angr-tkbr.3); old guidance now wrong.
+   1  Trivial unicode-width gotcha — Sphinx would warn, len() trick is basic. Caught once during docs edit.
+   1  Class-existence note — 'use this class instead of inline closures'. Code-describes-itself; deferred bead avoid-deferred-
+   1  Spike-design note with explicit 'follow-up optimization' caveat; v5a5 spike is documented elsewhere
+   1  Iter-7 predictor analysis (counter dump deltas, candidate heuristics) for a spike that closed without landing; cited onl
+   1  Documented in rust_z3_sharing.rst 'Why not Z3_solver_translate?' section verbatim; cited by avoid-z3-solver-translate-sa
+   1  final closer; merged into benchmark-bimodal-variance-rules anchor (citing ref pruned)
+   1  final closer; spec-replay variant inlined into z3-universality-parity-test-template
+   1  topic already covered in rust_engine.rst (SimOption coverage matrix); user-declined promotion
+   1  topic already covered in rust_engine.rst (state.inspect dispatch section); user-declined promotion

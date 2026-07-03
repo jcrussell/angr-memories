@@ -1,0 +1,32 @@
+{
+  "in": {
+    "rust-proxy-architecture-decision": [
+      "rust-engine-claude-md-pointer"
+    ],
+    "rust-python-boundary-audit": [
+      "rust-engine-claude-md-pointer"
+    ],
+    "rust-state-proxy-write-through": [
+      "boundary-4scu-simmem-spike"
+    ],
+    "rust-write-through-supersedes-diff-push": [
+      "dead-fallback-deletion-pattern"
+    ]
+  },
+  "out": {
+    "rust-engine-claude-md-pointer": [
+      "benchmark-bimodal-variance-rules",
+      "characterization-vs-fix-pattern",
+      "constraint-export-no-pre-pin",
+      "core-goal-design-philosophy",
+      "rust-proxy-architecture-decision",
+      "rust-python-boundary-audit"
+    ],
+    "rust-solver-unsat-semantics": [
+      "satisfiable-wrong-answer"
+    ],
+    "rust-write-through-supersedes-diff-push": [
+      "proxy-writes-design-verdict"
+    ]
+  }
+}

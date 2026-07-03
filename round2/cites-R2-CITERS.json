@@ -1,0 +1,106 @@
+{
+  "citer->stuck": {
+    "avoid-deferred-fk0m-state-mixin-unification": [
+      "invariant-rust-solver-fallback-class"
+    ],
+    "avoid-deferred-wqao-rust-manager-decomposition": [
+      "deadend-drops-deferred-forks",
+      "disk-cache-symbolic-guard",
+      "invariant-init-cache-lazy-regions-order"
+    ],
+    "avoid-dfs-coupling-for-shared-lineage": [
+      "v5a5-step-3a-predictor-2026-05-24",
+      "v5ht-landed-2026-05-24"
+    ],
+    "avoid-z3-solver-translate-same-context": [
+      "z3-solver-translate-same-context-bug-z3-solver"
+    ],
+    "invariant-bimodal-variance-benchmarks": [
+      "benchmark-fairlight-2026-05",
+      "benchmark-fairlight-2026-05-18",
+      "benchmark-sokohashv2-2026-05-18"
+    ],
+    "invariant-doc-mirror-pattern-2026-06-01": [
+      "invariant-v5a5-lineage-mutex-shape"
+    ],
+    "invariant-mips-n64-cc-2026-05-10": [
+      "invariant-mips-no-calling-convention"
+    ],
+    "invariant-neon-unimplemented-not-panic": [
+      "invariant-neon-scaffolding-panic-not-fallback"
+    ],
+    "iop-avg-vs-hadd-distinction": [
+      "z3-spec-replay-test-template"
+    ],
+    "rst-heading-validation-no-sphinx": [
+      "invariant-rst-heading-underline-em-dash"
+    ],
+    "rust-solver-unsat-semantics": [
+      "satisfiable-wrong-answer"
+    ],
+    "solver-fallback-architecture": [
+      "avoid-pre-pinning-recovered-symbols",
+      "pre-pinning-dangerous"
+    ],
+    "z3-universality-parity-test-template": [
+      "z3-spec-replay-test-template"
+    ]
+  },
+  "stuck->citers": {
+    "avoid-pre-pinning-recovered-symbols": [
+      "solver-fallback-architecture"
+    ],
+    "benchmark-fairlight-2026-05": [
+      "invariant-bimodal-variance-benchmarks"
+    ],
+    "benchmark-fairlight-2026-05-18": [
+      "invariant-bimodal-variance-benchmarks"
+    ],
+    "benchmark-sokohashv2-2026-05-18": [
+      "invariant-bimodal-variance-benchmarks"
+    ],
+    "deadend-drops-deferred-forks": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "disk-cache-symbolic-guard": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "invariant-init-cache-lazy-regions-order": [
+      "avoid-deferred-wqao-rust-manager-decomposition"
+    ],
+    "invariant-mips-no-calling-convention": [
+      "invariant-mips-n64-cc-2026-05-10"
+    ],
+    "invariant-neon-scaffolding-panic-not-fallback": [
+      "invariant-neon-unimplemented-not-panic"
+    ],
+    "invariant-rst-heading-underline-em-dash": [
+      "rst-heading-validation-no-sphinx"
+    ],
+    "invariant-rust-solver-fallback-class": [
+      "avoid-deferred-fk0m-state-mixin-unification"
+    ],
+    "invariant-v5a5-lineage-mutex-shape": [
+      "invariant-doc-mirror-pattern-2026-06-01"
+    ],
+    "pre-pinning-dangerous": [
+      "solver-fallback-architecture"
+    ],
+    "satisfiable-wrong-answer": [
+      "rust-solver-unsat-semantics"
+    ],
+    "v5a5-step-3a-predictor-2026-05-24": [
+      "avoid-dfs-coupling-for-shared-lineage"
+    ],
+    "v5ht-landed-2026-05-24": [
+      "avoid-dfs-coupling-for-shared-lineage"
+    ],
+    "z3-solver-translate-same-context-bug-z3-solver": [
+      "avoid-z3-solver-translate-same-context"
+    ],
+    "z3-spec-replay-test-template": [
+      "iop-avg-vs-hadd-distinction",
+      "z3-universality-parity-test-template"
+    ]
+  }
+}

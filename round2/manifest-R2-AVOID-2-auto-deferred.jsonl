@@ -1,0 +1,1 @@
+{"key": "avoid-pre-pinning-recovered-symbols", "verdict": "merge", "merged_into": "avoid-prepinning-export-constraints", "reason": "Duplicate of avoid-prepinning-export-constraints; both cover the same don't-add-ast==BVV pattern referencing the 2f0e8164f rollback.", "batch": "R2-AVOID-2"}

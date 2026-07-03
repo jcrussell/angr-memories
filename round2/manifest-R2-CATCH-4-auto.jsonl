@@ -1,0 +1,63 @@
+{"key": "prefetch-disabled-by-default", "verdict": "keep", "reason": "Non-obvious gotcha: prefetch is dead code by default — saves contributors from optimizing a no-op path", "batch": "R2-CATCH-4"}
+{"key": "prefetch-sp-offset-bug", "verdict": "forget", "reason": "Iteration receipt of a fixed bug; lesson (route through arch helpers) is general practice already discoverable in code", "batch": "R2-CATCH-4"}
+{"key": "procedure-syscall-error-memory-variant", "verdict": "forget", "reason": "Refactor receipt with commit citation; current code shows the pattern", "batch": "R2-CATCH-4"}
+{"key": "procedures-format-common-shared-helpers", "verdict": "keep", "reason": "Durable contributor guidance for adding printf/scanf-family procedures; not obvious from grep", "batch": "R2-CATCH-4"}
+{"key": "proxy-callstack-manage-required", "verdict": "keep", "reason": "Subtle invariant: _manage stub required by add_successor; missing it causes silent AttributeError on every callback explore", "batch": "R2-CATCH-4"}
+{"key": "proxy-writes-design-verdict", "verdict": "keep", "reason": "Design decision with measurements + reopen conditions; not duplicated in docs", "batch": "R2-CATCH-4"}
+{"key": "pyo3-pyclass-cycle-leak", "verdict": "keep", "reason": "Durable PyO3 gotcha with concrete fix template; specific to non-obvious cycle-GC trap", "batch": "R2-CATCH-4"}
+{"key": "pyo3-pymethods-private-fn-still-bridged", "verdict": "keep", "reason": "Non-obvious PyO3 trap with specific error code (E0277) and fix pattern", "batch": "R2-CATCH-4"}
+{"key": "pyo3-trust-model-audit", "verdict": "forget", "reason": "Audit findings already promoted to docs/advanced-topics/rust_engine.rst 'PyO3 API trust model' section per body text", "batch": "R2-CATCH-4"}
+{"key": "pytest-pyo3-method-spy-pattern", "verdict": "keep", "reason": "Non-obvious test pattern for PyO3 readonly methods; small but distinct", "batch": "R2-CATCH-4"}
+{"key": "python-class-reassignment-for-history-plugin", "verdict": "keep", "reason": "Non-obvious __class__ reassignment pattern with caveats", "batch": "R2-CATCH-4"}
+{"key": "python-lazy-memory-is-page-level-not-address-level", "verdict": "keep", "reason": "Common misconception clarified; durable architecture knowledge", "batch": "R2-CATCH-4"}
+{"key": "python-native-procedure-api", "verdict": "keep", "reason": "API documentation for register_python_procedure with signature semantics", "batch": "R2-CATCH-4"}
+{"key": "python-syscall-integration-test-pattern", "verdict": "keep", "reason": "Test pattern for native syscall handlers with specific contract (no-fallback counter)", "batch": "R2-CATCH-4"}
+{"key": "python-wrapper-overhead", "verdict": "forget", "reason": "Bare LOC/method counts; out-of-date snapshot of architecture without durable insight", "batch": "R2-CATCH-4"}
+{"key": "range-seeded-bisection-asymmetry", "verdict": "keep", "reason": "Non-obvious algorithmic insight about bisection seeding asymmetry with quantified benchmark impact", "batch": "R2-CATCH-4"}
+{"key": "real-unmapped-vex-ops-list", "verdict": "keep", "reason": "Verified list of unmapped VEX ops with probe pattern; saves discovery time", "batch": "R2-CATCH-4"}
+{"key": "reference-rustc-hash-dep", "verdict": "forget", "reason": "Trivial Cargo.toml advice discoverable in <1min by any contributor", "batch": "R2-CATCH-4"}
+{"key": "register-snapshot-optimization", "verdict": "forget", "reason": "Iteration receipt with old measurements; behavior is in code", "batch": "R2-CATCH-4"}
+{"key": "register-sync-bottleneck", "verdict": "keep", "reason": "Counter-intuitive negative result with empirical data; prevents wasted optimization effort", "batch": "R2-CATCH-4"}
+{"key": "regression-flakes-defcamp_r100", "verdict": "keep", "reason": "Active operational guidance for CI/local regression triage; ambient noise specifics", "batch": "R2-CATCH-4"}
+{"key": "rejected-optimizations-apr12", "verdict": "keep", "reason": "Explicit DO-NOT-RE-PROPOSE list — saves repeating closed investigations", "batch": "R2-CATCH-4"}
+{"key": "replace-all-too-narrow-neon-comments", "verdict": "forget", "reason": "Iteration-specific tooling pitfall; general lesson is trivial (verify replace_all matches)", "batch": "R2-CATCH-4"}
+{"key": "reverse-leaf-emission-root-cause", "verdict": "forget", "reason": "Fixed-bug receipt with commit hash bbdb2451e; covered by unit tests in code", "batch": "R2-CATCH-4"}
+{"key": "rst-doc-citation-pattern", "verdict": "forget", "reason": "Trivial RST style hint discoverable from existing docs", "batch": "R2-CATCH-4"}
+{"key": "rst-heading-validation-no-sphinx", "verdict": "keep", "reason": "Practical validation snippet (no sphinx in venv); useful when writing rST", "batch": "R2-CATCH-4"}
+{"key": "run-single-spawn-tree-sampling", "verdict": "keep", "reason": "Non-obvious profiling gotcha with concrete fix reference", "batch": "R2-CATCH-4"}
+{"key": "run1-per-step-overhead", "verdict": "forget", "reason": "Bare line citation that drifts; investigation hint without durable insight", "batch": "R2-CATCH-4"}
+{"key": "rustbv-api-and-syscall-test-gotchas", "verdict": "keep", "reason": "Two real gotchas (.width() vs .bits(), syscall test assertion contract) that save time", "batch": "R2-CATCH-4"}
+{"key": "rustbv-into-variants", "verdict": "keep", "reason": "Convention for pairing borrow/owned ops in value.rs — durable contributor pattern", "batch": "R2-CATCH-4"}
+{"key": "rustbv-microbench-vs-realworld", "verdict": "keep", "reason": "Counter-intuitive lesson about microbench vs production traces with example numbers", "batch": "R2-CATCH-4"}
+{"key": "rustbv-symbolic-id-not-in-debug", "verdict": "keep", "reason": "Non-obvious Debug-impl trap that silently fails tests", "batch": "R2-CATCH-4"}
+{"key": "rustfmt-ci-fix-scope", "verdict": "forget", "reason": "Trivial CI operational hint; would be discovered immediately by running cargo fmt --all", "batch": "R2-CATCH-4"}
+{"key": "s35o-savings-bottleneck", "verdict": "forget", "reason": "Iteration receipt with commit hash; lesson is captured in canonical vec-ops-savings-bottleneck (cited)", "batch": "R2-CATCH-4"}
+{"key": "safety-comment-fp-helpers-pattern", "verdict": "forget", "reason": "Refactor receipt with commit hash; pattern is in code", "batch": "R2-CATCH-4"}
+{"key": "sampler-perf-test-pattern", "verdict": "keep", "reason": "Non-obvious sampler test gotcha with global state requirements", "batch": "R2-CATCH-4"}
+{"key": "scanf-simproc-design", "verdict": "keep", "reason": "Concise scanf design summary useful for adding printf/scanf-family procedures", "batch": "R2-CATCH-4"}
+{"key": "segmentlist-iter-snapshot", "verdict": "forget", "reason": "Implementation detail with line cite; trivial to rediscover from code", "batch": "R2-CATCH-4"}
+{"key": "serde-json-byte-keyed-map-trap", "verdict": "keep", "reason": "Non-obvious serde_json trap with reproducible symptom; cited by other memories", "batch": "R2-CATCH-4"}
+{"key": "serde-json-unbounded-depth-for-rustbv", "verdict": "keep", "reason": "Non-obvious serde_json limit with concrete fix and caveat about thread stack", "batch": "R2-CATCH-4"}
+{"key": "set-max-history-non-converging-bug", "verdict": "forget", "reason": "Fixed-bug receipt; behavior is in current code", "batch": "R2-CATCH-4"}
+{"key": "sgbn-unconstrained-sp-fastpath", "verdict": "keep", "reason": "Performance optimization with quantified impact (34x) and caveat (constraint scan cost grows)", "batch": "R2-CATCH-4"}
+{"key": "shared-block-cache", "verdict": "forget", "reason": "Iteration receipt with old measurements; current behavior is in code", "batch": "R2-CATCH-4"}
+{"key": "shared-solver-architecture", "verdict": "merge", "merged_into": "shared-solver-for-callbacks", "reason": "Overlaps heavily with shared-solver-for-callbacks; both describe shared solver mechanism", "batch": "R2-CATCH-4"}
+{"key": "shared-solver-for-callbacks", "verdict": "merge", "canonical": true, "merged_body": "Shared solver for callbacks (architecture). RustSolverContext supports SolverCtxStorage::Shared(Rc<RefCell<SymContext>>) variant. borrow_pending_solver() returns O(1) Rc clone instead of ~3-42ms Z3 Solver::clone. export_callback_bundle defaults to shared_solver=true. Python side skips constraint re-sync when rust_ctx.is_shared() returns True. Constraints added via _rust_add go directly to pending state's solver. Forked states (SimProc multiple successors) still use fork_pending_solver(). PendingCallback.solver_ctx uses shared Rc clone (O(1)) instead of Z3 Solver::clone. Pre-callback snapshot (state.fork()) only created when deferred_forks is non-empty. 5 callback paths in exploration.rs updated: Hook, SimProcedure, Syscall, dynamic resolution, run-loop SimProcedure.", "reason": "Combined architecture + callback-paths description", "batch": "R2-CATCH-4"}
+{"key": "shared-z3-context-setup-required", "verdict": "keep", "reason": "Mandatory test bootstrap requirement with clear symptom and fix; non-obvious", "batch": "R2-CATCH-4"}
+{"key": "simoption-wiring-template", "verdict": "keep", "reason": "Durable 8-site wiring template for adding new SimOptions — high value contributor guidance", "batch": "R2-CATCH-4"}
+{"key": "simprocedure-dispatch-priority", "verdict": "keep", "reason": "Durable dispatch chain documentation with counter semantics", "batch": "R2-CATCH-4"}
+{"key": "sla-regression-flags", "verdict": "keep", "reason": "Operational flag reference for run_regression.py SLA semantics", "batch": "R2-CATCH-4"}
+{"key": "snapshot-rustbv-shadow-type-pattern", "verdict": "keep", "reason": "Durable serde shadow type pattern for non-serializable Z3 caches", "batch": "R2-CATCH-4"}
+{"key": "snapshot-rustsimstate-envelope-shape", "verdict": "keep", "reason": "Durable snapshot envelope format documentation with version semantics", "batch": "R2-CATCH-4"}
+{"key": "snapshot-solver-smtlib2-design", "verdict": "keep", "reason": "Design decision for constraint capture with rationale", "batch": "R2-CATCH-4"}
+{"key": "snapshot-state-bucket-shadow-pattern", "verdict": "keep", "reason": "Durable serde shadow pattern with key collapses; applies to future serde work", "batch": "R2-CATCH-4"}
+{"key": "snapshot-to-angr-ast-recovery-order", "verdict": "forget", "reason": "Implementation detail of one function; refactor receipt with commit hash", "batch": "R2-CATCH-4"}
+{"key": "sokohashv2-fv81-root-cause", "verdict": "merge", "merged_into": "sokohashv2-two-bugs", "reason": "Single-bug detail subsumed by sokohashv2-two-bugs summary", "batch": "R2-CATCH-4"}
+{"key": "sokohashv2-rust-hash-divergence", "verdict": "merge", "merged_into": "sokohashv2-two-bugs", "reason": "Symptom diagnosis subsumed by sokohashv2-two-bugs", "batch": "R2-CATCH-4"}
+{"key": "sokohashv2-two-bugs", "verdict": "keep", "reason": "Canonical summary of both sokohashv2 bugs with commits and verified residual analysis", "batch": "R2-CATCH-4"}
+{"key": "solver-fallback-architecture", "verdict": "keep", "reason": "Canonical reference for Rust-Python solver fallback; explicitly serves as cluster anchor", "batch": "R2-CATCH-4"}
+{"key": "solver-fallback-cache", "verdict": "forget", "reason": "Implementation detail merged into solver-fallback-architecture knowledge cluster", "batch": "R2-CATCH-4"}
+{"key": "solver-fork-O1", "verdict": "forget", "reason": "Bare invariant with commit hash; covered by solver-fork-o-n-root-cause-symcontext-fork", "batch": "R2-CATCH-4"}
+{"key": "solver-fork-o-n-root-cause-symcontext-fork", "verdict": "keep", "reason": "Root-cause explanation with cross-reference to Python angr design", "batch": "R2-CATCH-4"}
+{"key": "solver-test-pattern-fork-witness", "verdict": "keep", "reason": "Test idiom for proving admissibility without disturbing original context", "batch": "R2-CATCH-4"}
+{"key": "solver-tests-z3-context", "verdict": "merge", "merged_into": "shared-z3-context-setup-required", "reason": "Same rule as shared-z3-context-setup-required (test setup_class requirement)", "batch": "R2-CATCH-4"}
