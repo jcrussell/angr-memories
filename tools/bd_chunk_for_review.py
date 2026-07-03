@@ -2,7 +2,8 @@
 """Chunk bd memories into agent-review batches.
 
 Reads the snapshot at `<prune-dir>/snapshot-pre-prune.json` and writes
-one `bodies-R2-<batch>.json` bundle per chunk under `<prune-dir>/`.
+one `bodies-<round>-<batch>.json` bundle per chunk under `<prune-dir>/`
+(round prefix from `--round`, default R2 for backcompat).
 Each bundle is `{key: body}` JSON restricted to the chunk's keys.
 
 Chunking strategy: bucket by prefix family, then alpha-split inside
@@ -22,7 +23,7 @@ each family if it exceeds `--chunk-cap`. Families:
 Also writes:
   - `<prune-dir>/batch-index.json` — {batch_id: [keys]}
   - per-batch cites subset alongside the bodies bundle
-    (`cites-R2-<batch>.json`)
+    (`cites-<round>-<batch>.json`)
 """
 
 from __future__ import annotations
@@ -64,7 +65,7 @@ def _alpha_split(keys: list[str], cap: int) -> list[list[str]]:
     idx = 0
     for i in range(n_chunks):
         size = base + (1 if i < rem else 0)
-        chunks.append(keys[idx:idx + size])
+        chunks.append(keys[idx : idx + size])
         idx += size
     return chunks
 
@@ -72,8 +73,8 @@ def _alpha_split(keys: list[str], cap: int) -> list[list[str]]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--prune-dir", type=Path, required=True)
-    ap.add_argument("--chunk-cap", type=int, default=70,
-                    help="max keys per chunk (default: 70)")
+    ap.add_argument("--chunk-cap", type=int, default=70, help="max keys per chunk (default: 70)")
+    ap.add_argument("--round", default="R2", help="batch-id prefix, e.g. R3 (default: R2 for backcompat)")
     args = ap.parse_args()
 
     snap_path = args.prune_dir / "snapshot-pre-prune.json"
@@ -81,9 +82,7 @@ def main() -> int:
     if not snap_path.exists():
         raise SystemExit(f"missing {snap_path}")
     snap: dict[str, str] = json.loads(snap_path.read_text())
-    cites_graph: dict[str, list[str]] = (
-        json.loads(cites_path.read_text()) if cites_path.exists() else {}
-    )
+    cites_graph: dict[str, list[str]] = json.loads(cites_path.read_text()) if cites_path.exists() else {}
     # Reverse index: who cites X?
     cited_by: dict[str, list[str]] = {}
     for citer, targets in cites_graph.items():
@@ -103,10 +102,10 @@ def main() -> int:
             continue
         chunks = _alpha_split(keys, args.chunk_cap)
         if len(chunks) == 1:
-            batch_index[f"R2-{fam.upper()}"] = chunks[0]
+            batch_index[f"{args.round}-{fam.upper()}"] = chunks[0]
         else:
             for i, chunk in enumerate(chunks, start=1):
-                batch_index[f"R2-{fam.upper()}-{i}"] = chunk
+                batch_index[f"{args.round}-{fam.upper()}-{i}"] = chunk
 
     # Write per-batch bodies + cites subset
     for batch_id, keys in batch_index.items():
