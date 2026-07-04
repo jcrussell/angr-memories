@@ -1,0 +1,67 @@
+{"key": "libafl-0153-api-migration", "verdict": "keep", "reason": "Durable API-migration knowledge (SetTimeout removal, NopBytesConverter rename) for the still-pinned libafl 0.15.3 fuzzer feature", "batch": "R3-CATCH-4"}
+{"key": "libz3-soname-mismatch-root-cause", "verdict": "keep", "reason": "Root-cause + fix for a subtle Z3 SONAME/segfault hazard; durable build-config knowledge", "batch": "R3-CATCH-4"}
+{"key": "list", "verdict": "forget", "reason": "Junk scrap: body is literally 'list', no content", "batch": "R3-CATCH-4"}
+{"key": "live-pending-callback-test-harness", "verdict": "keep", "reason": "Detailed test-harness recipe with non-obvious gotchas (fork mints fresh id, symbolic-arg fallback)", "batch": "R3-CATCH-4"}
+{"key": "load-shellcode-blob-binary-none", "verdict": "keep", "reason": "Documents Blob.binary=None region-skip gotcha + workaround; cited by out-of-batch invariant-shellcode-binary-regions-test", "batch": "R3-CATCH-4"}
+{"key": "loop-stdout-buffering", "verdict": "forget", "reason": "Describes run_optimization_loop.sh + .claude/loop-logs which no longer exist (replaced by ralph)", "batch": "R3-CATCH-4"}
+{"key": "loopseer-native-wiring", "verdict": "keep", "reason": "Explains native LoopSeer wiring and use_technique dispatch; durable engine knowledge", "batch": "R3-CATCH-4"}
+{"key": "max-active-states-test-pattern", "verdict": "keep", "reason": "Non-obvious test pattern to avoid silently-no-op limit assertions", "batch": "R3-CATCH-4"}
+{"key": "medium-bench-counters-deterministic", "verdict": "keep", "reason": "Documents which benches are COUNT_EXEMPT and the count-baseline-rot rule; operational detail", "batch": "R3-CATCH-4"}
+{"key": "memcpy-memset-python-boundary-test", "verdict": "keep", "reason": "Documents test coverage seam + get_state_memory readback API pattern", "batch": "R3-CATCH-4"}
+{"key": "memcpy-symbolic-address-native", "verdict": "keep", "reason": "Detailed native symbolic-address memcpy/memmove design (caps, cross-product ITE)", "batch": "R3-CATCH-4"}
+{"key": "memcpy-symbolic-size-native", "verdict": "keep", "reason": "Detailed native symbolic-size memcpy/memmove design + memmove overlap snapshot", "batch": "R3-CATCH-4"}
+{"key": "memory-citation-audit-iter19", "verdict": "forget", "reason": "Dated one-off audit receipt (iter19, CLEAN); method captured in memory-citation-rot-path-scan", "batch": "R3-CATCH-4"}
+{"key": "memory-citation-rot-path-scan", "verdict": "keep", "reason": "Reusable citation-rot audit method with real gotchas (bare-basename gap); cites refactor-memory-sweep-rule", "batch": "R3-CATCH-4"}
+{"key": "memory-crossref-audit-clean", "verdict": "forget", "reason": "Dated one-off audit receipt (iter62, CLEAN); no durable rule beyond the method already in memory-citation-rot-path-scan", "batch": "R3-CATCH-4"}
+{"key": "memory-dedup-shared-helpers", "verdict": "keep", "reason": "Symbol-anchored map of memory-area shared helpers; durable refactor reference", "batch": "R3-CATCH-4"}
+{"key": "memory-perm-rust-vs-python", "verdict": "keep", "reason": "Documents W-only vs RW store-permission parity decision with Python", "batch": "R3-CATCH-4"}
+{"key": "memory-store-symbolic-full-not-registered", "verdict": "keep", "reason": "Clarifies historical key name vs current production wiring; prevents confusion", "batch": "R3-CATCH-4"}
+{"key": "memory-sync-skip-symbolic", "verdict": "keep", "reason": "Critical correctness invariant: never sync symbolic-offset pages", "batch": "R3-CATCH-4"}
+{"key": "mempcpy-stpcpy-integration-coverage", "verdict": "keep", "reason": "Documents test coverage + return-contract distinctions for mempcpy/stpcpy", "batch": "R3-CATCH-4"}
+{"key": "memset-symbolic-address-native", "verdict": "keep", "reason": "Detailed native symbolic-address memset design; cross-cited by memcpy siblings", "batch": "R3-CATCH-4"}
+{"key": "memset-symbolic-size-native", "verdict": "keep", "reason": "Detailed native symbolic-size memset design; cited by memcpy-symbolic-size-native", "batch": "R3-CATCH-4"}
+{"key": "memset-symbolic-value-native", "verdict": "keep", "reason": "Native symbolic-byte-value memset design (concat_balanced chunk)", "batch": "R3-CATCH-4"}
+{"key": "merge-memory-test-pattern", "verdict": "keep", "reason": "SymbolicMemory::merge test pattern with z3-gating and branch-isolation trick", "batch": "R3-CATCH-4"}
+{"key": "migration-count-is-the-lever", "verdict": "keep", "reason": "Key parallel-exploration design pivot (break-even steal fraction); cited by out-of-batch keys", "batch": "R3-CATCH-4"}
+{"key": "mimalloc-global-allocator", "verdict": "keep", "reason": "Durable negative result: allocator swap gives no speedup; do-not-reattempt guidance", "batch": "R3-CATCH-4"}
+{"key": "min-max-bottleneck", "verdict": "keep", "reason": "Perf-profiling heuristic (grep z3_site_min_search_count) with corrected hypothesis", "batch": "R3-CATCH-4"}
+{"key": "mips-o32-syscall-audit-clean", "verdict": "keep", "reason": "Documents divergent +2 *at syscall numbers and regression-guard test; durable arch detail", "batch": "R3-CATCH-4"}
+{"key": "mips32-struct-stat-and-omitted-mode", "verdict": "keep", "reason": "Detailed MIPS32 stat64 layout quirks + registered LFS numbers; cited out-of-batch", "batch": "R3-CATCH-4"}
+{"key": "mips64-register-dispatch-status", "verdict": "keep", "reason": "Documents MIPS64 register alias/canonical dispatch design", "batch": "R3-CATCH-4"}
+{"key": "model-stability-eval-nondeterminism-root-cause", "verdict": "keep", "reason": "Root cause of a test flake + invariant (never assert cross-instance eval model identity)", "batch": "R3-CATCH-4"}
+{"key": "multi-stage-manager-reuse", "verdict": "keep", "reason": "Critical correctness rule: reuse manager via reset_for_stage; lossy constraint transfer", "batch": "R3-CATCH-4"}
+{"key": "native-access-parity", "verdict": "keep", "reason": "Native access() impl detail incl. add_constraint borrow-scope pattern", "batch": "R3-CATCH-4"}
+{"key": "native-asprintf-getline-getdelim-parity", "verdict": "keep", "reason": "Registration-keyed-by-class-name RULE gotcha + parity detail; cited both ways", "batch": "R3-CATCH-4"}
+{"key": "native-bzero-parity", "verdict": "keep", "reason": "DRY bzero pattern + registry API note + remaining parity gaps list", "batch": "R3-CATCH-4"}
+{"key": "native-char-io-unlocked-aliases", "verdict": "keep", "reason": "Documents _unlocked alias parity for char-IO procs; part of alias cluster", "batch": "R3-CATCH-4"}
+{"key": "native-coverage-real-binary-tail", "verdict": "keep", "reason": "Epic-level map of native libc coverage tail + cut rationale; durable planning reference", "batch": "R3-CATCH-4"}
+{"key": "native-ctype-loc-tables", "verdict": "keep", "reason": "ctype table pointer-forwarding design + must-touch-all-struct-literals gotcha", "batch": "R3-CATCH-4"}
+{"key": "native-dispatch-skipped-for-loaded-libs", "verdict": "keep", "reason": "Key dispatch-gate mechanism explaining why native procs bypassed on real libs; cited out-of-batch", "batch": "R3-CATCH-4"}
+{"key": "native-fgets-fgetc-resolves-stream-fd", "verdict": "keep", "reason": "Documents fixed stream->fd resolution bug class and fallback behavior", "batch": "R3-CATCH-4"}
+{"key": "native-fileops-largefile-aliases", "verdict": "keep", "reason": "fseeko/ftello alias parity mechanism; part of alias cluster, cross-cited", "batch": "R3-CATCH-4"}
+{"key": "native-fscanf-stream-variant", "verdict": "keep", "reason": "Native fscanf stream-variant design + record_stdin gating detail", "batch": "R3-CATCH-4"}
+{"key": "native-getopt-design-no-elf-resolution", "verdict": "keep", "reason": "Novel Python->native init-push channel analysis + touch-point map; cited by pushdown memory", "batch": "R3-CATCH-4"}
+{"key": "native-getopt-engine-bhk0a2", "verdict": "keep", "reason": "Native getopt engine impl detail + e2e test pattern gotchas", "batch": "R3-CATCH-4"}
+{"key": "native-getopt-extern-addr-pushdown", "verdict": "keep", "reason": "Extern-addr init-push pattern mirroring ctype template; corrects design memory", "batch": "R3-CATCH-4"}
+{"key": "native-getopt-family-parity", "verdict": "keep", "reason": "Full getopt Python SimProc engine semantics + cursor/writeback design", "batch": "R3-CATCH-4"}
+{"key": "native-htonl-htons-parity", "verdict": "keep", "reason": "Registration-namespace gotcha (posix not libc) + impl; cited both ways", "batch": "R3-CATCH-4"}
+{"key": "native-identity-proc-vs-syscall-dispatch", "verdict": "keep", "reason": "Two-dispatch-path (proc vs syscall) gotcha for identity getters", "batch": "R3-CATCH-4"}
+{"key": "native-libc-alias-parity-audit", "verdict": "keep", "reason": "Alias-parity audit method + list of genuine faithfulness-blocked gaps", "batch": "R3-CATCH-4"}
+{"key": "native-libc-no-parity-family", "verdict": "keep", "reason": "Parity-wall status map + RULE to grep for actual SimProc class; cited both ways", "batch": "R3-CATCH-4"}
+{"key": "native-locale-string-parity", "verdict": "keep", "reason": "strcoll/strxfrm C-locale parity + remaining gap list", "batch": "R3-CATCH-4"}
+{"key": "native-memrchr-rawmemchr-strchrnul", "verdict": "keep", "reason": "Scan-core flag-extension design for reverse/nul-variant scans", "batch": "R3-CATCH-4"}
+{"key": "native-only-procedures-pattern", "verdict": "keep", "reason": "Test pattern for decl-only procs via _make_stub; native is sole dispatch path", "batch": "R3-CATCH-4"}
+{"key": "native-proc-call-counts-keyed-on-hook-name", "verdict": "keep", "reason": "call_counts keyed on hooked/alias name gotcha for alias-dispatch tests", "batch": "R3-CATCH-4"}
+{"key": "native-proc-extern-region-and-ctype-table-timing", "verdict": "keep", "reason": "Why native procs only fire in extern region + ctype seed-timing limitation", "batch": "R3-CATCH-4"}
+{"key": "native-proc-heap-store-lazy", "verdict": "keep", "reason": "Heap lazy-region auto-map fix root cause + cascading perf win", "batch": "R3-CATCH-4"}
+{"key": "native-proc-unlocked-aliases", "verdict": "keep", "reason": "_unlocked alias DRY mechanism + SIM_PROCEDURES name-fallback path; cited out-of-batch", "batch": "R3-CATCH-4"}
+{"key": "native-pthread-mutex-noop", "verdict": "keep", "reason": "pthread mutex/once native no-op design + subcall usage for pthread_once", "batch": "R3-CATCH-4"}
+{"key": "native-setbuf-parity", "verdict": "keep", "reason": "Void no-op setbuf + grep-proc-name-not-filename pitfall", "batch": "R3-CATCH-4"}
+{"key": "native-simoption-has-option", "verdict": "keep", "reason": "Two-part SimOption wiring requirement (mirror + allow-list) gotcha", "batch": "R3-CATCH-4"}
+{"key": "native-sleep-usleep-parity", "verdict": "keep", "reason": "bv-arg-discard trick to avoid concretization fallback; cited both ways", "batch": "R3-CATCH-4"}
+{"key": "native-stdio-cle-stream-fileno-unmapped", "verdict": "keep", "reason": "cle stream fileno unmapped-page fix + perf-regression root cause", "batch": "R3-CATCH-4"}
+{"key": "native-stpcpy-mempcpy-parity", "verdict": "keep", "reason": "Return-end-pointer family parity RULE; cited by native-stpncpy-parity", "batch": "R3-CATCH-4"}
+{"key": "native-stpncpy-parity", "verdict": "keep", "reason": "stpncpy semantics + strncpy padding-divergence gotcha; cross-cited", "batch": "R3-CATCH-4"}
+{"key": "native-strncasecmp-parity", "verdict": "keep", "reason": "posix-namespace gotcha + shared compare_bytes reuse detail", "batch": "R3-CATCH-4"}
+{"key": "native-strndup-parity", "verdict": "keep", "reason": "DRY strndup impl + posix registration; cites native-htonl-htons-parity", "batch": "R3-CATCH-4"}
+{"key": "native-subcall-dispatcher-design", "verdict": "keep", "reason": "Durable CallAndResume subcall architecture design with dispatch paths + design doc ref", "batch": "R3-CATCH-4"}

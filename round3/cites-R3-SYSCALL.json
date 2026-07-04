@@ -1,0 +1,8 @@
+{
+  "in": {},
+  "out": {
+    "syscall-arch-number-table-staleness": [
+      "i386-struct-stat-and-angr-syscall-map"
+    ]
+  }
+}

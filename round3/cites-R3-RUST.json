@@ -1,0 +1,47 @@
+{
+  "in": {
+    "rust-mod-tests-sibling-extraction": [
+      "rust-mod-tests-named-mods-extracted",
+      "rust-mod-tests-tier-exhausted"
+    ],
+    "rust-proc-integration-test-rax-only": [
+      "format-proc-integration-tests"
+    ],
+    "rust-proxy-architecture-decision": [
+      "rust-engine-claude-md-pointer"
+    ],
+    "rust-proxy-copy-design": [
+      "arch-design-cluster-sweep-iter509",
+      "invariant-rust-proxy-copies-gc"
+    ],
+    "rust-python-boundary-audit": [
+      "bounce-reduction-low-roi-corpus",
+      "rust-engine-claude-md-pointer"
+    ]
+  },
+  "out": {
+    "rust-engine-claude-md-pointer": [
+      "benchmark-bimodal-variance-rules",
+      "characterization-vs-fix-pattern",
+      "constraint-export-no-pre-pin",
+      "core-goal-design-philosophy",
+      "rust-proxy-architecture-decision",
+      "rust-python-boundary-audit"
+    ],
+    "rust-fallback-strategy-semantics": [
+      "refactor-memory-sweep-rule"
+    ],
+    "rust-mod-tests-named-mods-extracted": [
+      "rust-mod-tests-sibling-extraction"
+    ],
+    "rust-mod-tests-tier-exhausted": [
+      "rust-mod-tests-sibling-extraction"
+    ],
+    "rust-proxy-constraints-vs-exported-state": [
+      "constraint-export-no-pre-pin"
+    ],
+    "rust-proxy-copy-design": [
+      "invariant-rust-proxy-copies-gc"
+    ]
+  }
+}

@@ -1,0 +1,67 @@
+{"key": "native-subcall-enum-vs-trait-blastradius", "verdict": "keep", "reason": "Quantified design guidance (Option B recommended) for a human-gated native sub-call dispatcher refactor; durable decision data.", "batch": "R3-CATCH-5"}
+{"key": "native-syscall-name-is-diagnostic", "verdict": "keep", "reason": "Durable invariant: dispatcher keys on (arch,num) not name(); unit-struct implication.", "batch": "R3-CATCH-5"}
+{"key": "native-syscall-registration-discipline", "verdict": "keep", "reason": "Durable registration rule for new syscall families.", "batch": "R3-CATCH-5"}
+{"key": "native-syslog-parity", "verdict": "keep", "reason": "Operational parity detail (openlog/closelog void stubs) + remaining-gap map.", "batch": "R3-CATCH-5"}
+{"key": "native-system-parity", "verdict": "keep", "reason": "Durable parity idiom for native system() symbolic return.", "batch": "R3-CATCH-5"}
+{"key": "native-technique-architecture", "verdict": "keep", "reason": "Architecture of NativeTechnique enum; cited externally (arch-design-cluster-sweep-iter509).", "batch": "R3-CATCH-5"}
+{"key": "native-time-proc-forwards-to-syscall", "verdict": "keep", "reason": "Durable generalizable pattern (libc proc forwarding to native syscall core; symbolic rax).", "batch": "R3-CATCH-5"}
+{"key": "native-uniqueness-filter", "verdict": "keep", "reason": "Durable architecture of native uniqueness filter and call sites.", "batch": "R3-CATCH-5"}
+{"key": "native-vprintf-family-aliases", "verdict": "keep", "reason": "Documents alias pattern + obsolescence update; cross-refs the vsprintf parity note.", "batch": "R3-CATCH-5"}
+{"key": "native-vsnprintf-chk-parity", "verdict": "keep", "reason": "Durable fortify-printf drop-flag/slen parity detail.", "batch": "R3-CATCH-5"}
+{"key": "native-vsprintf-vprintf-vfprintf-parity", "verdict": "keep", "reason": "Captures raw-write family design decision; cited in-batch by native-vprintf-family-aliases.", "batch": "R3-CATCH-5"}
+{"key": "network-reachability-2026-06-06", "verdict": "forget", "reason": "Dated network-reachability status snapshot (2026-06-06); point-in-time, no external citers.", "batch": "R3-CATCH-5"}
+{"key": "no-full-simstate-sync", "verdict": "keep", "reason": "Strong durable invariant: avoid full SimState sync, use RustStateProxy.", "batch": "R3-CATCH-5"}
+{"key": "offline-loop-queue-blocker-map", "verdict": "keep", "reason": "Blocker map with recommendations; cited externally (avoid-fxhash-dedup-set-spike); bias keep.", "batch": "R3-CATCH-5"}
+{"key": "offline-workflows-doc-2026-06-06", "verdict": "keep", "reason": "Entry-point pointer to tools/OFFLINE_WORKFLOWS.md (verified present) + how-to-extend guidance.", "batch": "R3-CATCH-5"}
+{"key": "okca-statesid-scoping", "verdict": "keep", "reason": "Durable scoping analysis for a future StateId newtype refactor.", "batch": "R3-CATCH-5"}
+{"key": "ops-tests-split-design", "verdict": "keep", "reason": "Durable design of the by-family ops_tests split.", "batch": "R3-CATCH-5"}
+{"key": "ovqja5-qfbv-smt-route-infeasible", "verdict": "keep", "reason": "Durable NOGO/infeasibility reasoning; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "p1b-harness-pass-results", "verdict": "forget", "reason": "One-off bounded-harness run-results snapshot (angr-9w6ad.2); superseded by perf-campaign-p5-deferral-decision; no external citers.", "batch": "R3-CATCH-5"}
+{"key": "page-clear-symbolic-helper", "verdict": "keep", "reason": "Documents Page::clear_symbolic API (verified present) and when to use it.", "batch": "R3-CATCH-5"}
+{"key": "panhl1-killgate-pass", "verdict": "keep", "reason": "Kill-gate evidence for the active parallel-exploration work (steady-state coordinator is live on branch); cited in-batch.", "batch": "R3-CATCH-5"}
+{"key": "panhl2-killgate-pass", "verdict": "keep", "reason": "Contains durable leaves-only-Z3-translate insight for active parallel work; cross-refs siblings.", "batch": "R3-CATCH-5"}
+{"key": "panic-hardening-symbolic-value-pattern", "verdict": "keep", "reason": "Durable panic-hardening pattern + pitfall.", "batch": "R3-CATCH-5"}
+{"key": "panic-hardening-vec-float-pattern", "verdict": "keep", "reason": "Durable panic-hardening pattern for vec_float dispatch.", "batch": "R3-CATCH-5"}
+{"key": "panic-reachability-audit-2026-06", "verdict": "keep", "reason": "Audit with do-not-re-flag list; prevents redundant panic sweeps.", "batch": "R3-CATCH-5"}
+{"key": "parallel-cliff-was-bimodal-not-superlinear", "verdict": "keep", "reason": "Durable correction to a prior superlinear claim; active parallel area.", "batch": "R3-CATCH-5"}
+{"key": "parallel-exploration-recommendation", "verdict": "keep", "reason": "Durable threading-model design recommendation (Option A).", "batch": "R3-CATCH-5"}
+{"key": "parallel-go-nogo-panhl", "verdict": "keep", "reason": "Durable sharpened GO/NOGO summary for parallel exploration.", "batch": "R3-CATCH-5"}
+{"key": "parallel-is-transport-bound", "verdict": "keep", "reason": "Durable transport-bound analysis; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "parallel-migration-model", "verdict": "keep", "reason": "Durable implementation note for the migration model; cited in-batch.", "batch": "R3-CATCH-5"}
+{"key": "parallel-numfind1-speculative-waste", "verdict": "keep", "reason": "Durable insight on num_find=1 parallel worst case.", "batch": "R3-CATCH-5"}
+{"key": "parallel-per-wave-migration-dominates", "verdict": "keep", "reason": "Durable root-cause of per-wave migration cost; cited externally; active area.", "batch": "R3-CATCH-5"}
+{"key": "parallel-width-audit-verdict", "verdict": "keep", "reason": "Durable QUALIFIED-GO width-audit verdict + lesson.", "batch": "R3-CATCH-5"}
+{"key": "parity-gap-diff-false-positives", "verdict": "keep", "reason": "Durable methodology warning for parity gap-diffs.", "batch": "R3-CATCH-5"}
+{"key": "pattern-libc-symbolic-integration-test", "verdict": "keep", "reason": "Durable reusable test pattern; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "pattern-pyobject-fork-clone-via-attach", "verdict": "keep", "reason": "Durable GIL clone_ref pattern; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "pdq8-counter-overhead-validated", "verdict": "keep", "reason": "Durable validated conclusion (counters zero-cost, no stats flag needed); cited by 2j5v.", "batch": "R3-CATCH-5"}
+{"key": "pending-writes-scaffold-inactive-not-the-path", "verdict": "keep", "reason": "Durable 'this scaffold is inactive / not the path' guidance.", "batch": "R3-CATCH-5"}
+{"key": "per-arch-syscall-numbers-from-angr", "verdict": "keep", "reason": "Durable methodology + truncation caveat for per-arch syscall registration.", "batch": "R3-CATCH-5"}
+{"key": "per-fork-solver-share-infeasible", "verdict": "keep", "reason": "Durable NOGO reasoning (SharedLineageSolver already exists); cited externally.", "batch": "R3-CATCH-5"}
+{"key": "perf-campaign-p5-deferral-decision", "verdict": "keep", "reason": "Durable campaign-closure deferral rationale ('do NOT re-open as engine work').", "batch": "R3-CATCH-5"}
+{"key": "perf-counter-fishing-exhausted", "verdict": "keep", "reason": "Durable 'do not re-run counter dumps' guidance; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "perf-dashboard-schema", "verdict": "keep", "reason": "Durable schema_version invariant for the perf dashboard.", "batch": "R3-CATCH-5"}
+{"key": "phase3-cache-invariant", "verdict": "keep", "reason": "Durable MultiPayload::collapse cache invariant future code must preserve.", "batch": "R3-CATCH-5"}
+{"key": "pmovmskb-binary-free-test", "verdict": "keep", "reason": "Durable test pattern correcting a prior handoff claim.", "batch": "R3-CATCH-5"}
+{"key": "posix-callback-counter-export-only", "verdict": "keep", "reason": "Durable counter semantics (export-time only) affecting a DEFER->GO trigger.", "batch": "R3-CATCH-5"}
+{"key": "pr-bench-gate-jitter-risk", "verdict": "keep", "reason": "Durable operational risk note + mitigation options for the PR bench gate.", "batch": "R3-CATCH-5"}
+{"key": "predicate-eval-uncached-states", "verdict": "keep", "reason": "Durable architectural gotcha in predicate evaluation of Rust-forked states.", "batch": "R3-CATCH-5"}
+{"key": "predicate-reevaluation-bug", "verdict": "keep", "reason": "Durable re-evaluation semantics (active/deadended always re-evaluated).", "batch": "R3-CATCH-5"}
+{"key": "prefetch-disabled-by-default", "verdict": "keep", "reason": "Durable note: prefetch off, prefetch-only optimizations have zero impact.", "batch": "R3-CATCH-5"}
+{"key": "prexisting-public-api-drift-failures", "verdict": "forget", "reason": "Stale status snapshot: the 3 failing tests were fixed in 1d488466a (angr-ytu9 CLOSED); superseded by public-api-proxy-protocol-surface.", "batch": "R3-CATCH-5"}
+{"key": "printf-family-symbolic-format-boundary", "verdict": "keep", "reason": "Durable asymmetric symbolic-format boundary detail.", "batch": "R3-CATCH-5"}
+{"key": "procedures-cluster5-scan-driver", "verdict": "keep", "reason": "Durable dedup design + gotchas for the shared scan driver.", "batch": "R3-CATCH-5"}
+{"key": "procedures-format-common-shared-helpers", "verdict": "keep", "reason": "Durable guidance: use format_common leaf parsers, don't inline ad-hoc loops.", "batch": "R3-CATCH-5"}
+{"key": "procedures-write-and-memcommon-helpers", "verdict": "keep", "reason": "Durable shared write/symbolic-addr helper guidance.", "batch": "R3-CATCH-5"}
+{"key": "proxy-baby-re-corruption-mem-aliasing", "verdict": "forget", "reason": "Incomplete-investigation snapshot (iter 4); angr-5aj8 later root-caused (u128 shift-overflow) and CLOSED/fixed, superseding these hypotheses/next-steps.", "batch": "R3-CATCH-5"}
+{"key": "proxy-callstack-manage-required", "verdict": "keep", "reason": "Durable invariant: RustCallStackProxyPlugin._manage must exist as no-op.", "batch": "R3-CATCH-5"}
+{"key": "proxy-gate-audit-all-default-off", "verdict": "keep", "reason": "Durable audit verdict inverting the sluuj premise; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "proxy-gate-cache-pollution-pattern", "verdict": "keep", "reason": "Durable gotcha: cache pollution under proxy gates; fix at consumer side.", "batch": "R3-CATCH-5"}
+{"key": "proxy-writes-design-verdict", "verdict": "keep", "reason": "Durable design verdict (Option C) + reopen conditions; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "public-api-proxy-protocol-surface", "verdict": "keep", "reason": "Durable explanation of intentional proxy public surface (prevents rename-to-underscore mistakes).", "batch": "R3-CATCH-5"}
+{"key": "pyo3-pyclass-cycle-leak", "verdict": "keep", "reason": "Durable PyO3 cycle-leak gotcha + fix; cited externally.", "batch": "R3-CATCH-5"}
+{"key": "pyo3-pymethods-private-fn-still-bridged", "verdict": "keep", "reason": "Durable PyO3 gotcha: move non-bridgeable helpers out of #[pymethods].", "batch": "R3-CATCH-5"}
+{"key": "pytest-pyo3-method-spy-pattern", "verdict": "keep", "reason": "Durable test pattern for spying on read-only PyO3 methods.", "batch": "R3-CATCH-5"}
+{"key": "python-baseline-tests-audit", "verdict": "keep", "reason": "Rejected-candidates + re-audit cadence give ongoing test-suite guidance; torn, bias keep.", "batch": "R3-CATCH-5"}
+{"key": "python-bridge-dedup-shared-helpers", "verdict": "keep", "reason": "Durable dedup design of shared solver-proxy primitives.", "batch": "R3-CATCH-5"}
+{"key": "python-class-reassignment-for-history-plugin", "verdict": "keep", "reason": "Durable __class__ reassignment pattern for per-state history override.", "batch": "R3-CATCH-5"}

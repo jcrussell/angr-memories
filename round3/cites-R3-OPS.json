@@ -1,0 +1,33 @@
+{
+  "in": {
+    "bd-memory-citation-repair-pattern": [
+      "bd-memory-rename-sweep-json-dump",
+      "refactor-memory-sweep-rule"
+    ],
+    "bd-memory-path-audit-method": [
+      "bd-memory-symbol-anchor-audit-clean"
+    ],
+    "bd-update-notes-overwrites": [
+      "avoid-bd-remember-without-key-flag",
+      "bd-comment-append-only"
+    ]
+  },
+  "out": {
+    "bd-comment-append-only": [
+      "avoid-bd-remember-without-key-flag",
+      "bd-update-notes-overwrites"
+    ],
+    "bd-memory-path-audit-method": [
+      "docs-citation-audit-method",
+      "native-htonl-htons-parity",
+      "refactor-memory-sweep-rule"
+    ],
+    "bd-memory-rename-sweep-json-dump": [
+      "bd-memory-citation-repair-pattern",
+      "invariant-flush-stores-drain"
+    ],
+    "bd-memory-symbol-anchor-audit-clean": [
+      "bd-memory-path-audit-method"
+    ]
+  }
+}

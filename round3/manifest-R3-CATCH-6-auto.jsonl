@@ -1,0 +1,67 @@
+{"key": "python-lazy-memory-is-page-level-not-address-level", "verdict": "keep", "reason": "Durable conceptual knowledge on Python angr memory model; corrects a common misconception", "batch": "R3-CATCH-6"}
+{"key": "python-native-procedure-api", "verdict": "keep", "reason": "Durable PyO3 API description for register_python_procedure", "batch": "R3-CATCH-6"}
+{"key": "range-seeded-bisection-asymmetry", "verdict": "keep", "reason": "Durable perf characterization of bisection seeding asymmetry", "batch": "R3-CATCH-6"}
+{"key": "read-short-read-model", "verdict": "keep", "reason": "Durable SHORT_READS design detail beyond commit message", "batch": "R3-CATCH-6"}
+{"key": "ready-queue-fully-blocked-escalate-to-human", "verdict": "forget", "reason": "Iteration receipt (ralph iters 74-79, stale one-off bead ids); reusable kernel is a single sentence", "batch": "R3-CATCH-6"}
+{"key": "real-binary-readiness-roadmap", "verdict": "keep", "reason": "Epic angr-11djq still OPEN; encodes chosen anti-explosion design direction", "batch": "R3-CATCH-6"}
+{"key": "real-unmapped-vex-ops-list", "verdict": "keep", "reason": "Durable verified reference list of unmapped VEX ops + probe pattern", "batch": "R3-CATCH-6"}
+{"key": "refactor-memory-sweep-rule", "verdict": "keep", "reason": "Mandatory keep-list key", "batch": "R3-CATCH-6"}
+{"key": "register-proxy-gate-empty-state-ids", "verdict": "forget", "reason": "Superseded hypothesis; angr-4rq7 CLOSED with stale-cache as final root cause, which refutes this suspected mechanism", "batch": "R3-CATCH-6"}
+{"key": "register-proxy-stale-cache-root-cause", "verdict": "keep", "reason": "FINAL root cause of angr-4rq7; load-bearing (cited from outside batch)", "batch": "R3-CATCH-6"}
+{"key": "register-sync-bottleneck", "verdict": "keep", "reason": "Durable perf characterization; do-not-optimize guidance", "batch": "R3-CATCH-6"}
+{"key": "regression-flakes-defcamp_r100", "verdict": "keep", "reason": "Operational knowledge of known ambient flakes on the box", "batch": "R3-CATCH-6"}
+{"key": "rejected-optimizations-apr12", "verdict": "keep", "reason": "Durable do-not-re-propose list", "batch": "R3-CATCH-6"}
+{"key": "ruff-install-recipe", "verdict": "keep", "reason": "Operational recipe for installing ruff with broken venv pip", "batch": "R3-CATCH-6"}
+{"key": "run-n-ignored-root-cause", "verdict": "keep", "reason": "Durable semantics knowledge of run(n=N) fix + repro beyond commit", "batch": "R3-CATCH-6"}
+{"key": "run-single-spawn-tree-sampling", "verdict": "keep", "reason": "Durable process-tree sampling gotcha (spawn grandchild)", "batch": "R3-CATCH-6"}
+{"key": "rustbv-api-and-syscall-test-gotchas", "verdict": "keep", "reason": "Durable API + test gotchas (.width vs .bits)", "batch": "R3-CATCH-6"}
+{"key": "rustbv-into-variants", "verdict": "keep", "reason": "Durable _into vs &self op pairing convention", "batch": "R3-CATCH-6"}
+{"key": "rustbv-microbench-vs-realworld", "verdict": "keep", "reason": "Durable lesson on microbench vs real-world attribution", "batch": "R3-CATCH-6"}
+{"key": "rustbv-symbolic-id-not-in-debug", "verdict": "keep", "reason": "Durable test gotcha on Debug impl omitting symbolic id", "batch": "R3-CATCH-6"}
+{"key": "sampler-perf-test-pattern", "verdict": "keep", "reason": "Durable sampler-hook perf test pattern", "batch": "R3-CATCH-6"}
+{"key": "scanf-scanset-unconstrained", "verdict": "keep", "reason": "Durable scanset modeling design note", "batch": "R3-CATCH-6"}
+{"key": "scanf-simproc-design", "verdict": "keep", "reason": "Durable scanf simproc design; cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "selfcall-continuation-regression-test", "verdict": "keep", "reason": "Durable binary-free regression test recipe", "batch": "R3-CATCH-6"}
+{"key": "serde-json-byte-keyed-map-trap", "verdict": "keep", "reason": "Durable serde_json byte-keyed map trap + fix pattern", "batch": "R3-CATCH-6"}
+{"key": "serde-json-unbounded-depth-for-rustbv", "verdict": "keep", "reason": "Durable serde recursion-limit fix knowledge", "batch": "R3-CATCH-6"}
+{"key": "sgbn-unconstrained-sp-fastpath", "verdict": "keep", "reason": "Durable perf fix detail; cited as anchor by refactor-memory-sweep-rule", "batch": "R3-CATCH-6"}
+{"key": "shared-solver-for-callbacks", "verdict": "keep", "reason": "Durable shared-solver architecture", "batch": "R3-CATCH-6"}
+{"key": "shared-z3-context-setup-required", "verdict": "keep", "reason": "Durable test-setup requirement for shared Z3 context", "batch": "R3-CATCH-6"}
+{"key": "sharif7-stale-baseline-iter67", "verdict": "forget", "reason": "Iteration receipt; stale-baseline incident resolved and baseline refreshed in landed commit 831d8918a", "batch": "R3-CATCH-6"}
+{"key": "showcase-blog-draft", "verdict": "keep", "reason": "Locates blog draft + honesty guardrails; artifact exists in repo", "batch": "R3-CATCH-6"}
+{"key": "showcase-blog-epic", "verdict": "keep", "reason": "Epic scope + load-bearing honesty guardrails for numbers", "batch": "R3-CATCH-6"}
+{"key": "showcase-checkpoint-resume-demo", "verdict": "keep", "reason": "Describes show_checkpoint_resume.py (present); cited by resume-target-classification", "batch": "R3-CATCH-6"}
+{"key": "showcase-multiarch-parity-demo", "verdict": "keep", "reason": "Describes show_multiarch.py (present) + parity-not-speed framing", "batch": "R3-CATCH-6"}
+{"key": "showcase-number-gate", "verdict": "keep", "reason": "Describes measure_showcase.py number gate (present)", "batch": "R3-CATCH-6"}
+{"key": "showcase-raw-speed-harness", "verdict": "keep", "reason": "Describes show_raw_speed.py (present)", "batch": "R3-CATCH-6"}
+{"key": "showcase-resume-target-classification", "verdict": "keep", "reason": "Durable resume target classification; cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "showcase-solver-instrumentation-demo", "verdict": "keep", "reason": "Describes show_solver_instrumentation.py (present) + get_solver_stats gotcha", "batch": "R3-CATCH-6"}
+{"key": "simoption-wiring-template", "verdict": "keep", "reason": "Durable 8-site SimOption wiring template", "batch": "R3-CATCH-6"}
+{"key": "simprocedure-dispatch-priority", "verdict": "keep", "reason": "Durable native-vs-Python dispatch chain doc", "batch": "R3-CATCH-6"}
+{"key": "sla-regression-flags", "verdict": "keep", "reason": "Durable run_regression.py SLA flags reference", "batch": "R3-CATCH-6"}
+{"key": "smxp-slice-1-dfs-length-limiter-recipe", "verdict": "keep", "reason": "Records DFS+LengthLimiter recipe + deferred items (grub measurement, auto-detect)", "batch": "R3-CATCH-6"}
+{"key": "snapshot-rustbv-shadow-type-pattern", "verdict": "keep", "reason": "Durable serde shadow-type pattern for RustBV", "batch": "R3-CATCH-6"}
+{"key": "snapshot-rustsimstate-envelope-shape", "verdict": "keep", "reason": "Durable snapshot envelope shape; cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "snapshot-solver-smtlib2-design", "verdict": "keep", "reason": "Durable snapshot constraint-capture design; cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "snapshot-state-bucket-shadow-pattern", "verdict": "keep", "reason": "Durable RegisterFile/MemoryPage serde shadow pattern", "batch": "R3-CATCH-6"}
+{"key": "sokohashv2-two-bugs", "verdict": "keep", "reason": "Adds durable residual-gap characterization (bimodal Z3) beyond the two landed fixes", "batch": "R3-CATCH-6"}
+{"key": "solver-equality-contradiction-detected", "verdict": "keep", "reason": "Durable characterization correcting stale docstrings", "batch": "R3-CATCH-6"}
+{"key": "solver-fork-o-n-root-cause-symcontext-fork", "verdict": "keep", "reason": "Durable root-cause + Python-parity architecture rationale (fixed in angr-y2o but design knowledge stands)", "batch": "R3-CATCH-6"}
+{"key": "solver-test-pattern-fork-witness", "verdict": "keep", "reason": "Durable fork-witness constraint-admissibility test pattern", "batch": "R3-CATCH-6"}
+{"key": "sphinx-cross-link-audit-method", "verdict": "keep", "reason": "Durable Sphinx :ref: audit method", "batch": "R3-CATCH-6"}
+{"key": "stack-page-concrete-load", "verdict": "keep", "reason": "Durable stack-page init perf fix + AVOID note", "batch": "R3-CATCH-6"}
+{"key": "state-export-identity-not-passthrough", "verdict": "keep", "reason": "Durable export-identity contract for round-trip tests", "batch": "R3-CATCH-6"}
+{"key": "state-roots-every-fork", "verdict": "keep", "reason": "Durable fork-registration invariant", "batch": "R3-CATCH-6"}
+{"key": "stateid-newtype-boundary-okca", "verdict": "keep", "reason": "Durable newtype-boundary design lesson", "batch": "R3-CATCH-6"}
+{"key": "stdio-fwrite-fputs-arbitrary-fd", "verdict": "merge", "reason": "Canonical of stdio fwrite/fputs cluster; absorbs the position-aware update", "batch": "R3-CATCH-6", "canonical": true, "merged_body": "NativeFwrite (native/angr/src/procedures/stdio.rs) and NativeFputs are sibling stdio shims that resolve a FILE struct's _fileno (arch-specific offset via fd_offset_for_arch) then write the payload. Both write to ANY non-negative fd via state.write_fd -> FileSystem::write. Both require CONCRETE src bytes (error -> Python fallback on symbolic). fwrite was originally narrowed to fd 1/2 only; b670c (commit 1e08b86c9) generalized it to match fputs. When touching one, keep the other in sync. POSITION note: FileSystem::write originally APPENDED to the fd's content buffer, ignoring the fd position field (NOT position-aware — a seek-then-write on a regular file would diverge from Python); this is now FIXED (commit 994707c63) — FileSystem::write is a POSIX positioned-write. See memory write-fd-position-aware."}
+{"key": "stdio-fwrite-fputs-arbitrary-fd-update", "verdict": "merge", "reason": "Patch-note superseding the base memory's position caveat; folded into canonical", "batch": "R3-CATCH-6", "merged_into": "stdio-fwrite-fputs-arbitrary-fd"}
+{"key": "steady-state-loop-opt-in-net-negative-corpus", "verdict": "keep", "reason": "Recent, durable warning on opt-in steady-state parallel feature", "batch": "R3-CATCH-6"}
+{"key": "step-error-size-numbers", "verdict": "keep", "reason": "Durable StepError size analysis; cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "strcpy-find-regression-root-cause", "verdict": "keep", "reason": "Durable CFG monkey-patch root cause; cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "strcpy-strcat-integration-coverage", "verdict": "keep", "reason": "Durable write-proc integration test reuse pattern", "batch": "R3-CATCH-6"}
+{"key": "strnlen-bad-integration-test-target", "verdict": "keep", "reason": "Durable test-target guidance; cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "strnlen-fallback-root-cause", "verdict": "keep", "reason": "Durable confirmed root cause (is_in_binary skip); cited from outside batch", "batch": "R3-CATCH-6"}
+{"key": "symbolic-stream-fd-read-slice", "verdict": "keep", "reason": "Durable symbolic-stream-fd design + deferred bounded-file note", "batch": "R3-CATCH-6"}
+{"key": "symlink-seeding-from-python", "verdict": "keep", "reason": "Durable FileSystem symlink seeding design + syscall test gotcha", "batch": "R3-CATCH-6"}
+{"key": "symlink-table-readlink-model", "verdict": "keep", "reason": "Durable symlink table / readlink model design", "batch": "R3-CATCH-6"}
+{"key": "symwrite-eager-vs-lazy-memory", "verdict": "keep", "reason": "Durable architectural root cause of sym-write slowness", "batch": "R3-CATCH-6"}

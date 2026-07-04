@@ -1,0 +1,11 @@
+{
+  "in": {
+    "inspect-enabled-clone-pitfall": [
+      "invariant-pycallbacks-mutable-fields"
+    ],
+    "inspect-marshalling-design": [
+      "arch-design-cluster-sweep-iter509"
+    ]
+  },
+  "out": {}
+}

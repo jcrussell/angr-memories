@@ -1,0 +1,24 @@
+{
+  "in": {
+    "invariant-concrete-bv-u128-16-byte-limit": [
+      "xmllint-simprocs-cross-engine-divergence"
+    ],
+    "invariant-error-class-taxonomy": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-expression-cache-export-key": [
+      "claripy-bridge-thread-local-caches"
+    ]
+  },
+  "out": {
+    "invariant-3tek2-replay-ordering": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-divmod-symbolic": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-error-class-taxonomy": [
+      "refactor-memory-sweep-rule"
+    ]
+  }
+}

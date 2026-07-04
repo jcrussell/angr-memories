@@ -1,0 +1,24 @@
+{
+  "in": {
+    "invariant-flush-stores-drain": [
+      "bd-memory-rename-sweep-json-dump"
+    ],
+    "invariant-fork-metadata-clone": [
+      "fork-skip-gil-attach-empty-metadata"
+    ],
+    "invariant-fork-needs-python-init": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-mem-ite-depth-counter": [
+      "lazy-memory-sidecar-architecture"
+    ]
+  },
+  "out": {
+    "invariant-ite-builder-loads-match": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-native-syscall-dispatch": [
+      "invariant-syscall-fallback-on-collision"
+    ]
+  }
+}

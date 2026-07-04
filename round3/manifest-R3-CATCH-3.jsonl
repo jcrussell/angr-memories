@@ -1,0 +1,67 @@
+{"key": "exploration-route-and-chunked-helpers", "verdict": "keep", "reason": "Durable dedup-helper API + intentional non-migration rationale for resume.rs buffering sites", "batch": "R3-CATCH-3"}
+{"key": "export-proxy-gates-nightly-soak", "verdict": "keep", "reason": "Opens as a closure receipt but carries a reusable PITFALL: forcing a new gate on breaks hand-written off-tests, fix via explicit kwarg=False", "batch": "R3-CATCH-3"}
+{"key": "expression-z3-ast-memo", "verdict": "keep", "reason": "Durable Z3 AST memo design + soundness/context-swap correctness; load-bearing (cited from outside batch)", "batch": "R3-CATCH-3"}
+{"key": "extract-ite-targets-test-pattern", "verdict": "keep", "reason": "Concrete unit-test construction pattern for extract_ite_targets", "batch": "R3-CATCH-3"}
+{"key": "extract-symbolic-pages-misses-filler-loads", "verdict": "keep", "reason": "Durable insight: UltraPage changed-history tracks stores not loads; filler-materialised values need symbolic_data walk", "batch": "R3-CATCH-3"}
+{"key": "fairlight-bottleneck", "verdict": "keep", "reason": "Durable benchmark characterization: Z3-bound, path-condition accumulation is the lever", "batch": "R3-CATCH-3"}
+{"key": "fast-prune-callable", "verdict": "keep", "reason": "Optimization with durable design rationale (prune uses Rust state_satisfiable, filter uses lightweight proxy)", "batch": "R3-CATCH-3"}
+{"key": "fauxware-exit-overlaps-main", "verdict": "keep", "reason": "Durable debugging quirk: rejected() post-call address overlaps main() start", "batch": "R3-CATCH-3"}
+{"key": "feature-gate-decay-native-lift", "verdict": "keep", "reason": "Documents the native-lift deletion (verified gone) + durable lesson on non-default Cargo feature decay", "batch": "R3-CATCH-3"}
+{"key": "ffi-batch-pending-getters", "verdict": "keep", "reason": "Durable FFI-batching pattern for hot-path pending getters", "batch": "R3-CATCH-3"}
+{"key": "fgetc-eof-short-read-model", "verdict": "keep", "reason": "Durable native fgetc/getchar EOF/short-read model detail", "batch": "R3-CATCH-3"}
+{"key": "fgets-newline-constraint", "verdict": "keep", "reason": "Durable native fgets newline-constraint design with all-but-last KEY INSIGHT", "batch": "R3-CATCH-3"}
+{"key": "fgets-short-read-design", "verdict": "keep", "reason": "Durable native fgets short-read modeling; load-bearing (cited from outside batch)", "batch": "R3-CATCH-3"}
+{"key": "file-read-fixture-build", "verdict": "keep", "reason": "Durable fixture build notes for file_read_kernel", "batch": "R3-CATCH-3"}
+{"key": "flaky-model-stability-constraint-order", "verdict": "keep", "reason": "Durable operational note: order-dependent flaky test, not a regression signal", "batch": "R3-CATCH-3"}
+{"key": "flareon10-three-bugs", "verdict": "keep", "reason": "Consolidates three durable design invariants (Iend_BE snapshot, 16-byte chunking, per-step step_func)", "batch": "R3-CATCH-3"}
+{"key": "flareon2015_2-baseline-drift", "verdict": "keep", "reason": "Generalizable lesson: gate failure on codegen-identical refactor is baseline drift, re-time baseline commit", "batch": "R3-CATCH-3"}
+{"key": "flareon5-post-exploration-constraints", "verdict": "keep", "reason": "Durable design point: sync post-exploration constraints to Rust solver on eval", "batch": "R3-CATCH-3"}
+{"key": "fopen-mode-parsing", "verdict": "keep", "reason": "Durable native fopen mode-parser divergence notes (O_CREAT/O_APPEND unmodeled)", "batch": "R3-CATCH-3"}
+{"key": "fork-cold-wider-load-cache", "verdict": "keep", "reason": "Durable fork-cache design + general rule for dropping rebuildable caches cold", "batch": "R3-CATCH-3"}
+{"key": "fork-counters-zero-on-fauxware", "verdict": "keep", "reason": "Durable test-assertion guidance: check *_fork_time_ns not *_fork_count on fauxware", "batch": "R3-CATCH-3"}
+{"key": "fork-skip-gil-attach-empty-metadata", "verdict": "keep", "reason": "Durable fork GIL-skip design for empty-metadata common case", "batch": "R3-CATCH-3"}
+{"key": "format-parser-interpret-two-subpaths", "verdict": "keep", "reason": "Durable format_parser.interpret() dual-dispatch gotcha; cross-references three-dispatch-sites", "batch": "R3-CATCH-3"}
+{"key": "format-parser-three-dispatch-sites", "verdict": "keep", "reason": "Durable format-spec three-dispatch-site sync rule; load-bearing (cited from outside batch)", "batch": "R3-CATCH-3"}
+{"key": "format-proc-integration-tests", "verdict": "keep", "reason": "Durable format-proc integration-test setup (vararg register order, distinguishing asserts)", "batch": "R3-CATCH-3"}
+{"key": "format-spec-type-lowercased-and-printf-strip", "verdict": "keep", "reason": "Durable gotcha: spec_type lowercases conversion char; f-string prefix-strip regression", "batch": "R3-CATCH-3"}
+{"key": "fortify-chk-glibc-proto-arg-order", "verdict": "keep", "reason": "Durable divergence-check rule for fortify _chk proto arg order across glibc.json/decls", "batch": "R3-CATCH-3"}
+{"key": "fortify-chk-ignore-destlen", "verdict": "keep", "reason": "Durable rule: fortify mem _chk ignore destlen, do not emulate __chk_fail (cross-engine divergence)", "batch": "R3-CATCH-3"}
+{"key": "fortify-printf-chk-prototype-abi", "verdict": "keep", "reason": "Durable fortify printf _chk ABI gotchas (proto arg count must equal run() signature)", "batch": "R3-CATCH-3"}
+{"key": "fortify-str-chk-divergence-fix", "verdict": "keep", "reason": "Durable asymmetry lesson: str _chk needs Python procs added too (grep-Python-first rule)", "batch": "R3-CATCH-3"}
+{"key": "fp-isnan-via-fpa-eq", "verdict": "keep", "reason": "Durable Z3 FP identity: is_nan via NOT(x==x)", "batch": "R3-CATCH-3"}
+{"key": "fp-minmax-no-z3-fpa-min", "verdict": "keep", "reason": "Durable Z3 FP min/max encoding via ITE(FCmpLt)", "batch": "R3-CATCH-3"}
+{"key": "fp-simd-fixture-build", "verdict": "keep", "reason": "Durable fixture-build pitfalls + finding that native VEX covers all SSE FP/SIMD; load-bearing", "batch": "R3-CATCH-3"}
+{"key": "fp-symbolic-rm-test-pattern", "verdict": "keep", "reason": "Durable test pattern for symbolic-rm float ops", "batch": "R3-CATCH-3"}
+{"key": "fpa-null-fallback-fresh-const", "verdict": "keep", "reason": "Durable panic-free FP-builder design (panic=abort so per-site fallback required)", "batch": "R3-CATCH-3"}
+{"key": "fread-python-boundary-unreachable-content", "verdict": "keep", "reason": "Durable test-reachability constraint for native fread; load-bearing", "batch": "R3-CATCH-3"}
+{"key": "fwrite-io_file-fd-offsets", "verdict": "keep", "reason": "Durable per-arch FILE._fileno offset table + return-value contract", "batch": "R3-CATCH-3"}
+{"key": "gan1-memory-load-clone-not-hot", "verdict": "keep", "reason": "Measure-first decision preventing re-investigation; durable 'do not refactor load.rs' guidance; mutual cite with invariant-rustbv-clone-cheap", "batch": "R3-CATCH-3"}
+{"key": "gate-cow-fork-scaling-variance", "verdict": "keep", "reason": "Durable operational note: cow_fork_scaling gate spuriously fails under load, reproduce in clean subprocess", "batch": "R3-CATCH-3"}
+{"key": "gate-noise-floor-15pct", "verdict": "keep", "reason": "Durable operational guidance on 15% gate threshold variance for sub-second benches", "batch": "R3-CATCH-3"}
+{"key": "getenv-heap-alloc", "verdict": "keep", "reason": "Durable native getenv heap-alloc design + heap-mapping precondition", "batch": "R3-CATCH-3"}
+{"key": "gil-strategy-decision", "verdict": "keep", "reason": "Durable GIL-strategy architecture decision (Strategy A vs B) with measured ceilings", "batch": "R3-CATCH-3"}
+{"key": "god-module-split-impl-across-files", "verdict": "keep", "reason": "Distinct god-module-split gotcha (impl split across sibling files); load-bearing cluster", "batch": "R3-CATCH-3"}
+{"key": "god-module-split-private-mod-deadcode", "verdict": "keep", "reason": "Distinct god-module-split gotcha (private submodule triggers dead_code)", "batch": "R3-CATCH-3"}
+{"key": "god-module-split-private-struct", "verdict": "keep", "reason": "Distinct god-module-split gotcha (E0446 private struct widening); load-bearing", "batch": "R3-CATCH-3"}
+{"key": "god-module-split-state-rs", "verdict": "keep", "reason": "Distinct god-module-split record (state.rs non-contiguous chop, NEXT_STATE_ID kept in parent); load-bearing", "batch": "R3-CATCH-3"}
+{"key": "god-module-split-test-glob-imports", "verdict": "keep", "reason": "Distinct god-module-split gotcha (test glob-import loses moved use decls); load-bearing", "batch": "R3-CATCH-3"}
+{"key": "god-module-split-visibility-pitfall", "verdict": "keep", "reason": "Distinct god-module-split gotcha (E0624 pub(super) widening, derive attrs); load-bearing hub of cluster", "batch": "R3-CATCH-3"}
+{"key": "gotcha-endness-variants", "verdict": "keep", "reason": "Durable naming gotcha: Endness variants Little/Big not LE/BE", "batch": "R3-CATCH-3"}
+{"key": "gotcha-stride-detection-two-addrs", "verdict": "keep", "reason": "Durable test gotcha: stride detection classifies 2-addr regular delta as Strided not Multiple", "batch": "R3-CATCH-3"}
+{"key": "hackcon-z3-ast-structure", "verdict": "keep", "reason": "Durable characterization: converted-AST structure solves 7.5x slower; load-bearing", "batch": "R3-CATCH-3"}
+{"key": "high-level-mgr-errored-stash-producer", "verdict": "keep", "reason": "Durable operational recipe to drive the errored stash from Python", "batch": "R3-CATCH-3"}
+{"key": "hitcon-sakura-separate-bug", "verdict": "keep", "reason": "Durable characterization distinguishing sakura crash from csgames2018 callable bug", "batch": "R3-CATCH-3"}
+{"key": "hook-sync-unregister-live-manager", "verdict": "keep", "reason": "Durable design: hook sync must DIFF registered set to propagate unhook removals", "batch": "R3-CATCH-3"}
+{"key": "hzd9e-corpus-add-redecision", "verdict": "keep", "reason": "Iteration-flavored but carries durable strategic conclusion (native coverage not the bottleneck; redirect to z3/ffi/concretize)", "batch": "R3-CATCH-3"}
+{"key": "i386-struct-stat-and-angr-syscall-map", "verdict": "keep", "reason": "Durable syscall-number divergence pitfall + stat-family layout notes; load-bearing", "batch": "R3-CATCH-3"}
+{"key": "i9f2-mma-howtouse-attribution", "verdict": "keep", "reason": "Durable perf attribution: per-Callable memory-sync slow path, follow-up angr-bzsc", "batch": "R3-CATCH-3"}
+{"key": "iaol1-seed-pin-empirically-broken", "verdict": "keep", "reason": "Durable AVOID guidance: Z3 seed pin via solver_set_params corrupts/fails; load-bearing", "batch": "R3-CATCH-3"}
+{"key": "imported-addrs-filter", "verdict": "keep", "reason": "Durable design: skip imported_addrs in symbolic-AST export (flareon5 root cause)", "batch": "R3-CATCH-3"}
+{"key": "inspection-system", "verdict": "keep", "reason": "Durable InspectionManager architecture + contract; referenced in docs", "batch": "R3-CATCH-3"}
+{"key": "internal-patches-offline-prepare-pattern", "verdict": "keep", "reason": "Durable workflow pattern for measurement-gated offline-prepare slices", "batch": "R3-CATCH-3"}
+{"key": "interpreter-dedup-shared-helpers", "verdict": "keep", "reason": "Durable 'DO NOT re-inline' guidance for four shared interpreter primitives", "batch": "R3-CATCH-3"}
+{"key": "invalid-handle-id-helper", "verdict": "keep", "reason": "Durable standard: handle-lookup misses must raise via invalid_handle_id (PyValueError)", "batch": "R3-CATCH-3"}
+{"key": "inventory-validation-cross-check", "verdict": "keep", "reason": "Durable pattern: combine source grep with runtime dir(cls) to catch mixin/class-constant gaps", "batch": "R3-CATCH-3"}
+{"key": "iop-avg-vs-hadd-distinction", "verdict": "keep", "reason": "Durable VEX op distinction: Iop_Avg rounding vs claripy HAdd truncating", "batch": "R3-CATCH-3"}
+{"key": "lazy-memory-load-overlay-fails", "verdict": "keep", "reason": "Durable design lesson: pending-writes ITE overlay on loads is O(n)/load, wrong approach; load-bearing", "batch": "R3-CATCH-3"}
+{"key": "lazy-memory-sidecar-architecture", "verdict": "keep", "reason": "Authoritative bd entry point referenced in CLAUDE.md docs table; core sidecar design", "batch": "R3-CATCH-3"}

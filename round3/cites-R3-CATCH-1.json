@@ -1,0 +1,101 @@
+{
+  "in": {
+    "2j5v-counter-architecture": [
+      "arch-design-cluster-sweep-iter509"
+    ],
+    "3uye-stack-page-eager-materialization": [
+      "3uye-2-call-stack-empty-as-unconstrained-trigger"
+    ],
+    "a2br2-context-split-impl-block-plan": [
+      "a2br2-context-split-slice11"
+    ],
+    "a2br2-context-split-slice3": [
+      "a2br2-context-split-slice2"
+    ],
+    "a2br2-context-split-slice4": [
+      "a2br2-context-split-slice3"
+    ],
+    "a2br2-context-split-slice5": [
+      "a2br2-context-split-slice4"
+    ],
+    "aggregation-doc-v1-partial-pattern": [
+      "internal-patches-offline-prepare-pattern",
+      "upstream-pr-offline-prepare-slice-pattern"
+    ],
+    "angr-z3-params-env-override": [
+      "z3-param-survey-negative-result"
+    ],
+    "anti-migration-scheduler-delivered": [
+      "vh834-phase2-minting-deferred",
+      "vh834-phase6-go-not-materialized"
+    ],
+    "beyond-parity-no-motivator-closure-pattern": [
+      "parallel-go-nogo-panhl",
+      "upstream-pr-offline-prepare-slice-pattern"
+    ],
+    "bounce-reduction-low-roi-corpus": [
+      "parallel-cliff-was-bimodal-not-superlinear"
+    ],
+    "callstack-architecture": [
+      "arch-design-cluster-sweep-iter509"
+    ],
+    "ccall-inc-dec-carry-preserve": [
+      "avoid-synthetic-loop-blob-for-rust-tests"
+    ],
+    "characterization-vs-fix-pattern": [
+      "rust-engine-claude-md-pointer",
+      "solver-equality-contradiction-detected"
+    ]
+  },
+  "out": {
+    "2j5v-counter-architecture": [
+      "pdq8-counter-overhead-validated"
+    ],
+    "3uye-2-call-stack-empty-as-unconstrained-trigger": [
+      "3uye-stack-page-eager-materialization"
+    ],
+    "3uye-stack-page-eager-materialization": [
+      "refactor-memory-sweep-rule"
+    ],
+    "a2br2-context-split-slice11": [
+      "a2br2-context-split-impl-block-plan"
+    ],
+    "a2br2-context-split-slice2": [
+      "a2br2-context-split-slice3"
+    ],
+    "a2br2-context-split-slice3": [
+      "a2br2-context-split-slice4"
+    ],
+    "a2br2-context-split-slice4": [
+      "a2br2-context-split-slice5"
+    ],
+    "a8epx-gate-measured-defer": [
+      "native-dispatch-skipped-for-loaded-libs"
+    ],
+    "anti-migration-scheduler-delivered": [
+      "migration-count-is-the-lever",
+      "parallel-is-transport-bound"
+    ],
+    "arch-design-cluster-sweep-iter509": [
+      "2j5v-counter-architecture",
+      "callstack-architecture",
+      "inspect-marshalling-design",
+      "lazy-memory-sidecar-architecture",
+      "native-technique-architecture",
+      "pattern-libc-symbolic-integration-test",
+      "pattern-pyobject-fork-clone-via-attach",
+      "rust-proxy-copy-design",
+      "scanf-simproc-design",
+      "snapshot-solver-smtlib2-design"
+    ],
+    "block-granular-step-mode": [
+      "avoid-cadet-phase3-sticky-eager-retry"
+    ],
+    "bounce-reduction-low-roi-corpus": [
+      "rust-python-boundary-audit"
+    ],
+    "claripy-bridge-thread-local-caches": [
+      "invariant-expression-cache-export-key"
+    ]
+  }
+}

@@ -1,7 +1,8 @@
 # angr-memories — bd memory cleanup archive
 
-Snapshot of the two-round cleanup of the `angr` bd memory corpus
-(2026-06-04 round 1 + 2026-06-05 round 2). Use this directory to:
+Snapshot of the three-round cleanup of the `angr` bd memory corpus
+(2026-06-04 round 1 + 2026-06-05 round 2 + 2026-07-04 round 3). Use this
+directory to:
 
 - Study **what was forgotten** — body archives + per-decision audit logs
 - Re-run a forgotten memory's recovery — pre-prune snapshots are full JSON dumps
@@ -9,8 +10,8 @@ Snapshot of the two-round cleanup of the `angr` bd memory corpus
 - Read back the conversation transcripts that drove the prune decisions
 
 This is a frozen mirror of the project's `.bd-prune/` + `.bd-prune-part2/`
-directories plus the live tool scripts at the time of round-2 completion.
-The original directories remain in the repo (gitignored).
++ `.bd-prune-part3/` directories plus the live tool scripts at the time of
+round-3 completion. The original directories remain in the repo (gitignored).
 
 ## Headline numbers
 
@@ -18,11 +19,17 @@ The original directories remain in the repo (gitignored).
 |---|---|---|
 | Round 1 (2026-06-04) | 1,296 | 832 (−36%) |
 | Round 2 (2026-06-05) | 832 | 414 (−50%) |
-| Combined           | 1,296 | 414 (−68%, 948 KB → 289 KB) |
+| Round 3 (2026-07-04) | 934 | 757 (−19%) |
+| Combined           | peak 1,296 | 757 |
 
 Round 1 used heuristic triage + light agent review. Round 2 did an
 exhaustive body-by-body agent review with an aggressive forget/merge
-posture, plus citation-graph surgery on the residue.
+posture, plus citation-graph surgery on the residue. Round 3 repeated the
+round-2 process on the corpus after it regrew from 414 to 934 (four weeks
+of new work): cheap triage sweeps forgot 70, then an 18-batch exhaustive
+agent re-review forgot another 70 and merged 66 (37 subordinates folded
+into 29 canonicals). Zero promotes — the round-2 "when in doubt, forget
+rather than duplicate docs" precedent held again.
 
 ## Layout
 
@@ -30,11 +37,11 @@ posture, plus citation-graph surgery on the residue.
 ~/angr-memories/
 ├── README.md            (this file)
 ├── round2-plan.md       (the plan that drove round 2)
-├── forgotten.txt        — all 882 keys removed, with round/verdict/reason
-├── survivors.txt        — all 414 surviving keys with first-line preview
-├── forget_reasons.txt   — reason histogram (360 distinct reasons, sorted by count)
-├── merges.txt           — 36 merges: subordinate → canonical
-├── batch_stats.txt      — per-batch verdict counts
+├── forgotten.txt        — all 1,059 keys removed across 3 rounds, with round/verdict/reason
+├── survivors.txt        — all 757 surviving keys with first-line preview
+├── forget_reasons.txt   — reason histogram (495 distinct reasons, sorted by count)
+├── merges.txt           — 73 merges: subordinate → canonical
+├── batch_stats.txt      — per-batch verdict counts (all 3 rounds)
 ├── claude-md/
 │   ├── CLAUDE.md.pre-round2  — state at last git commit (before round 1)
 │   ├── CLAUDE.md.post-round2 — current state (after both rounds)
@@ -70,9 +77,26 @@ posture, plus citation-graph surgery on the residue.
 │   ├── decisions.jsonl          — append-only audit log (842 rows)
 │   └── intermediate/            — temp manifests from the citation-surgery phase
 │       (orphans retries, promotes-declined, last3 cleanup, etc.)
+├── round3/              (full .bd-prune-part3/ snapshot from 2026-07-04)
+│   ├── batch-index.json         — {batch_id: [keys]} chunking record (R3 prefixes)
+│   ├── snapshot-pre-prune.json  — 864 memories after cheap sweeps, before agent review
+│   ├── snapshot-pre-prune-original.json — 934 memories at the very start of round 3
+│   ├── snapshot-post-prune.json — all 757 memories at end of round 3
+│   ├── triage.csv               — heuristic tags per key (final state)
+│   ├── cites-graph.json         — final citation graph
+│   ├── review-instructions.md   — the per-batch agent brief (round-2 decision tree)
+│   ├── manifest-R3-*.jsonl      — per-batch decisions (18 agent batches + 3 sweeps)
+│   ├── manifest-R3-*-auto.jsonl — split: forget/merge/keep half
+│   ├── manifest-R3-*-promote.jsonl — split: promote half (all empty this round)
+│   ├── manifest-R3-combined-auto.jsonl — all 18 agent batches concatenated for one apply
+│   ├── bodies-R3-*.json         — bodies handed to round-3 agents (per batch)
+│   ├── cites-R3-*.json          — per-batch citation subset given to agents
+│   ├── decisions.jsonl          — append-only audit log (round 3 only)
+│   └── intermediate/            — citation-surgery originals (2 repaired citers)
 └── claude-logs/
     ├── round1-session.jsonl     — Claude Code transcript driving round 1
-    └── round2-session.jsonl     — Claude Code transcript driving round 2
+    ├── round2-session.jsonl     — Claude Code transcript driving round 2
+    └── round3-session.jsonl     — Claude Code transcript driving round 3
 ```
 
 ## Common operations
@@ -172,6 +196,31 @@ is angr-specific — replace with your project's anchors before reuse.
   agent's promotes were rejected. Useful precedent for "when in doubt,
   forget rather than duplicate".
 
+## Round-3 notes worth re-reading
+
+- **Full re-review at scale**: unlike a delta-only pass, round 3 re-judged
+  all 864 post-sweep memories (including the 414 round-2 survivors) across
+  18 prefix-family batches. Net result was gentler (−19%) than round 2
+  because the round-2 survivors were already scrubbed — most round-3 forgets
+  came from the ~520 keys added in the intervening four weeks (iteration
+  receipts, clippy-progress snapshots, completed-refactor commit scraps).
+- **One combined apply, not batch-by-batch**: all 18 agent manifests were
+  concatenated into `manifest-R3-combined-auto.jsonl` and applied once via
+  `bd_apply_with_defer.py`. A combined apply gives the most accurate
+  cited-by guard — a forget is only blocked if a *surviving* memory cites
+  it, whereas per-batch applies would falsely defer a key cited only by
+  another to-be-forgotten memory in a later batch.
+- **Citation surgery (2 keys)**: `djq7-evidence-needs-file-io-harness` and
+  `xmllint-vanilla-symex-probe` were each cited only by the memory that
+  superseded them (a "supersedes X" / "refutes X" prose back-reference).
+  The two citers were rephrased to drop the dangling name before forgetting;
+  originals archived in `round3/intermediate/`.
+- **Zero promotes again**: no memory cleared the ≥800-char durable-and-not-
+  already-in-docs bar. Same precedent as round 2.
+- **Tooling change**: `bd_chunk_for_review.py` gained a `--round` flag
+  (defaults to `R2` for backcompat) so batch IDs/filenames aren't hardcoded
+  to one round.
+
 ## Recovery
 
 If a forgotten key turns out to be load-bearing:
@@ -179,8 +228,10 @@ If a forgotten key turns out to be load-bearing:
 ```bash
 python3 -c "
 import json, subprocess
-# Try round-2 snapshot first (round-1 post-prune == round-2 pre-prune)
-for snap in ('round2/snapshot-pre-prune.json', 'round1/snapshot-pre-prune.json'):
+# Try newest snapshot first (each round's pre-prune == prior round's post-prune,
+# modulo corpus regrowth between rounds)
+for snap in ('round3/snapshot-pre-prune-original.json',
+             'round2/snapshot-pre-prune.json', 'round1/snapshot-pre-prune.json'):
     d = json.load(open(snap))
     if '<key>' in d:
         body = d['<key>']
@@ -196,5 +247,8 @@ else:
 
 - Round 1 driven by Claude Code session `671c1d6c-cb62-4d8c-ad0e-da0fb1c2f733`
 - Round 2 driven by Claude Code session `194c8d59-ecfc-43df-92f8-149659bfbd57`
-- Tooling commits live in the angr repo on the `rust-symex` branch (uncommitted as of archive time)
-- Original `.bd-prune/` and `.bd-prune-part2/` remain in `/home/ubuntu/repos/angr/`
+- Round 3 driven by Claude Code session `session_01TTjnmeZXQvTj1A5Qe72cqy`
+- Round-3 tooling change (`bd_chunk_for_review.py --round`) committed to this
+  archive repo; the `DEFAULT_KEEP_LIST` in `bd_gen_manifest.py` already
+  matched the current CLAUDE.md quick-keys (13 anchors, all survived).
+- Original `.bd-prune/`, `.bd-prune-part2/`, `.bd-prune-part3/` remain in `/home/ubuntu/repos/angr/` (gitignored)

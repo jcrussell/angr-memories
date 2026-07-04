@@ -1,4 +1,4 @@
-# All keys forgotten across both rounds (1296 -> 414)
+# All keys forgotten across three rounds (1296 -> 757)
 # Format: <round>	<verdict>	<key>	<reason>
 
 round1	forget	2j5v-sample-counter-dump	bead-closure-scrap
@@ -883,3 +883,180 @@ round2	merge	sym-write-7s-bottleneck-is-275-z3-concretization	Same root cause as
 round2	merge	venv-binaries-can-disappear	Same topic as mandatory-keep env-venv-corruption
 round2	merge	z3-roundtrip-test-pattern-for-rewrites	Z3-roundtrip test pattern — merges with universality-parity and spec-replay templates into one canonical test-pattern memory
 round2	merge	z3-universality-vs-python-parity	Python-parity variant of universality test — merge with spec-replay and roundtrip variants into single canonical memory
+round3	forget	avoid-inline-callback-timing-wrappers	status-shape
+round3	forget	avoid-prepinning-export-constraints	status-shape
+round3	forget	bd-memory-consolidation-pattern-closed-task	status-shape
+round3	forget	bd-memory-consolidation-pattern-invariant-pair	status-shape
+round3	forget	bench-mem-ite-depth-distribution	status-shape
+round3	forget	bench-xmllint-getenv	status-shape
+round3	forget	benchmark-cadet-convergence-two-bugs	status-shape
+round3	forget	benchmark-cadet-eager-reaches-egg	status-shape
+round3	forget	benchmark-cadet-eggphase-rootcause-cfg	status-shape
+round3	forget	benchmark-insomnihack_aeg-not-viable	status-shape
+round3	forget	benchmark-peak-memory-gate-solve-independent	status-shape
+round3	forget	catalog-rust-ok-false-refresh-2026-06-06	status-shape
+round3	forget	clippy-z3jb-epic-final-state	status-shape
+round3	forget	complexity-godmodule-audit-2026-06	status-shape
+round3	forget	decision-brief-offline-prepare-pattern	status-shape
+round3	forget	decision-c3zm-2-rustposixstate-2026-06-06	status-shape
+round3	forget	declare-proc-migration-complete	status-shape
+round3	forget	deferred-forks-unconstrained-oom	status-shape
+round3	forget	deps-bump-922-audit-2026-06-05	status-shape
+round3	forget	doc-rot-audit-2026-06	status-shape
+round3	forget	exploration-dedup-cluster-4	status-shape
+round3	forget	explore-predicate-loop-termination	status-shape
+round3	forget	fcntl-ioctl-intentional-stub-parity	status-shape
+round3	forget	fgets-eof-newline-gap-bead	status-shape
+round3	forget	fopen-mode-parsing-order-independent	status-shape
+round3	forget	fork-path-mining-6t8z3	status-shape
+round3	forget	format-float-no-native-parity	status-shape
+round3	forget	format-n-no-native-parity	status-shape
+round3	forget	fp-rounding-mode-already-wired	status-shape
+round3	forget	invariant-baseline-timings-fields	status-shape
+round3	forget	lazy-store-gate-removed-phase43	status-shape
+round3	forget	license-timeout-fread-root-cause	status-shape
+round3	forget	merge-and-range-seeded-test-pattern	status-shape
+round3	forget	multiarch-parity-only-decision	status-shape
+round3	forget	native-ctype-parity-complete	status-shape
+round3	forget	native-fprintf-impl	status-shape
+round3	forget	native-fputc-putc-resolves-stream-fd	status-shape
+round3	forget	native-getopt-cursor-fields-landed	status-shape
+round3	forget	native-gets-shared-symbolic-line	status-shape
+round3	forget	native-procs-no-simoption-access	status-shape
+round3	forget	native-returnunconstrained-bvv0-gate	status-shape
+round3	forget	native-subcall-resume-stack-s1	status-shape
+round3	forget	phase3-cache-residual-gap	status-shape
+round3	forget	profile-python-bench-harness	status-shape
+round3	forget	reg-proxy-overlap-invalidation	status-shape
+round3	forget	run-single-monkeypatch-callable-guard	status-shape
+round3	forget	rust-engine-2026-07-roadmap	status-shape
+round3	forget	ryf6-root-cause-proxy-replay-clobber	status-shape
+round3	forget	scanf-scanset-native-implemented	status-shape
+round3	forget	showcase-runner-pythonpath	status-shape
+round3	forget	simproc-fallback-statecreate-bottleneck	status-shape
+round3	forget	state-review-2026-06-findings	status-shape
+round3	forget	strstr-integration-test-concrete-only	status-shape
+round3	forget	sym-write-perf-spike-decision-2026-06-05	status-shape
+round3	forget	symfile-native-export-design	status-shape
+round3	forget	uahs-mremap-no-motivator-closure	status-shape
+round3	forget	vacuous-test-fauxware-deterministic	status-shape
+round3	forget	vex-dispatch-bypass-closed	status-shape
+round3	forget	vex-ops-24pv4-cluster-progress	status-shape
+round3	forget	vex-ops-expr-node-ctor	status-shape
+round3	forget	vex-ops-scalar-binop-dedup	status-shape
+round3	forget	wheels-manylinux-z3-header-gap	status-shape
+round3	forget	wqao-disk-cache-mixin-layout	status-shape
+round3	forget	xmllint-6d3l-post-aca6y-convergence	status-shape
+round3	forget	autonomous-loop-empty-queue-595	future-date
+round3	forget	ds-spike3-nogo-decision	future-date
+round3	forget	cargo-direct-so-teardown-segfault	stale-file-ref
+round3	forget	neon-mla-blob-test-encoding	stale-file-ref
+round3	forget	python-syscall-integration-test-pattern	stale-file-ref
+round3	forget	x86-e2e-blob-test-pattern	stale-file-ref
+round3	forget	avoid-sampling-sweep-complete-iter508	Iteration-receipt/status snapshot (decision tree c) pinned to iter 508 / 41 keys; now stale — avoid-* count grew to 58 and this batch found two real merge clusters, contradicting its 'no merge candidates remain' claim. No external citers.
+round3	forget	avoid-rust-tracking-actions-silent-ignore	Superseded: its recommendation was implemented. TRACK_*_ACTIONS now raise NotImplementedError at manager construction via _RAISE_OPTION_NAMES; TRACK_MEMORY_MAPPING/CONSTRAINT_TRACKING explicitly rejected. Fully covered by docs/advanced-topics/rust_engine.rst SimOption matrix (lines ~1805-1835, ~3110-3135); the 'silent-ignore' claim is now false.
+round3	forget	avoid-pyo3-init-test-failures	Stale: the four named tests were refactored (now in *_tests.rs files, e.g. malloc_tests.rs test_heap_metadata_cloned_on_fork uses pure RustSimState fork, no PyO3), and avoid-mislabel-stale-test-as-isolation records the full cargo lib suite green (1510 passed, 0 failed) as of 5eeb1f45b — the failures no longer exist.
+round3	merge	avoid-import-before-usage-ruff-strip	Duplicate of avoid-split-import-edit-ruff-autofix (same ruff F401-strip-between-edits failure mode); its angr-k8pc occurrence folded into the canonical body.
+round3	merge	avoid-import-before-use-formatter-strip	Duplicate of avoid-split-import-edit-ruff-autofix (same ruff strip-between-edits failure mode, ruff-format variant); its angr-ge7l contextlib occurrence folded into the canonical body.
+round3	merge	avoid-global-cargo-fmt	Duplicate of avoid-cargo-fmt-scope-creep (same global-cargo-fmt noise invariant); its distinct detail (no rust pre-commit hooks, tree not rustfmt-clean vs rustfmt 1.8.0, 50+ file blast radius) folded into the canonical body.
+round3	merge	bench-harness-argv-injection	same EXAMPLE_CATALOG argv mechanism; the SystemExit-hang memory is more descriptive
+round3	merge	bench-noise-single-shot	same 'single-shot noise, re-run before believing' rule
+round3	merge	benchmark-cow-fork-scaling-bimodal-timing	describes the same bench's baseline/bimodal convention
+round3	merge	benchmark-peak-memory-gate-promoted	an update to the same gate (warn-only removed)
+round3	merge	benchmark-sub1x-drift-2026-06-15	same baseline-drift theme (baselines rot toward stale-slow, re-measure)
+round3	merge	benchmark-rust-time-baseline-drift-kdni	same baseline-drift theme (refresh modest drift vs bisect step-changes)
+round3	forget	bench-concretize-distribution	one-off characterization data table (2026-06-02 concretize-counter sweep) with an explicit no-action 'characterization only' decision
+round3	forget	benchmark-cadet-eager-at-unconstrained-insufficient	iter66 failed-approach receipt; superseded by benchmark-cadet-single-step-loop-unroll-defeats-latch (definitive why) and the landed two-phase-eager-retry
+round3	forget	benchmark-cadet-partial-run-counters	one-off counter snapshot at crash; its syscall-fallback-zero reinforcement is already covered by bench-syscall-fallback-zero-coverage
+round3	forget	a2br2-context-split-impl-block-plan	Plan for a now-COMPLETE refactor (slice12 says done); field-coupling counts and slice order are historical bead-closure scrap. No external citers.
+round3	forget	a2br2-context-split-slice10	Iteration receipt for a completed context.rs split slice (commit-level move detail). Superseded by slice12 final-structure summary.
+round3	forget	a2br2-context-split-slice11	Iteration receipt for a completed context.rs split slice. Only intra-cluster citation; superseded by slice12.
+round3	forget	a2br2-context-split-slice2	Iteration receipt for a completed split slice (commit 01ee593ac move detail). Superseded by slice12.
+round3	forget	a2br2-context-split-slice3	Iteration receipt for a completed split slice. Only intra-cluster citations; superseded by slice12.
+round3	forget	a2br2-context-split-slice4	Iteration receipt for a completed split slice. Only intra-cluster citations; superseded by slice12.
+round3	forget	a2br2-context-split-slice5	Iteration receipt for a completed split slice. Only intra-cluster citations; superseded by slice12.
+round3	forget	a2br2-context-split-slice9	Iteration receipt for a completed split slice (constraint-mutation cluster move). Superseded by slice12.
+round3	forget	a2br2-slice6-lineage-ops-done	Iteration receipt for a completed split slice. Superseded by slice12 final structure.
+round3	forget	a2br2-slice7-solving-ops-done	Iteration receipt for a completed split slice. Superseded by slice12 final structure.
+round3	forget	a2br2-slice8-bv-id-ops-done	Iteration receipt for a completed split slice. Superseded by slice12 final structure.
+round3	forget	angr-1c88c-build-ite-store-harness	Per-gap Rust unit-test recipe for a completed test-coverage bead; subsumed by angr-1c88c-harness-findings umbrella.
+round3	forget	angr-1c88c-concretize-cache-toolarge-harness	Per-gap Rust unit-test recipe for a completed test-coverage bead; subsumed by angr-1c88c-harness-findings umbrella.
+round3	forget	angr-1c88c-eval-next-addr-harness	Per-gap Rust unit-test recipe for a completed test-coverage bead; subsumed by angr-1c88c-harness-findings umbrella.
+round3	forget	arch-design-cluster-sweep-iter509	Memory-audit sweep receipt (iter 509, 'confirmed orthogonal, NO merges'); status snapshot with no external citers.
+round3	merge	cargo-test-pyo3-fork-failures	Same invariant as cargo-test-state-fork memory (cargo test fork panics from Py<PyAny> clone needing GIL); merged in the procedures:: specifics.
+round3	forget	catalog-rust-ok-true-refresh-2026-06-06	Dated one-off catalog-refresh receipt (iter 498, found 4 stale entries); findings now historical, no external citers.
+round3	forget	clippy-cloned-ref-to-slice-refs-safe	Iteration receipt for one clippy lint fix (commit 4e3450348); cosmetic-lint trivia adds nothing durable.
+round3	merge	clippy-needless-range-loop-readback-cascade	Same needless_range_loop lint; the re-grep-for-cascades discipline folded into the canonical.
+round3	merge	clippy-needless-range-loop-tuple-destructure-pattern	Same needless_range_loop lint; tuple-slot destructure variant folded into the canonical.
+round3	forget	clippy-rust-symex-gate-state-2026-06-06	Dated clippy warning-count status snapshot (iter 510); counts are stale/moving.
+round3	forget	clippy-rust-symex-progress-2026-06-06	Dated clippy bucket-count progress snapshot (iter 514); superseded by later state.
+round3	forget	clippy-rust-symex-progress-2026-06-10	Dated clippy progress snapshot (iter 594); moving-count status scrap.
+round3	forget	clippy-unnecessary-cast-u128-fix	Mechanical fix receipt (commit 2cb1526dc); trivial cast-suffix pattern adds nothing durable.
+round3	forget	declare-proc-guard-before-extraction	Migration batch-commit receipt; durable macro-hygiene content is fully covered by declare-proc-macro-hygiene-args + declare-proc-migration-imports.
+round3	forget	djq7-evidence-needs-file-io-harness	Superseded by in-batch djq7-file-read-harness-evidence, which explicitly resolves its open question.
+round3	forget	list	Junk scrap: body is literally 'list', no content
+round3	forget	loop-stdout-buffering	Describes run_optimization_loop.sh + .claude/loop-logs which no longer exist (replaced by ralph)
+round3	forget	memory-citation-audit-iter19	Dated one-off audit receipt (iter19, CLEAN); method captured in memory-citation-rot-path-scan
+round3	forget	memory-crossref-audit-clean	Dated one-off audit receipt (iter62, CLEAN); no durable rule beyond the method already in memory-citation-rot-path-scan
+round3	forget	network-reachability-2026-06-06	Dated network-reachability status snapshot (2026-06-06); point-in-time, no external citers.
+round3	forget	p1b-harness-pass-results	One-off bounded-harness run-results snapshot (angr-9w6ad.2); superseded by perf-campaign-p5-deferral-decision; no external citers.
+round3	forget	prexisting-public-api-drift-failures	Stale status snapshot: the 3 failing tests were fixed in 1d488466a (angr-ytu9 CLOSED); superseded by public-api-proxy-protocol-surface.
+round3	forget	proxy-baby-re-corruption-mem-aliasing	Incomplete-investigation snapshot (iter 4); angr-5aj8 later root-caused (u128 shift-overflow) and CLOSED/fixed, superseding these hypotheses/next-steps.
+round3	forget	ready-queue-fully-blocked-escalate-to-human	Iteration receipt (ralph iters 74-79, stale one-off bead ids); reusable kernel is a single sentence
+round3	forget	register-proxy-gate-empty-state-ids	Superseded hypothesis; angr-4rq7 CLOSED with stale-cache as final root cause, which refutes this suspected mechanism
+round3	forget	sharif7-stale-baseline-iter67	Iteration receipt; stale-baseline incident resolved and baseline refreshed in landed commit 831d8918a
+round3	merge	stdio-fwrite-fputs-arbitrary-fd-update	Patch-note superseding the base memory's position caveat; folded into canonical
+round3	forget	test-coverage-audit-2026-06	Point-in-time completed coverage audit (angr-szg45) with line-number gap lists that rot; iteration/audit receipt.
+round3	forget	ugc2-context-split-slice1	Completed refactor receipt (context.rs->stats.rs split mechanics); code is self-documenting, no durable rule.
+round3	forget	vacuous-test-audit-2026-06	Point-in-time bead-filing audit snapshot; filed beads tracked in bd, per-line details rot.
+round3	forget	value-rs-split-progress	Completed god-object-split progress receipt with line counts/commit hashes; code is self-documenting.
+round3	forget	vec-ops-savings-bottleneck	One-off retrospective on why a dedup estimate was wrong; bead-closure scrap, no durable rule.
+round3	forget	venv-pip-resolvelib-broken-2026-06-06	Dated broken-pip status snapshot; the cargo-only workaround is covered by venv-rebuild-cargo-direct-copy and CLAUDE.md.
+round3	forget	vex-dispatch-bypass-inventory	Superseded by docs/extending-angr/rust_vex_ops.rst BYPASS subsection; memory's routing description is now stale (angr-s6miz added is_dispatch_fabricate_family routing + vex_bypass_fabricate_count).
+round3	forget	vex-ops-24pv4-dedup-progress	Completed dedup-cluster progress receipt (all clusters done); no durable reusable rule.
+round3	forget	vex-ops-cmp-bool-dedup-24pv4	Completed dedup-cluster commit receipt (cmp_bool_for_cached helper landed); code self-documenting.
+round3	forget	vex-ops-splice-lane0-dedup	Completed dedup-cluster commit receipt (splice_lane0_u128 helper landed); code self-documenting.
+round3	forget	vex-ops-symbolic-dedup-24pv4	Completed dedup-cluster progress receipt (from_parts/make_bv_const reuse); no durable rule.
+round3	forget	vex-ops-z3binop-macro-24pv4	Completed dedup-cluster commit receipt (z3_binop! macro landed); code self-documenting.
+round3	merge	vexops-conversions-macro-split	Macro-in-child sub-rule of the same VEXOps god-file split pattern; folded into canonical.
+round3	merge	vexops-split-orphaned-import	Orphaned-import sub-rule of the same VEXOps god-file split pattern; folded into canonical.
+round3	forget	wheel-build-static-audit	Point-in-time 'audited clean iter 48' snapshot; durable recipe lives in wheel-distribution-shared-libz3 and the rst.
+round3	forget	wqao-init-phase-pipeline	Pure code-motion refactor receipt describing the 4-phase __init__ structure; self-documenting in code, zero behavior change.
+round3	forget	xmllint-solve-symex-offline-prepare	Completed offline-prepare slice receipt; staged patch lives in tools/upstream_patches/ with README, parent 75mc tracked in bd; characterization retained in tractability-probe.
+round3	forget	xmllint-vanilla-symex-probe	Superseded by xmllint-path-b-glibc-init-wall, which explicitly REFUTES this memory's 'chain of missing ops' prediction; VGetMSBs landing is self-documenting in code.
+round3	forget	vex-ops-fcmp-dedup	Completed dedup-cluster commit receipt (fcmp_truth/fcmp_predicate_1bit helpers landed); code self-documenting, no durable rule.
+round3	merge	inspect-bp-writeback-honored	Duplicate of the writeback-pattern invariant and stale (claims mem_write_expr still read-only, but angr-inh0 has since made it honored); distinct dirty_result/mechanism detail folded into canonical.
+round3	forget	invariant-apply-state-metadata-strips-options	Stale + superseded: _apply_state_metadata now copies ENABLE_NX/NO_IP_CONCRETIZATION/NO_SYMBOLIC_JUMP_RESOLUTION too (rust_manager.py ~L3027), and the rule lives near-verbatim as module-docstring invariant I4 in rust_manager.py at point of use.
+round3	forget	invariant-callstack-sync-export-pipeline	Structure no longer exists: _get_stash_states now returns lazy refs; materialization moved to _materialize_single_state with sync helpers centralized in _sync_cached_state + the snapshot arm (both documented in-file). The four-path/L207-L284 map would mislead.
+round3	forget	invariant-cgc-simoptions-disposition	Duplicated in docs: all three CGC SimOption dispositions (CGC_NO_SYMBOLIC_RECEIVE_LENGTH, CGC_ENFORCE_FD inherited; CGC_NON_BLOCKING_FDS divergence-risk incl. fdwait concrete-1-bit detail) are fully covered in docs/advanced-topics/rust_engine.rst (~L1595, ~L1929); memory itself notes it was promoted there.
+round3	forget	invariant-deferred-fork-no-drop	Transcribed verbatim into resume.rs comment at the P11/P15 site (native/angr/src/exploration/resume.rs:69-72), including the removed-warn history; memory adds nothing beyond the in-place comment a reviewer would read first.
+round3	forget	invariant-disk-cache-key-axes	Superseded by module-docstring invariant I1 in rust_manager.py, which carries the same all-three-move-together rule and is more current (code moved to the RustDiskCacheManager mixin in rust_disk_cache.py; memory cites the old location).
+round3	forget	invariant-editable-install-no-pth	Describes a state that no longer exists: .venv site-packages now HAS __editable__.angr-9.2.222.dev0.pth installing the finder, and the cited consumer run_optimization_loop.py is gone from the repo.
+round3	merge	invariant-concrete-extract-width128	Same invariant family (RustBV::Concrete u128 backing vs width>128); folded into the canonical u128-hazard memory as the bit-slicing arm.
+round3	merge	invariant-dedup-seeding-quadratic-cost	Perf corollary of the same dedup_set lazy-seed mechanism; folded into the canonical dedup_set memory.
+round3	merge	invariant-divmod-symbolic	Same VEX DivMod arm/helper as the canonical; folded in as the symbolic-path section.
+round3	merge	invariant-check-executable-test-needs-both-flags	Test-side restatement of the same both-flags gate invariant; folded into the canonical as a test-writing corollary.
+round3	forget	invariant-orchestrator-dryrun-side-effects	run_optimization_loop.py and the orchestrator_smoke CI job no longer exist; loop replaced by ralph (CLAUDE.md); rule (e)
+round3	merge	invariant-init-cache-options-allowlist	Same invariant as plugin-coverage (init-cache allow-list must be extended for new options); mirror-pattern detail folded into canonical
+round3	merge	invariant-init-cache-user-symbolic	Gate detail subsumed by plugin-coverage's _state_has_user_symbolic coverage; load+save suppression detail folded into canonical
+round3	merge	invariant-freeze-into-shared	Same single-lock LocalConstraints discipline in symbolic/context.rs; freeze helper detail folded into canonical
+round3	merge	invariant-mips32-inline-elf-opcodes	MIPS32 instantiation of the same inline-ELF test-construction pattern; encodings folded into canonical
+round3	merge	invariant-pending-api-extension-impl	Restates the single-pymethods extension-impl rule for pending_api.rs; file-specific detail folded into canonical.
+round3	merge	invariant-run-loop-extension-impl	Restates the single-pymethods extension-impl rule for run_loop.rs; file-specific detail (incl. STEPPING_STATE_ID visibility) folded into canonical.
+round3	forget	invariant-rust-state-satisfiable-no-extras	Stale: proxy solver.satisfiable/min/max now honor extra_constraints via _with_extra_constraints push/pop (rust_state_proxy.py:73,193); the memory's central claim is inverted and the helper's docstring documents the current semantics.
+round3	merge	invariant-simproc-call-no-double-push	Same invariant as continuation-push-capture (explicitly defers to it as 'the real fix'); unique double-push/off-by-8 history folded into canonical.
+round3	forget	invariant-typed-error-taxonomy-test-only	Fully superseded by rust_engine.rst 'User-facing error taxonomy' warning block, which carries every detail incl. the angr-ghwsd.3 deferred option; memory itself notes it is documented
+round3	forget	invariant-unsupported-arch-loud	Fully superseded by rust_engine.rst 'Unsupported architectures (PPC32/PPC64/S390X)' section covering the panic contract, backstop rationale, and add-an-arch path; memory itself notes it is documented
+round3	merge	invariant-vsetelem-non-rm-triop	Exception case of the Triop rm rule; folded into invariant-vex-triop-qop-rm with all unique detail preserved
+round3	merge	invariant-z3-ast-validation-limit	Same topic as sort-check-before-wrap (raw Z3 AST ptr safety); its garbage-pointer caveat folded into the canonical
+round3	forget	invariant-z3-runpath	Superseded by rust_z3_sharing.rst 'How the link is wired' section + CLAUDE.md build notes; only marginal extra is a readelf one-liner
+round3	merge	bd-memory-rename-sweep-json-dump	Same cluster (bd memories --json full-body enumeration for citation audits); its unique content (keyword-search recall-gap proof, 3ca759588 rename nuances) folded into the canonical merged body; no external citers.
+round3	merge	bd-memory-symbol-anchor-audit-clean	Largely an iter60 audit receipt (clean result) atop a method variant of the same audit cluster; regex/false-positive method and benign-miss taxonomy preserved in the canonical merged body; no external citers.
+round3	forget	claude-cli-monthly-limit-envelope-shape	Describes detect_failure_mode in run_optimization_loop.py, deleted in commit ff7382a1d; the envelope-shape insight is codified in ralph internal/runner/classify.go (comment says lifted there, scans Envelope.Result + api_error_status for 'monthly usage'). Criterion (e).
+round3	merge	rust-engine-lift-failure-silent-deadend	Describes the old stepping.rs message.contains heuristic which no longer exists (now structural run_error_kind); unique test-trigger detail preserved in canonical.
+round3	forget	rust-engine-simplification-audit-clean	Point-in-time audit receipt (2026-06-22) with 'don't re-run without new churn'; heavy churn since; references blank epic. Iteration-receipt scrap.
+round3	merge	rust-mgr-stats-steps-key	Same mgr.stats-access invariant as rust-mgr-stats-property-vs-method; unique 'steps' detail folded into canonical.
+round3	merge	rust-mod-tests-named-mods-extracted	Iteration receipt for the test-split campaign; unique named-mod survey recipe folded into the canonical recipe memory.
+round3	merge	rust-mod-tests-tier-exhausted	Status snapshot of the same campaign; threshold/exhaustion detail folded into the canonical recipe.
+round3	merge	z3-has-no-native-bitvector-reverse-operation-both	Overlaps z3-ast-construction-c-api-z3-mk-bvadd on Concat/Extract fusion and QF_BV preprocessing; unique content (no native Reverse, full pipeline order) folded into the canonical.
+round3	merge	z3-solver-params-for-bv-optimization-1-bv	Raw param catalog from source mining; same cluster as the ovqja.2 survey which is the actionable conclusion. Catalog facts preserved verbatim in the canonical's merged body.

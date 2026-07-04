@@ -1,0 +1,80 @@
+{
+  "in": {
+    "t2-measure-xmllint-fallback-profile": [
+      "djq7-evidence-needs-file-io-harness"
+    ],
+    "translate-into-primitive": [
+      "panhl2-killgate-pass"
+    ],
+    "upstream-pr-offline-prepare-slice-pattern": [
+      "internal-patches-offline-prepare-pattern",
+      "network-reachability-2026-06-06",
+      "xmllint-solve-symex-offline-prepare"
+    ],
+    "vex-ops-cmp-bool-dedup-24pv4": [
+      "vex-ops-z3binop-macro-24pv4"
+    ],
+    "vexops-god-file-split-pattern": [
+      "vexops-split-orphaned-import"
+    ],
+    "vh834-phase2-minting-deferred": [
+      "vh834-phase6-go-not-materialized"
+    ],
+    "write-fd-position-aware": [
+      "stdio-fwrite-fputs-arbitrary-fd-update"
+    ],
+    "write-side-fileno-fallback-correct": [
+      "write-stream-heavy-bench"
+    ],
+    "write-stream-heavy-bench": [
+      "djq7-evidence-needs-file-io-harness",
+      "write-side-fileno-fallback-correct"
+    ],
+    "write-through-gate-promotion-keep-off-verdict": [
+      "proxy-gate-audit-all-default-off"
+    ],
+    "xmllint-vanilla-symex-probe": [
+      "xmllint-path-b-glibc-init-wall"
+    ]
+  },
+  "out": {
+    "upstream-pr-offline-prepare-slice-pattern": [
+      "aggregation-doc-v1-partial-pattern",
+      "beyond-parity-no-motivator-closure-pattern"
+    ],
+    "vex-ops-z3binop-macro-24pv4": [
+      "vex-ops-cmp-bool-dedup-24pv4"
+    ],
+    "vexops-split-orphaned-import": [
+      "vexops-god-file-split-pattern"
+    ],
+    "vh834-phase2-minting-deferred": [
+      "anti-migration-scheduler-delivered"
+    ],
+    "vh834-phase6-go-not-materialized": [
+      "anti-migration-scheduler-delivered",
+      "vh834-phase2-minting-deferred"
+    ],
+    "wheel-distribution-shared-libz3": [
+      "avoid-pip-install-deps"
+    ],
+    "write-fd-position-aware": [
+      "stdio-fwrite-fputs-arbitrary-fd"
+    ],
+    "write-side-fileno-fallback-correct": [
+      "write-stream-heavy-bench"
+    ],
+    "write-stream-heavy-bench": [
+      "write-side-fileno-fallback-correct"
+    ],
+    "xmllint-path-b-glibc-init-wall": [
+      "xmllint-vanilla-symex-probe"
+    ],
+    "xmllint-simprocs-cross-engine-divergence": [
+      "invariant-concrete-bv-u128-16-byte-limit"
+    ],
+    "xmllint-solve-symex-offline-prepare": [
+      "upstream-pr-offline-prepare-slice-pattern"
+    ]
+  }
+}

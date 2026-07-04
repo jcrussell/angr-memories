@@ -1,200 +1,353 @@
-# Keys that survived both rounds (414 memories)
+# Keys that survived all three rounds (757 memories)
 
 2j5v-counter-architecture	angr-2j5v instrumentation design (2026-05-20, commit 1445f3e40): all new counters live as global AtomicU64 statics in na
-3uye-2-call-stack-empty-as-unconstrained-trigger	native/angr/src/interpreter_cb/exits.rs:182-198 — when handle_exit sees jumpkind.is_ret() && self.call_stack.is_empty() 
-3uye-stack-page-eager-materialization	ROOT cause of angr-3uye unconstrained-PC bug: angr/exploration/rust_state_sync.py:486-503 _sync_stack_page slow path eag
+3uye-2-call-stack-empty-as-unconstrained-trigger	native/angr/src/interpreter/exits.rs (fn handle_exit, ~line 188) — when handle_exit sees jumpkind.is_ret() && self.call_
+3uye-stack-page-eager-materialization	ROOT cause of angr-3uye unconstrained-PC bug: the _sync_stack_page slow path (rust_state_sync.py) eagerly solver.eval()s
 9maq-bisect-method	Effective bisect pattern for mma_howtouse-style per-call leak/perf regressions: write a small reproducer (/tmp/leak_repr
+a2br2-context-split-slice12	context.rs split (epic a2br.2) — final structure after a2br.2.11: native/angr/src/symbolic/context.rs is 718 lines (SymC
+a8epx-gate-measured-defer	a8epx (refine is_in_binary gate to let native fire for use_sim_procedures library hooks) was DEFERRED iter51 after the g
+aarch64-no-nzcv-cc-thunks	AArch64 (aarch64) VEX guest state has NO flat NZCV/flags register in the Rust register table (native/angr/src/arch/arm64
+abi3-py310-compatible	abi3-py310 IS compatible with the Rust engine's full PyO3 surface (angr-6f0i, commit fb0ff9613). The engine uses pyo3 fe
+aggregation-doc-v1-partial-pattern	Pattern: when an aggregation-doc bead (e.g. angr-p65i Characterize .5) is gated by ONE blocked sub-bead but most sibling
+angr-1c88c-harness-findings	angr-1c88c (test-coverage: interpreter integration gaps) harness findings: the 7 gaps (exits.rs eval_next_addr, expressi
+angr-1c88c-interp-dispatch-harness	angr-1c88c interpreter dispatch harness: the native expressions.rs::dispatch_address_concretization_inspect (BP bit 17) 
+angr-1c88c-symbolic-variable-harness	angr-1c88c gap 2/7 DONE: symbolic_variable BP bit-18 end-to-end fires from interpreter mod.rs::load_from_callback fresh-
 angr-syscall-mips-o32-table-divergence	angr's MIPS-O32 syscall number table in angr/procedures/definitions/linux_kernel.py uses NUMBERS THAT DIFFER from upstre
+angr-z3-params-env-override	ANGR_Z3_PARAMS env var overrides Z3 solver params at runtime without a rebuild. Parsed once per process by extra_params_
+anti-migration-scheduler-delivered	Anti-migration work-stealing scheduler DELIVERED (angr-729vn, 2026-06-30, proven in isolation; NOT yet wired into run_lo
 arch-prctl-fs-gs-register-name	On amd64, arch_prctl set/get FS/GS map to RustSimState's fs_const/gs_const registers (not 'fs'/'gs' which are 16-bit seg
+arch-reg-alias-macro-needs-paste	Numbered register-alias tables in arch/ (arm64 W/D/Q/V ~190 lines, MIPS rN/$N/fN/$fN ~256 lines, arm.rs d/q ~48 lines) C
+archinfo-aarch64-be-fix-shape	archinfo 9.2.221: ArchAArch64.__init__ partially handles BE (flips pcode_id, ida_processor, prologs/epilogs) but DROPS i
 archinfo-be-arch-alias-support	archinfo BE arch aliases that work: 'armeb' returns ARMEL with memory_endness=Iend_BE and instruction_endness=Iend_BE (B
 arm-return-addr	ARM and AArch64 use LR (link register) for return address, NOT the stack. ARM: LR=R14 at offset 64 (4 bytes). AArch64: L
 assemble-load-with-multi-handles-all-byte-states	assemble_load_with_multi (load.rs:721) is misleadingly named: it works correctly for ANY mix of byte states (Multi / per
+avoid-add-constraint-for-context-rebuild	PITFALL when rebuilding SymContext constraints (e.g. SymContext::translate_into, snapshot replay): SymContext::add_const
 avoid-any-on-bytes-for-zero-check	AVOID `any(bytes_of_size_N)` for zero-detection — Python's any() iterates each byte through PyObject_IsTrue and is ~14.6
+avoid-background-run-at-iter-end	Ralph loop pitfall: a background run launched in the LAST turn of an iteration gets KILLED when the iteration ends — its
 avoid-bd-remember-without-key-flag	Never run `bd remember <text>` WITHOUT the `--key <name>` flag. When `<text>` looks like a key name (no spaces, hyphenat
 avoid-cache-cached-state-predicates	AVOID caching predicate results for states in _state_cache (Python-created states from SimProcedure callbacks). Their st
-avoid-cargo-fmt-scope-creep	cargo fmt reformats THE ENTIRE workspace, not just the file you touched. Three known footguns: (1) `make fmt` after a su
+avoid-cadet-phase3-sticky-eager-retry	angr-ckdy (CADET solve.py phase-3 step-loop egg hunt): the 'while True: sm.step(); break if any active.addr==0x804833E' 
+avoid-cargo-fmt-scope-creep	cargo fmt reformats THE ENTIRE workspace, not just the file you touched — and pre-commit has NO rust hooks (.pre-commit-
 avoid-check-assumptions	AVOID z3 check_assumptions() for branch feasibility. It caused 2x regression (fairlight 14s→28.6s). check_assumptions pr
 avoid-deferred-fork-base-mismatch	Deferred fork base mismatch in stepping.rs: MaxBlocks/BlockEnd path forks from successors[0] (carries accumulated taken-
 avoid-deferred-prem-memory-layer	Task angr-prem (MemoryLayer trait so interpreter is generic over backend) deferred 2026-05-07 after audit. Same template
+avoid-eager-symbolic-register-export	Eager full-AST recovery of EVERY symbolic register on the plain-state export hot path (rust_state_export.py register syn
+avoid-entry-state-for-seed-push-tests	Testing the Python->Rust seed-time push of a state field in _add_rust_state: do NOT bump the field on an entry_state() —
 avoid-fast-path-skipping-filters	AVOID: when adding fast-path bypasses that skip the slow path's iteration logic, do not also skip the slow path's filter
 avoid-fixing-only-one-native-dispatch-path	AVOID: assuming the exit hook is hit only via the top-of-loop run() check in mod.rs. The VEX interpreter has its OWN nat
-avoid-fresh-symbolic-on-unsupported-binop	Before fix: symbolic DivMod returned OpError::UnsupportedVectorOp, which the binop handler in interpreter_cb/expressions
+avoid-fresh-symbolic-on-unsupported-binop	Before fix: symbolic DivMod returned OpError::UnsupportedVectorOp, which the binop handler in interpreter/expressions.rs
 avoid-frozenset-intersection-on-simstateoptions	SimStateOptions does not implement the set protocol — frozenset.intersection(state.options) raises 'option does not exis
+avoid-fxhash-dedup-set-spike	Evaluated+REJECTED the last std-hash hot-path FxHash candidate for the autonomous loop: symbolic/context.rs LocalConstra
 avoid-getattr-private-dunder-recursion	_LazySimStateRef.__getattr__ MUST raise AttributeError for names starting with '_' or '__'. Otherwise debugger probes (_
 avoid-hasattr-lazy-init	AVOID using hasattr(state, 'heap') or hasattr(state, plugin_name) on angr SimState objects. SimState.__getattr__ trigger
 avoid-inspect-state-id-negative	AVOID passing state_id=-1 (or any < 0) to mgr._cb_inspect_mem_{read,write}: _make_inspect_state_for falls back to _get_d
 avoid-lazy-solver-fork	Lazy solver fork for callback states does NOT help. __libc_start_main and other SimProcedures always trigger solver.eval
 avoid-mgr-active-after-syscall-step	When testing native syscall dispatch with a single-syscall shellcode + RustExplorationManager.run(max_steps=1), checking
+avoid-mislabel-stale-test-as-isolation	DIAGNOSIS PATTERN: a Rust lib test that fails BOTH standalone AND in its full module run is a STALE/broken test, NOT a t
+avoid-multivalued-read-behavioral-test	AVOID_MULTIVALUED_READS behavioral test surface: PyRustSimState::probe_symbolic_load_value_range(addr,size) (native/angr
+avoid-needless-pass-by-value-sweep	clippy::needless_pass_by_value nursery lint is NOT a viable autonomous sweep on native/angr (unlike redundant_clone, whi
+avoid-nop-padding-syscall-return-test	When testing native-syscall return register values in the Rust engine via load_shellcode, do NOT pad the shellcode with 
 avoid-pending-store-partial-overwrite	pending_stores load forwarding has a known but pre-existing semantic quirk: the reverse-scan-first-fully-covering-store-
-avoid-pip-install-deps	NEVER run 'pip install <angr-dep>' (pyvex, claripy, archinfo, cle, z3-solver) in the angr venv. These are pinned dev ver
+avoid-pip-install-deps	NEVER run 'pip install <angr-dep>' (pyvex, claripy, archinfo, cle, z3-solver) in the angr venv. These are pinned to 9.2.
 avoid-pip-install-no-rust-build	If 'pip install -e . --no-build-isolation' silently produces no .so file (rustylib*.so missing, ImportError on 'from ang
-avoid-prepinning-export-constraints	On rust-symex state export, never add ast==BVV(concrete) constraints for tracked symbols to 'help' the Python solver. Tr
-avoid-pyo3-init-test-failures	Pre-existing cargo test failures (unrelated to changes) that surface in cargo --lib runs without Python::initialize(): p
 avoid-rust-mgr-extra-pages-symbolic-skip	When a Python angr blank_state has user-stored pages (via state.memory.store) that haven't been fully concretized, RustE
-avoid-rust-tracking-actions-silent-ignore	When users rely on state.history.actions or unsat_core() under the Rust engine, they will silently get empty/missing dat
 avoid-rustbv-enum-field-add	Adding fields to RustBV enum is a 67-callsite refactor: RustBV::Expression is constructed in 67 places across native/ang
 avoid-silent-no-op-callback-fallbacks	AVOID silent no-op fallbacks in PythonCallbacks call_* methods (e.g., the removed call_memory_store_symbolic_ast at call
 avoid-solver-bridge-protocol	angr-x3xu proposed defining a SolverBridge Protocol so the manager codes against an abstract solver interface (eval/sati
 avoid-spawn-pythonpath-broken	run_regression.py / run_single.py spawn subprocesses via multiprocessing 'spawn' context — this DOES NOT inherit the ven
+avoid-split-import-edit-ruff-autofix	GOTCHA (edit-hook autofix): the PostToolUse ruff hook (ruff --fix / ruff-format) runs after EVERY Edit. If you add an im
 avoid-stale-perf-bead-acceptance	Before claiming an optimization-spike bead, grep the codebase + git log for the central artifact named in the descriptio
 avoid-state-copy-optimization	AVOID removing state.copy() for extern SimProcedures without replacing it with register snapshots. When orig_state == st
 avoid-stdin-tracking-fix-for-codegate	Do NOT attempt to 'fix stdin BVS tracking' as the codegate_2017-angrybird fix. The parent angr-kcf description ('Rust en
 avoid-store-side-fix-for-wider-sym-drift	When fixing sidecar drift in store_concrete (e.g., angr-1tes for multi_objects, angr-jvjf attempted for symbolic_objects
 avoid-strict-2-cache-bound-without-overlay	AVOID interpreting angr-qm7w's 'cache size ≤ 2' literally without a plugin-overlay map. The current implementation got d
-avoid-sync-exported-constraints	NEVER call _sync_exported_constraints on state export. It's O(n^2) on constraint ASTs (5.9s for sym-write), causes ident
+avoid-symbolic-addr-store-for-concrete-readback	INVARIANT: state.memory_store_symbolic(symbolic_addr, val) is NOT reliably concrete-loadable afterwards — a subsequent s
+avoid-synthetic-loop-blob-for-rust-tests	Rust engine + tiny load_shellcode/blob: angr-1lzq + angr-g6dg both now FIXED. (1) [commit b78d99dc4] Blob main object bi
 avoid-trait-over-macro-for-uniform-binops	The bd task angr-v2cl suggested replacing width_binop! macro with a BinOpMethod trait. This was rejected as net negative
 avoid-unbounded-extraction-fallback	When walking UltraPage.symbolic_data as a fallback for filler-materialised values, cap per-entry extraction at ~64 bytes
 avoid-uniform-page-policy-rust-sync	When a Rust-state-sync optimization 'always X' or 'never X' decision benefits one benchmark workload (mma_howtouse: thou
 avoid-update-baseline-without-verification	Running run_regression.py --full --update writes a single run's measurements as the new baseline. For Z3-nondeterministi
+avoid-vsnprintf-real-formatting	vsnprintf native SHIPPED (commit dd300abf4, tx7ec.9): NativeVsnprintf in procedures/sprintf.rs matches Python angr/proce
 avoid-weakref-callbacks	AVOID wrapping Rust engine callbacks (RustExplorationManager._cb_*) in weakref-based closures to break the bound-method 
+avoid-with-z3-context-for-stale-ctx-test	Testing a stale-context guard for any cached z3::ast::BV (e.g. expression-z3-ast-memo) CANNOT use z3::with_z3_context: i
 avoid-z3-optimize-for-min-max	AVOIDED Z3's Optimize API (Optimize::minimize/maximize from z3-0.19.7) for symbolic-address concretization. While Optimi
 avoid-z3-parallel-enable	Z3 parallel.enable=true (set via params.set_bool on the solver) is CORRECTNESS-BREAKING in our setup, not merely null/ne
 avoid-z3-solver-set-params-for-random-seed	AVOID pinning Z3 smt.random_seed or sat.random_seed via z3::Params::set_u32 + Z3_solver_set_params in native/angr/src/sy
 bare-except-cat-x-convention	angr/exploration/ has ~250 'except Exception' sites. The project tags each one with a 3-letter rationale: cat-(a) EXPECT
+bare-rust-manager-callbacks-and-run-api	Bare _RustExplorationManager (rustylib manager, not the RustExplorationManager Python wrapper) requires set_callbacks() 
+baseline-counters-manual-refresh-drift	baseline_counters.json (tests/benchmarks/) snapshots are maintained MANUALLY and silently rot when a bench is added to F
+bd-comment-append-only	bd CLI surface (2026-06-06): comments are APPEND-ONLY — no bd comment edit/delete subcommand exists; bd comments only su
+bd-dep-edge-one-per-pair	bd allows only ONE dependency edge per ordered pair. To change an edge's type (e.g. 'related' or 'parent-child' -> 'bloc
+bd-deps-flag-direction-inverted	bd create --deps 'blocks:X' is INVERTED vs intuition: it makes the NEW issue block X (X depends on NEW), NOT NEW depends
 bd-lock-stale-process-recovery	Lock-recovery for stuck bd processes: if 'bd' reports 'another process holds the exclusive lock on .beads/embeddeddolt',
+bd-memory-citation-repair-pattern	When repairing dangling bd-memory citations after a prune, prefer OPTION (b) REWRITE (inline the evidence) over OPTION (
+bd-memory-path-audit-method	bd-memory citation audit & rename-sweep methodology (canonical; absorbs the rename-sweep JSON-dump and symbol-anchor aud
 bd-update-notes-overwrites	WARNING: 'bd update <id> --notes <text>' OVERWRITES the entire NOTES field — it does NOT append. Hit on 2026-05-22 iter 
-bench-concretize-distribution	Concretize counter distribution sweep across 20 fast-tier benches (angr-3x4u, 2026-06-02):
+bench-add-baseline-files-insertion-order	baseline_timings.json and baseline_counters.json preserve INSERTION order, not sorted order — do NOT re-dump them with j
+bench-catalog-argv-systemexit-hang	run_single.py _run_in_child loads each bench solve.py via exec_module inside an 'except Exception' guard. argparse with 
+bench-cow-fork-scaling	cow_fork_scaling synthetic bench (angr-vx8p.2) is the corpus's ONLY fork-scaling regression gate: x86_64 fork_tree_8 rea
 bench-deserialize-example	native/angr/examples/bench_deserialize.rs is a one-shot microbenchmark for IRSB deserialize timing. Capture inputs by ad
-bench-harness-argv-injection	tests/benchmarks/run_single.py harness supports per-example argv injection via the EXAMPLE_CATALOG dict (key='argv', lis
-bench-noise-single-shot	When changing benchmark-touched code, single-shot run_regression.py results can show 15-22% regressions that disappear u
-bench-syscall-fallback-zero-coverage	Across 19 baseline_timings.json benchmarks (fauxware, ais3_crackme, csaw_wyvern, ekoparty_rev250, flareon2/5/10, mma_how
-benchmark-bimodal-variance-rules	## Bimodal Z3-nondeterminism benchmarks
-benchmark-cadet-cgc-blocker	CADET_00001 CGC bench: Python 22s; Rust >90s timeout because CGC syscall ABI (transmit=2, receive=3, fdwait=4, allocate=
+bench-gate-retry-all-dimensions	run_regression.py gate retry pass (--retry-failures N) re-checks ALL THREE failure dimensions — timing, SLA, and peak_me
+bench-sla-rust-only-exempt	run_regression.py SLA gate: the speedup-vs-Python SLA check (in the REGRESSION_SUITE loop, 'SLA check' block) falls back
+bench-soft-timeout-harness	Bounded-bench soft-timeout harness (tests/benchmarks/run_single.py, added angr-9w6ad.7): opt-in via env ANGR_BENCH_SOFT_
+bench-substitute-survey-528r	Survey of untracked angr-examples CTF crackmes for bench-add (angr-528r, 2026-06-06): exhaustive enumeration found ALL v
+bench-syscall-fallback-zero-coverage	Across 22 baseline_timings.json benchmarks (19 from 2026-06-02 + 3 new added by vx8p sub-beads — android_arm_license_val
+benchmark-bimodal-variance-rules	## Bimodal Z3-nondeterminism benchmarks Some benches have bimodal timing distributions due to Z3 model nondeterminism af
+benchmark-cadet-cgc-partial-unblock	CADET_00001 (DECREE) under Rust engine (commit e16ca3bf3, post angr-rdgs): all seven CGC syscalls now native. Buffer-ove
+benchmark-cadet-partial-bimodal	CADET_00001_partial easter-egg explore(find=) is BIMODAL under Z3 model nondeterminism: 4 samples clustered into ~6.8s/4
+benchmark-cadet-phase3-materialize-forks	angr-ckdy FIXED (commit 98d4fa5e1): the CADET solve.py phase-3 step-loop (while True: sm.step(); break if active.addr==0
+benchmark-cadet-phase3-not-a-bench	CADET_00001's full upstream solve.py CANNOT run end-to-end under the Rust engine as one bench: its 3 phases need mutuall
+benchmark-cadet-single-step-loop-unroll-defeats-latch	027h CADET convergence — why ALL post-hoc/surgical eager approaches fail (iter67, definitive). In deferred-fork mode the
+benchmark-cadet-two-phase-eager-retry	angr-027h two-phase eager-retry explore (commit 906b4ae4b): address-based explore(find=A) in RustExplorationManager runs
+benchmark-counter-baseline-refresh	9w6ad.1 baseline refresh (iter55, 2026-06-19): run_regression.py --full --rust-only --update-counters is SAFE in the 6G 
 benchmark-insomnihack-aeg-rust-blockers	insomnihack_aeg solve.py at angr-examples/insomnihack_aeg/solve.py is blocked from Rust benchmarking by TWO issues, not 
+benchmark-lazy-solves-engagement-audit	P4-spike-B LAZY_SOLVES engagement audit (angr-9w6ad.11, commit on docs/advanced-topics/rust_engine.rst 'P4-spike-B' subs
 benchmark-memory-fxhash	FxHasher swap on 4 SymbolicMemory u64-keyed fields (symbolic_objects, symbolic_spans, dirty_pages, imported_addrs): stor
+benchmark-memory-fxhash-stash-done	FxHash-on-stash is DONE (angr-dziec, iter25): StashManager.state_index (HashMap<u64,String>) and state_roots (HashMap<u6
+benchmark-mma-howtouse-cprofile-attribution	mma_howtouse (callback-heavy, 0.65x — Rust SLOWER) re-measured 2026-06-15 post-d1dr via cProfile in capped subprocess (t
+benchmark-p1d-triage-table	Perf-campaign P1d triage table (commit 6364c171d, docs/advanced-topics/rust_engine.rst 'Perf-campaign triage table (P1d)
+benchmark-p2a-mma-per-manager-cost	P2a (angr-9w6ad.5) mma_howtouse per-manager fixed-cost profile, HEAD 6364c171d, 2026-06-19. cProfile in capped subproces
+benchmark-p2b-android-register-sync	P2b (angr-9w6ad.6) android_arm_license_validation init/state-export fixed cost, HEAD 6364c171d, 2026-06-19 (/tmp/prof_an
+benchmark-p2c-veryslow-profile	P2c (angr-9w6ad.7) very-slow-tier profile: 5 never-completing benches profiled under bounded harness (one run each, run_
+benchmark-p2d-no-microbench-decision	P2d (angr-9w6ad.8) RESOLVED: do NOT add a state_export/manager_sync criterion micro-bench. The conditional gate ('add IF
+benchmark-p3-synthesis-conclusion	P3 synthesis (angr-9w6ad.9, commit on docs/advanced-topics/rust_engine.rst 'Ranked optimization candidates (P3 synthesis
+benchmark-peak-memory-gate	run_regression.py peak_memory_mb gate (angr-wcxi, commit 4c379cfe4): the memory regression check lives inside the 'if ba
+benchmark-per-arch-tally-method	Per-arch benchmark tally for the rust_engine.rst arch support matrix is NOT derivable from baseline_timings.json keys or
+benchmark-proxy-write-density	angr-7jv5 measurement (2026-06-06): per-callback proxy write density on the fast-tier corpus is too low to justify a wit
 benchmark-regression-noise-floor	Benchmark regression --threshold 0.15 on the sub-second smoke benches (arm_le_branch, mips64_le_branch, ais3_crackme, de
+benchmark-stale-vs-variance-baseline	Re-baselining lesson (angr-ngver): android_arm_license_validation (0.25->0.48s) and cmu_binary_bomb_partial (1.31->1.51s
+benchmark-sym-write-cprofile-attribution	sym-write (Z3-heavy 2.3x speedup) cProfile attribution (angr-trsg, 2026-06-06 commit 60bbac47d). Python engine: ~0.45s o
 benchmark-update-variance	Running run_regression.py --update --full overwrites baseline timings, including any entries previously populated on dif
+benchmark-vecret-gsptr-corpus-zero	VECRET/GSPTR Python VEX fallback fires ZERO times across the entire fast-tier benchmark corpus plus mma_howtouse, securi
+benchmark-w4oo3-register-sync-noop	angr-w4oo3 register-sync 'optimization' is a NO-OP: the 41.6-47ms register sync that P2b (benchmark-p2b-android-register
+beyond-parity-no-motivator-closure-pattern	Pattern formalized across THREE iterations (angr-528r iter 276, angr-uahs iter 278, angr-j7kn iter 279) of clean won't-f
 big-endian-arch-name-same	Python archinfo returns the SAME arch.name for both BE and LE variants (e.g. 'MIPS32' for both). Endianness is only in a
+binary-free-simprocedure-test-pattern	Binary-free SimProcedure unit tests (no ../binaries fixture): use angr.load_shellcode(b'\x90', arch='amd64') + p.factory
+blank-state-fallback-test-pattern	Testing _create_blank_state_fallback (rust_callback_dispatch.py): the method IGNORES its 'event' arg entirely — it rebui
 blob-loader-segment-fallback	cle Blob loader exposes only segments, not sections. _load_binary_regions in rust_manager.py must fall back to obj.segme
+block-granular-step-mode	Block-granular step() mode (angr-bmyx, commit 089a38aa4) makes mid-chain block boundaries observable at a step boundary.
+bounce-reduction-low-roi-corpus	Bounce-reduction ('stay in Rust more') has LOW ROI on the real corpus (measured 2026-07-01 from baseline_counters.json, 
+bridge-error-pyerr-per-variant	From<BridgeError> for PyErr (native/angr/src/solver.rs) now maps per-variant (angr-ghwsd.2): TypeMismatch->PyTypeError, 
 bypass-simoption-classification	BYPASS_* SimOption family (12 options) under Rust engine, classified angr-6rz8 (2026-06-03 commit 4eb8b8cad). HONORED tr
 callable-rust-engine-monkeypatch-pattern	Callable.perform_call() builds its SimulationManager internally via project.factory.simulation_manager(state, techniques
 callback-bottleneck	FFI callbacks are NOT a bottleneck in the Rust engine. Measured 2026-05-01: fauxware 3ms/0.35s (<1%), csaw_wyvern 110ms/
-callstack-architecture	Call stack tracking lives in 3 layers: (1) state.rs defines CallStackEntry struct + Vec on RustSimState, (2) interpreter
+callstack-architecture	Call stack tracking lives in 3 layers: (1) state/types.rs defines CallStackEntry struct + Vec on RustSimState (RustSimSt
 callstack-rebuild-pattern	To rebuild angr's CallStack plugin from Rust's call_stack: Rust frames are in push order (outermost first), angr's CallS
-cargo-test-state-fork-preexisting-python-init	cargo test state::tests:: failures on rust-symex: test_state_fork, test_state_fork_memory_cow, test_filesystem_fork_isol
+cargo-doc-clean-scope-to-doc-lines	cargo doc clean: never str.replace() a Rust type token like 'Py<PyAny>'/'Option<u64>' across a whole .rs file to backtic
+cargo-test-state-fork-preexisting-python-init	cargo test fork-test failures on rust-symex are PRE-EXISTING (present on master too), NOT regressions. Root cause: .fork
 cas-llsc-recursion-limit	CAS/LLSC implementation in callback interpreter (statements.rs): the natural way to reuse the Store handler for the cond
 cascmp-string-path-gap-root-cause	Iop_CasCmpEQ/CasCmpNE 8/16/32/64 were missing from the STRING path of opcode_map.rs::parse_comparison despite being corr
+catalog-tier-field-consumers	EXAMPLE_CATALOG tier field (tests/benchmarks/run_single.py) is consumed by exactly TWO call sites: (1) run_single.py --s
+ccall-inc-dec-carry-preserve	Rust ccall rflags_c/eflags_c symbolic-carry path (handle_ccall_with_ctx in native/angr/src/vex/ccall/mod.rs) must cover 
+cfg-spillingcfg-graph-api	CFGFast's cfg.graph is a custom SpillingCFG (angr/knowledge_plugins/cfg/spilling_cfg.py), NOT a plain networkx.DiGraph: 
 cfgfast-data-region-nondeterminism	CFGFast on csgames2018 (KeygenMe) is mildly nondeterministic in its DATA-region function-address discovery. The .text/.p
+cgc-receive-stdin-sync-root-cause	CGC receive() stdin-sync root cause (angr-vx8p.3, commit f662e1164): native/angr/src/syscalls/cgc.rs::receive wrote fres
 characterization-vs-fix-pattern	When a P3 characterization task ("investigate hackcon2016 0.9x speedup") turns up an unexpected regression (e.g., the be
-claripy-bridge-thread-local-caches	claripy_bridge.rs has FOUR thread_local caches with distinct roles. (1) AST_CACHE [LruCache<i64, RustBV>]: claripy→Rust,
+check-counts-gate-baseline-drift	run_regression.py TRACKED_METRICS count gate (--check-counts, callback_count/state_creations/steps) was dead code until 
+claripy-bridge-thread-local-caches	claripy_bridge/cache.rs has THREE thread_local caches with distinct roles (the file was claripy_bridge.rs before the zel
 claripy-cache-clear-api	claripy.clear_all_caches() does NOT exist in current claripy. Cache structures present today (verified 2026-05-17): clar
-claude-cli-monthly-limit-envelope-shape	Claude CLI's monthly-usage-limit 429 returns {subtype:'success', is_error:true, api_error_status:429, result:"You've hit
 cle-pseudo-objects-binary-not-none	cle pseudo-objects (ExternObject, ELFTLSObjectV2, KernelObject) have a synthetic obj.binary='cle##externs' / 'cle##tls' 
+cleanup-state-cache-set-mutation-bug	rust_manager.py _cleanup_state_cache had a 'Set changed size during iteration' bug: live.update(self._state_roots.get(si
 clippy-allow-vs-fix-rule	Updated 2026-06-02 (iter-62, after angr-wfvk size measurement). Original rule still holds for hot-path control-flow type
+clippy-fix-only-touches-targeted-bucket	Lesson learned (clippy auto-fix discipline): when running 'cargo clippy --fix --allow-dirty' to drain ONE bucket of warn
+clippy-identity-op-simd-tests	When clippy flags identity_op (e.g. `x << 0`, `(0u128 << 32)`) on a SIMD test fixture in native/angr/src/vex/ops_tests_<
+clippy-needless-mut-narrowing	clippy::needless_pass_by_ref_mut narrowing (&mut->&) has a two-step gotcha: after changing the fn signature, clippy's un
+clippy-needless-range-loop-exp-pattern	clippy needless_range_loop pattern for SIMD lane tests with exp[i] arrays: rewrite 'for i in 0..N { ...exp[i]... }' to '
+clippy-pedantic-audit-2026-06	clippy pedantic/nursery audit of rust-symex (2026-06-20, bead angr-167yo). Ran clippy::pedantic+nursery (CI only gates d
+clippy-redundant-clone-gaps	clippy::redundant_clone is CONSERVATIVE — it has false negatives. Moving a field out of a #[pyclass] struct (e.g. fuzzer
+clz-ctz-symbolic-concretization-bug	4ju9e Layer 1 (symbolic register export drop) FIXED via lazy proxy, commit 0b6b0ea1d. Mechanism: RustSimState::export_fu
 codegate-constraint-divergence	codegate_2017-angrybird: 316 Rust constraints vs 382 Python. CONFIRMED as PATH DIVERGENCE, not expression loss. VEX trac
+collect-fallbacks-tooling	collect_simproc_fallbacks.py (tests/benchmarks/) now measures ALL Rust->Python fallback classes, not just SimProcedures 
+concretization-config-readback	Reading back Rust-side concretizer config in Python tests: the exploration manager exposes get_concretization_config() -
 concretizer-flag-plumbing-recipe	Adding a new bool flag to AddressConcretizer requires touching FIVE call sites: (1) struct field + Default impl (with av
-constraint-export-no-pre-pin	## Rule
-core-goal-design-philosophy	## Goal
+conftest-fixture-no-import	pytest auto-discovers fixtures from tests/engines/conftest.py for any test under tests/engines/** — do NOT 'from tests.e
+constraint-export-no-pre-pin	## Rule When the Rust engine exports a state back to a Python `SimState`, do NOT "pre-pin" tracked symbols by adding `as
+core-goal-design-philosophy	## Goal Create a Rust symbolic execution engine for angr that initializes in Python, hands off execution to Rust for sta
+counter-parity-contract-source	Counter-name contract for mgr.stats lives in tests/benchmarks/run_single.py — _DUMP_EXPLICIT_GROUPS holds the literal na
+coverage-fail-under-three-touch-points	Coverage gate enforcement (angr-ywu7) requires touching THREE places, not just pyproject.toml: (1) pyproject.toml [tool.
 critical-python-claripy-comparisons-ult-ule-etc-produce	CRITICAL: Python/claripy comparisons (ULT, ULE, etc.) produce native Z3 Bool nodes via Z3_mk_bvult etc. Our Rust build_z
-dcas-be-not-supported	DCAS (interpreter_cb/statements.rs:execute_cas_stmt) explicitly rejects big-endian endness with CbExecutionError::Unsupp
+ctype-integration-coverage	ctype native procs (ctype.rs): the boolean predicates (is*) return rax=1/0 from ranges_predicate/set_predicate; case_shi
+dcas-be-not-supported	DCAS (interpreter/statements.rs:execute_cas_stmt) explicitly rejects big-endian endness with CbExecutionError::Unsupport
+dead-code-audit-2026-06	dead-code audit of rust-symex (2026-06-20, bead angr-6m3jp). 23 confirmed zero-caller items: symbolic 5 (value.rs Signed
 dead-code-bd-ticket-policy	Dead code retained for 'future X' must have a bd ticket. When encountering #[allow(dead_code)] in native/angr/src/, comm
+debug-chunked-store-entry-trace	Debugging tip from angr-ryf6 (2026-06-06): When tracking a Rust callsite via std::backtrace::Backtrace::force_capture(),
+declare-proc-aliases-arg-order	declare_proc! arg ORDER is fixed: name, struct, args=[...], [no_return=...], [aliases=[...]], call |state|. Putting alia
 declare-proc-macro	declare_proc! macro at native/angr/src/procedures/macros.rs lets new SimProcedures be added with one args list driving n
+declare-proc-macro-hygiene-args	declare_proc! (procedures/macros.rs) macro hygiene HIDES the raw `args: &[RustBV]` slice from the call body: the macro b
+declare-proc-migration-imports	declare_proc! macro fully-qualifies RustSimState in the generated call() signature ($crate::state::RustSimState), so a m
 decomposition-staticmethod-pitfall	When extracting methods from a class using AST line-range removal, decorators (@staticmethod, @property, @classmethod) a
+deep-loop-harness-recipe	Deep-loop harness recipe (angr-11djq.2/T1b) is documented in rust_engine.rst 'Deep-input-loop binaries (grub-class)' sub
+default-max-active-states	RustExplorationManager (Python wrapper) now defaults max_active_states to DEFAULT_MAX_ACTIVE_STATES=100000 (angr-o4q3, r
+deterministic-seed-narrows-not-collapses	P4-spike-A (angr-9w6ad.10) measured whether RustExplorationManager(deterministic=True) — pinning Z3 smt/sat.random_seed=
+devacuify-rust-progress-and-inspect-bp-pattern	De-vacuifying RustExplorationManager 'run() still progresses' tests: assert mgr.stats["steps"] > 0 after run() — it's a 
+devacuify-rust-test-readback-surfaces	De-vacuifying existence-only/no-assert tests in tests/engines/rust/: the strongest read-back surfaces already exist — _R
 disk-cache-register-filter	INVARIANT: disk init cache stores ALL archinfo registers (cr0..8, ymm0..15, fs_seg, ds_seg, cmstart, cmlen, fpreg, etc.)
 disk-init-cache-symbolic-reg-invariant	When adding fields to disk init cache or fast-sync paths, the cache key MUST be invalidated whenever the user mutates th
+djq7-file-read-harness-evidence	angr-11djq.7 (RustPosixState fd/file sync) evidence is now CAPTURED via the file_read_kernel harness (tests/benchmarks/s
 doc-line-numbers-brittle	docs/extending-angr/rust_vex_ops.rst and simprocedures.rst originally pinned at specific line numbers (e.g. parse_arithm
 doc-vex-op-names-libvex-not-legacy	Existing rust_vex_ops.rst x87 transcendental table (pre angr-l0lm) used non-existent libvex names (Iop_Fsin, Iop_Fcos, I
+docs-citation-audit-method	Docs file-path citations drift across refactors just like bd-memory citations — audit them with: grep -rhoE '(native/ang
+docs-dead-memory-key-sweep-method	Dead-bd-memory-key sweep across rust .rst docs (angr-wxmc, commit 74a295cf0): extract all double-backtick kebab tokens, 
+docs-rst-crossref-audit-clean	Docs .rst cross-ref audit (iter61) — CLEAN. Method: extract ':doc:`...`' and ':ref:`...`' from docs/advanced-topics/rust
 drop-terminal-vs-predicates	INVARIANT: drop_terminal_states MUST be False when callable predicates are active. States that output to stdout then exi
+dry-test-audit-2026-06	DRY-test audit 2026-06-12 (branch rust-symex): filed 6 beads labeled tests,dry-tests — angr-3bth (hoist 354 inline RustE
+dry-tests-trio-complete	DRY-tests trio complete: angr-7gdp (conftest dedupe), angr-evu3 (parametrized *Gate toggle table), angr-3bth (module-lev
+ds-directed-search-greedy-trap	DS-spike.2 (DirectedSearch CFG-distance best-first technique, angr/exploration_techniques/directed_search.py): greedy be
+ds-instr-reconvergence-counters	DS-instr reconvergence counters (angr-11djq.16): RustExplorationManager::record_reconvergence_sample() (exploration/help
 eager-prefetch-kills-perf	AVOID eager prefetch: Prefetching all memory pages on state init caused 6.5s/block overhead. DISABLED in v2 commit c3705
+endianness-test-must-touch-memory	To make a RustSimState endianness test non-vacuous you must touch MEMORY, not just registers: RegisterFile::put_reg/get_
 env-venv-corruption	The .venv can get corrupted (site-packages wiped, only __pycache__ remaining). Recreating with --system-site-packages gi
+error-consistency-audit-2026-06	error-handling consistency audit of rust-symex (2026-06-20, bead angr-ghwsd). 12 error enums, mostly clean (6 Result<_,S
 error-refactor-audit-first	When refactoring SyscallError / ProcedureError variants, audit test assertions first. SymbolicArgument(String) keeps its
+eval-memory-reads-rust-not-python-state	eval_memory/get_state_memory reads RUST state memory, NOT the Python SimState. A Python-side state.memory.store() before
+eval-upto-warm-cache-seed	eval_upto/eval_upto_wide (symbolic/solving_ops.rs) now seed iteration-0 from the warm model_cache when present, skipping
 exit-continuation-cache	Exit continuation cache: after first SimProcedure callback where ALL successors have Ijk_Exit jumpkind, cache that addre
-explore-predicate-loop-termination	ROOT CAUSE: _explore_with_predicates() in angr/exploration/rust_manager.py historically only checked _predicate_found (P
+exploration-dedup-cluster-2	exploration dedup cluster 2 (angr-24pv4.5, iter33): prepare_shared_callback_solver(state: &RustSimState, deferred_forks:
+exploration-dedup-helpers-clusters-5-6-8	exploration dedup helpers (angr-24pv4.5): root_or_self on StashManager (stash.rs, near get_root) collapses get_root(id).
+exploration-helpers-test-pattern	exploration helpers_tests.rs unit-test patterns (szg45.3): all 4 RustExplorationManager helper gaps are pure-Rust-unit-t
+exploration-route-and-chunked-helpers	exploration/helpers.rs has two dedup helpers added for 24pv4.5: (1) route_successor(&mut self, state, gate_found_on_sat:
+export-proxy-gates-nightly-soak	Export proxy gates added to nightly soak (angr-5x6la, 2026-06-22): ANGR_RUST_USE_EXPORT_CALLSTACK_PROXY + ANGR_RUST_USE_
+expression-z3-ast-memo	RustBV::Expression carries a lazy Z3 AST memo: field memo: RefCell<Option<z3::ast::BV>> (type alias ExprMemo, = () witho
+extract-ite-targets-test-pattern	extract_ite_targets (interpreter/helpers.rs) unit-test pattern: build inputs with a local ite_bv(t,f) helper -> RustBV::
 extract-symbolic-pages-misses-filler-loads	angr-ctct fix: `_extract_symbolic_pages` was missing user-seeded symbolic values created via SYMBOL_FILL_UNCONSTRAINED_M
 fairlight-bottleneck	fairlight benchmark is Z3-bound, not BV-op-bound. Confirmed across 2026-05-01, 2026-05-05 (HEAD=fee4ea333), and the 0.47
 fast-prune-callable	OPTIMIZATION: prune() and filter() were exporting full Rust states to Python (expensive: full memory/register/constraint
 fauxware-exit-overlaps-main	fauxware quirk: rejected() ends with 'call exit@plt' at 0x400718, post-call address 0x40071d. Coincidentally 0x40071d is
+feature-gate-decay-native-lift	angr-h0ur (2026-06-06): native-lift Cargo feature deleted. Was declared in Cargo.toml + 1352-line libpyvex_ffi.rs FFI mo
 ffi-batch-pending-getters	FFI-batching pattern for read-only with_pending getters: where the Python dispatcher needs multiple cheap fields from th
+fgetc-eof-short-read-model	Native fgetc/getchar EOF model (procedures/fgets.rs NativeFgetc + NativeGetchar): under has_option("SHORT_READS") they r
+fgets-newline-constraint	Native fgets (native/angr/src/procedures/fgets.rs, NativeFgets call closure) now adds a newline path constraint: after c
+fgets-short-read-design	Native fgets short-read modeling (angr-efvao, commit 960b1eff9): variable-length read is gated behind has_option("SHORT_
+file-read-fixture-build	file_read_kernel fixture (angr-w5llj) build notes: raw open()/read()/close() syscalls (NOT stdio FILE*) so the measured 
+flaky-model-stability-constraint-order	tests/engines/rust/test_solver_ops.py::TestSolverOperations::test_model_stability_constraint_order is order-dependent fl
 flareon10-three-bugs	flareon2015_10 had THREE bugs: (1) _sync_rust_memory_to_state used arch.memory_endness (Iend_LE) which byte-reversed ent
+flareon2015_2-baseline-drift	flareon2015_2 fast-tier baseline rust_time=3.94 was an optimistic snapshot, NOT a target the current code regressed from
 flareon5-post-exploration-constraints	flareon2015_5 wrong output root cause: Rust solver fallback (eval_with_fallback) was the ONLY solver path for cached fou
 fopen-mode-parsing	fopen/fdopen native mode parser only accepts r/r+/w/w+/a/a+ (with b/t suffix stripped and any c/e chars removed). Anythi
+fork-cold-wider-load-cache	SymbolicMemory::fork (native/angr/src/memory/mod.rs::fork) now starts wider_load_cache COLD (FxHashMap::default()) inste
+fork-counters-zero-on-fauxware	On fauxware (RustExplorationManager + enable_profiling + explore find=0x4006ED), get_execution_stats() reports solver_fo
+fork-skip-gil-attach-empty-metadata	state/fork.rs clone_py_metadata early-returns three empty HashMaps WITHOUT Python::attach when symbolic_pages/hook_symbo
+format-parser-interpret-two-subpaths	format_parser.py interpret() has TWO internal dispatch sites that must BOTH be patched when fixing a scanf spec: (A) the
+format-parser-three-dispatch-sites	format_parser.py (angr/procedures/stubs) has THREE parallel format-spec dispatch sites that must stay in sync when addin
+format-proc-integration-tests	Format-family native procs now have Python integration tests in TestSymbolicLibcProcedures (test_procedures.py): sprintf
+format-spec-type-lowercased-and-printf-strip	FormatSpecifier.spec_type (angr/procedures/stubs/format_parser.py) returns self.string[-1:].lower() — it ALWAYS lowercas
+fortify-chk-glibc-proto-arg-order	glibc.json/glibc_decls.txt fortify _chk prototypes have had wrong arg order more than once. __sprintf_chk omitted flag/s
+fortify-chk-ignore-destlen	Fortify _chk libc variants (__memcpy_chk/__memmove_chk/__memset_chk/__mempcpy_chk, and the str family) must IGNORE the t
+fortify-printf-chk-prototype-abi	Native fortify printf _chk family (procedures/fortify_printf.rs: NativePrintfChk/NativeSprintfChk/NativeSnprintfChk, ang
+fortify-str-chk-divergence-fix	Native fortify str _chk family (__strcpy_chk/__strncpy_chk/__strcat_chk/__strncat_chk/__stpcpy_chk, procedures/fortify_s
 fp-isnan-via-fpa-eq	Z3 has no FloatOpKind::IsNan but the IEEE 754 identity is_nan(x) ⇔ NOT(x == x) gives the same answer cheaply. Both Z3_mk
 fp-minmax-no-z3-fpa-min	Z3 has no fpa_min / fpa_max op (only fpa_add/sub/mul/div/sqrt/neg/abs/fma + cmp/eq/lt/leq). For packed FP min/max, build
+fp-simd-fixture-build	fp_simd_kernel synthetic bench (angr-amtxu, tests/benchmarks/synthetic_examples/fp_simd_kernel/) fills the one corpus ga
 fp-symbolic-rm-test-pattern	Pattern for testing symbolic-rm float ops (RoundF32/F64toInt, ConvertFtoIRm, ConvertFtoFRm): pick a concrete value whose
+fpa-null-fallback-fresh-const	value_z3.rs FP builders harden NULL Z3_mk_fpa_* returns via .unwrap_or_else(|| fresh_unconstrained_raw(raw_ctx, sort)) i
+fread-python-boundary-unreachable-content	Native fread concrete-content serving (FileSystem::open_with_content -> NativeFread serving FS bytes) is UNREACHABLE fro
 fwrite-io_file-fd-offsets	Native fwrite (procedures/stdio.rs) resolves FILE._fileno at an arch-specific offset matching cle.backends.externs.simda
 gan1-memory-load-clone-not-hot	angr-gan1 measurement (2026-06-03): per-byte RustBV.clone() in memory/load.rs is NOT a hot path. mem_load_count on repre
+gate-cow-fork-scaling-variance	The ralph clean/dirty gate (run_regression.py --rust-only --skip-bimodal --threshold 0.15 --retry-failures 2) can spurio
 gate-noise-floor-15pct	The 15% gate threshold on tests/benchmarks/run_regression.py --skip-bimodal is tight for sub-second benches: a 0.79s bas
 getenv-heap-alloc	Native getenv() heap-allocates a buffer for the value string via state.heap_alloc(len+1), writes value bytes + NUL, retu
-gotcha-endness-variants	rustylib::vex::ir::Endness variants are 'Little' and 'Big' (NOT 'LE' / 'BE' as in some other VEX libraries). Check src/v
+gil-strategy-decision	GIL-strategy decision for parallel exploration (angr-1ilq.7, 2026-06-29): chose Strategy A (lazy-GIL step), rejected Str
+god-module-split-impl-across-files	God-module split NEW gotcha (zel8z.2 callbacks.rs): (1) ONE inherent impl block CAN be split across multiple sibling fil
+god-module-split-private-mod-deadcode	God-module split gotcha (NEW, zel8z.4 ccall.rs): moving a 'pub mod foo'/'pub const' block from a crate-reachable file in
+god-module-split-private-struct	god-module split E0446/private_interfaces: a private struct used only as a field-less helper bundle (e.g. interpreter/st
+god-module-split-state-rs	God-module split (zel8z.1 state.rs 3692->2030 ln, the largest in the zel8z epic): the giant 'impl RustSimState' block (~
+god-module-split-test-glob-imports	god-module dir-split pitfall (zel8z.5 claripy_bridge): a sibling #[path] test module using 'use super::*' silently inher
+god-module-split-visibility-pitfall	god-module split (zel8z.*) visibility pitfall: a PRIVATE fn defined in mod.rs's main impl block is callable from sibling
+gotcha-endness-variants	rustylib::vex::ir::Endness variants are 'Little' and 'Big' (NOT 'LE' / 'BE' as in some other VEX libraries). The enum is
 gotcha-stride-detection-two-addrs	AddressConcretizer with default settings has enable_stride_detection=true. Two solutions with a regular delta (e.g. {0x1
 hackcon-z3-ast-structure	hackcon2016 69s breakdown: explore=0.6s, constraint_export=0.1s, Z3_solve=66s. The 66s is Z3 solving the synced constrai
+high-level-mgr-errored-stash-producer	The ONLY non-executable page the high-level RustExplorationManager maps into Rust is the STACK page (perms=6, via rust_s
 hitcon-sakura-separate-bug	hitcon2017_sakura 'list index error' is NOT the same as csgames2018. sakura uses address-based find/avoid with multi-sta
-i9f2-mma-howtouse-attribution	mma_howtouse 0.6x residual gap is attributed (angr-i9f2, 2026-05-19, HEAD 2870a3429).
+hook-sync-unregister-live-manager	Live-manager hook sync (angr-969g): _sync_hooks_before_step in rust_state_sync.py must DIFF the registered set against p
+hzd9e-corpus-add-redecision	angr-hzd9e corpus-add re-decision (iter50, commit 94918464b): expanded tests/benchmarks/collect_simproc_fallbacks.py CAN
+i386-struct-stat-and-angr-syscall-map	i386 struct stat support landed (angr-11djq.5.1, commit bf81b4ff5): write_i386_stat in native/angr/src/syscalls/file_pat
+i9f2-mma-howtouse-attribution	mma_howtouse 0.6x residual gap is attributed (angr-i9f2, 2026-05-19, HEAD 2870a3429). Per-Callable RustExplorationManage
 iaol1-seed-pin-empirically-broken	angr-iaol.1 finding (commit 364325237, 2026-05-25): the parent iaol audit's hypothesis that pinning smt.random_seed / sa
 imported-addrs-filter	get_state_symbolic_z3_asts must skip addresses in SymbolicMemory.imported_addrs. These are addresses imported from Pytho
 inspect-bp-state-during-step	Inspect BP action that reads firing state via RustStateProxy during dispatch hits 'state X not found' because the state 
+inspect-bp-writeback-pattern	inspect BP attribute write-back pattern (angr-uy32 mem_read + dirty_result commit 895eeacd6; angr-inh0 mem_write commit 
 inspect-dispatch-origin-two-modes	inspect dispatch has two origins. Rust-origin events (mem/reg/exit/instruction/irsb/call/return) traverse PythonCallback
-inspect-enabled-clone-pitfall	PythonCallbacks (native/angr/src/callbacks.rs) derives Clone, and RustExplorationManager::set_callbacks(self, callbacks:
+inspect-enabled-clone-pitfall	PythonCallbacks (native/angr/src/callbacks/mod.rs — dir module since angr-zel8z.2; struct + its #[pymethods]/Default/tra
 inspect-marshalling-design	Inspect marshalling layer for Rust engine (angr-uq4n.2, 2026-05-16): manager-OWNED BP storage, NOT per-state. RustExplor
 inspect-mem-dispatch-surfaces	Inspect mem_read/mem_write dispatch surfaces in Rust engine (survey from angr-uq4n.1, 2026-05-16). TWO call surfaces, no
-inspection-system	InspectionManager in state.rs: bitmask u8 for enabled events (bit N = InspectEvent N), ring buffer Vec<InspectRecord> (m
-invariant-3tek2-replay-ordering	When implementing the angr-3tek.2 fix, ORDER MATTERS in _create_state_for_callback (rust_callback_dispatch.py:1733): the
+inspection-system	InspectionManager lives in state/inspection.rs (state.rs split into state/ dir module, angr-zel8z.1): bitmask u8 for ena
+internal-patches-offline-prepare-pattern	Pattern: when a bd task is gated on a runtime measurement / CI artifact (not network access), the offline-prepare slice 
+interpreter-dedup-shared-helpers	interpreter dedup helpers (commit f9b73e641, angr-24pv4.6): four shared interpreter primitives now exist as pub(super) m
+invalid-handle-id-helper	Symbol-table handle-lookup misses (RustSolverContext op_*/add_constraint_handle in native/angr/src/solver.rs + pending_a
+invariant-3tek2-replay-ordering	When implementing the angr-3tek.2 fix, ORDER MATTERS in _create_state_for_callback (rust_callback_dispatch.py): the new 
 invariant-active-stash-push	max_active_states is now enforced via push_to_active_or_drop helper in exploration/helpers.rs. The helper uses sm.push()
 invariant-address-vs-page-number	When carving a newtype out of u64 for a subsystem, distinguish byte ADDRESSES from PAGE NUMBERS (addr >> 12). Address ne
-invariant-apply-state-metadata-strips-options	RustExplorationManager._apply_state_metadata copies ONLY LAZY_SOLVES and STRICT_PAGE_ACCESS from the source state to a c
 invariant-arc-make-mut-cow	Pattern for read-mostly fields in RustSimState that need O(1) fork: wrap in Arc<T> and use Arc::make_mut on mutation. Fo
 invariant-arch-aliases-disjoint	ARCH_ALIASES on calling_conventions must stay disjoint across CCs. native/angr/src/arch/calling_conventions.rs (post ang
 invariant-arch-register-tables	Per-arch register tables in native/angr/src/arch/{amd64,x86,arm,arm64,mips}.rs use CANONICAL: &[RegEntry] + ALIASES: &[R
-invariant-ast-cache-width-check	AST_CACHE in claripy_bridge.rs validates width on hit (line ~311). claripy hashes are content-addressed so collisions ar
+invariant-arm-conditional-guards-symbolic	Rust engine evaluates ARM (arm32) conditional-load/branch guards SYMBOLICALLY, not concretely: armg_calculate_condition 
+invariant-arm64g-ccall-python-quirk	arm64g ccalls (arm64g_calculate_condition / _flags_nzcv / _flag_{n,z,c,v}) are implemented in native/angr/src/vex/ccall/
+invariant-ast-cache-width-check	AST_CACHE (defined in claripy_bridge/cache.rs after the zel8z.5 split; was claripy_bridge.rs) validates width on hit at 
 invariant-bare-z3-push-depth	Invariant for any future consumer of SymContext::bare_z3_push_depth (angr-3ms1 step 1a): the counter ONLY reflects pushe
+invariant-baseline-counters-suite-coverage	baseline_counters.json must contain a key for every NON-bimodal fast+medium SUITE bench in run_regression.py (key = name
 invariant-benchmark-python-4gb-oom	Several angr benchmarks (csaw_wyvern, securityfest_fairlight, ekopartyctf2016_rev250, csgames2018, whitehatvn2015_re400,
 invariant-benchmark-suite-tuple-format	tests/benchmarks/run_regression.py FAST_SUITE/MEDIUM_SUITE entries are tuples: (name, timeout, [strategy, [rust_only]]).
-invariant-calc-flags-sub-unmasked	calc_flags_sub/add in native/angr/src/vex/ccall.rs compute CF as 'arg_l < arg_r' on the RAW u64 values (NOT masked to nb
+invariant-calc-flags-sub-unmasked	calc_flags_sub/add in native/angr/src/vex/ccall/x86_concrete.rs compute CF as 'arg_l < arg_r' on the RAW u64 values (NOT
 invariant-callstack-proxy-per-instance-cache	RustCallStackProxy._frames_cache is intentionally per-instance (lazily realized in _frames property at angr/exploration/
-invariant-callstack-sync-export-pipeline	_get_stash_states in angr/exploration/rust_state_export.py has FOUR export paths (cached fast path L207, parent-state co
 invariant-cas-oldhi-sentinel	INVARIANT: Single-word VEX CAS leaves oldHi=0xFFFFFFFF (libVEX IRTemp_INVALID sentinel) on the pyvex side, with expdHi=N
 invariant-cc-return-register-per-arch	Each CallingConvention impl must use the right return-register offset for its target arch's VEX guest state. EAX in x86 
 invariant-ccall-unsupported-fallback	expressions.rs IRExpr::CCall fallback contract: handle_ccall_with_ctx==None has THREE outcomes by ccall name. (1) calcul
-invariant-check-executable-test-needs-both-flags	Tests that exercise SymbolicMemory::check_executable's X-rejection path must call BOTH set_enforce_permissions(true) AND
-invariant-claripy-annotation-preservation	Rust↔Python FFI annotation preservation works in two layers (post angr-ykdq, claripy_bridge.rs):
+invariant-cgc-syscall-dispatch	DECREE CGC syscall ABI dispatched through a separate 'CGC' registry key in NativeSyscallRegistry (native/angr/src/syscal
+invariant-claripy-annotation-preservation	Rust↔Python FFI annotation preservation works in two layers (post angr-ykdq; code now under claripy_bridge/ submodules a
+invariant-claripy-floordiv-mod-unsigned	claripy BV.__floordiv__ is UNSIGNED division and __mod__ is UNSIGNED remainder (verified: BVV(0xFFFFFFFE,32)//3==0x55555
 invariant-cmp-pair-zext-direction	RustBV unsigned comparisons (ult/ule/ugt/uge) and try_zext_const_cmp_fold direction: Ult uses (ZExtCmp::Ult, ZExtCmp::Ul
 invariant-coalesce-fingerprint	Phase 4.2 flush_multi_cells (multi.rs::flush_multi_cells) coalesces runs of adjacent Multi bytes ONLY when payload_cond_
 invariant-commutative-canonicalization-active	INVARIANT for future commutative-op work on RustBV (post angr-kkpr, commit 65b97cec9): the constructors add_into/mul_int
+invariant-concrete-bv-u128-16-byte-limit	RustBV::Concrete stores its value in a u128 (16 bytes / 128 bits max) regardless of declared width. Two hazard families 
 invariant-constraint-sync-z3-ptr-fallback	sync_constraints_from_python (helpers.rs) uses claripy_to_rustbv as primary (preserves assumed_constraints tracking for 
 invariant-counter-bump-at-construction-not-entry	When adding AST-emission counters (like bvop_extract_count/bvop_concat_count/bvop_reverse_count in angr-2j5v), bump at t
-invariant-dcas-reason-string	DCAS_UNSUPPORTED_REASON ('double compare-and-swap') is defined in native/angr/src/interpreter_cb/mod.rs and used by both
-invariant-dedup-seeding-quadratic-cost	Pattern from angr-mwbp investigation: the dedup_set seeding cost (O(N) walk over shared+local z3_assertions on first cal
+invariant-cross-engine-heap-pointer-sync	Cross-engine bump-allocator/pointer drift fields (heap_brk, posix_brk, mmap_base) all sync the same 3-point way: (1) Rus
+invariant-dcas-reason-string	DCAS_UNSUPPORTED_REASON ('double compare-and-swap') is defined in native/angr/src/interpreter/mod.rs and used by both st
 invariant-dedup-set-ptr	LocalConstraints.dedup_set is a HashSet<usize> of Z3_ast ptrs that tracks every assertion currently asserted on the solv
 invariant-default-symbolic-mode-tracks	The default angr 'symbolic' mode bundle (used by factory.entry_state() with no add_options/remove_options) ships TRACK_C
 invariant-deferred-fork-snapshot-primary	Deferred fork primary path is always snapshot-based: fork_from_snapshot REPLACES the solver/registers/memory entirely wi
-invariant-disk-cache-key-axes	When adding new disk-init cache version axes (angr/exploration/rust_manager.py): bump the matching constant (_RUST_CACHE
-invariant-divmod-generic-helper	Generic divmod_double_to_single (vex/ops.rs) handles all VEX DivMod{U,S}{64to32,128to64} via dividend_w = 2*divisor_w. C
-invariant-divmod-symbolic	VEX DivMod symbolic semantics (vex/ops.rs:466,543): extend divisor to dividend width using zero_extend for unsigned ops 
-invariant-eager-concretize-pattern	Eager-concretize pattern in interpreter_cb: when as_u64() fails for a value that must be concrete (PutI index, exit targ
-invariant-editable-install-no-pth	The angr editable install in .venv currently has no .pth file in site-packages — only __editable___angr_9_2_210_dev0_fin
+invariant-dirty-helper-gsptr-dead	Native VEX dirty-helper handlers in native/angr/src/vex/dirty.rs are ONLY reachable if ALL their args are concrete u64. 
+invariant-divmod-generic-helper	Generic divmod_double_to_single (now in native/angr/src/vex/ops_int_arith.rs after the ops.rs split; symbol-anchored) ha
+invariant-doc-line-refs-drift	Doc line refs to native/angr/src/ and angr/exploration/ files drift fast; upstream angr Python files drift SLOWLY: confi
+invariant-eager-concretize-pattern	Eager-concretize pattern in interpreter: when as_u64() fails for a value that must be concrete (PutI/GetI index, exit ta
 invariant-enable-nx-gated-on-strict	ENABLE_NX (X-bit non-executable check) is gated on BOTH enforce_permissions (STRICT_PAGE_ACCESS) AND enforce_nx (ENABLE_
-invariant-error-class-taxonomy	RustErrorRecord.error_class taxonomy in angr/exploration/rust_manager.py:269 is keyed off the Display impl prefixes of C
+invariant-error-class-taxonomy	RustErrorRecord.error_class taxonomy (_ERROR_CLASS_PREFIXES in angr/exploration/rust_manager.py) is keyed off the Displa
 invariant-exit-continuation-cache	_exit_continuation_addrs cache (rust_callback_dispatch.py) MUST only be populated when proc.NO_RET=True. Address-only ca
+invariant-export-identity-via-operands-ptr	To make a Rust-minted claripy export STABLE across repeated rustbv_to_claripy calls (object identity), store it via stor
+invariant-expression-cache-export-key	EXPRESSION_BY_OPERANDS_PTR is the SOLE Rust->claripy cache for compound RustBV::Expression nodes (defined in claripy_bri
 invariant-extract-args-no-silent-placeholders	ExtractionError type lives in native/angr/src/arch/calling_conventions.rs and is re-exported from arch::mod. Variants: M
 invariant-extract-z3-ast-ptr	extract_z3_ast_ptr in solver.rs returns Err on null pointer. Callers using NonNull::new_unchecked on the Ok value can re
 invariant-feature-flag-smoke	Rust feature-flag matrix in nightly-ci.yml runs (1) cargo check (2) cargo test (3) cargo test --test feature_flag_smoke 
 invariant-floatopkind-non-float-operand	FloatOpKind::RoundToInt was the first FloatOpKind variant where one operand (the rm BV) is NOT a float. The generic buil
 invariant-floatopkind-result-bits	FloatOpKind::result_bits(prec) added in commit 37983a77b — replaces the hardcoded 'compare ? 1 : prec.bits()' width logi
-invariant-flush-stores-drain	flush_stores in interpreter_cb/mod.rs drains pending_stores by move into all_flushed_stores (no Vec<u8> clone). pending_
+invariant-flush-stores-drain	flush_stores in interpreter/mod.rs drains pending_stores by move into all_flushed_stores (no Vec<u8> clone). pending_sym
+invariant-fork-cold-wider-load-cache	SymbolicMemory::fork() starts the child with a COLD wider_load_cache (empty FxHashMap), NOT a clone of the parent's, sin
 invariant-fork-metadata-clone	Per-state metadata (symbolic_pages, hook_symbolic_memory, addr_to_ast) in RustSimState is forked via clone_py_metadata (
-invariant-fork-needs-python-init	RustSimState::fork() (state.rs ~1496) requires the Python interpreter to be initialized (PyO3 0.27 panics otherwise). Th
+invariant-fork-needs-python-init	RustSimState::fork() (now in state/fork.rs; state.rs split into state/ dir module, angr-zel8z.1) requires the Python int
 invariant-fp-rm-variants	FloatOpKind for rm-aware FP arithmetic: AddRm/SubRm/MulRm/DivRm have arity 3 (rm at operand[0], a at [1], b at [2]); Sqr
-invariant-freeze-into-shared	native/angr/src/symbolic/context.rs::freeze_into_shared<T: Clone> is the generic helper that replaced the prior two spec
 invariant-fxhash-internal-keys	PATTERN: std HashMap/HashSet keyed by internal u64/u32 IDs (page numbers, register offsets, addresses, condition_ids, BV
-invariant-init-cache-options-mirror	_apply_state_metadata in angr/exploration/rust_manager.py must MIRROR (add+discard) all opt-in/opt-out flags it cares ab
-invariant-init-cache-user-symbolic	INVARIANT: disk init cache MUST be gated on _state_has_user_symbolic(state). When user has created symbolic args (e.g., 
-invariant-init-pipeline-phases	Init-pipeline phase map in angr/exploration/rust_manager.py (post angr-khth split):
+invariant-init-cache-plugin-coverage	INVARIANT: the Rust manager's init cache (rust_disk_cache.py + rust_manager._try_in_memory_init_cache/_try_disk_init_cac
+invariant-init-pipeline-phases	Init-pipeline phase map in angr/exploration/rust_manager.py (post angr-khth split): Validator/key: _disk_cache_key (cls 
 invariant-inline-elf-construction-pattern	Real-binary integration tests for arches without locally-available ELF binaries can construct a minimal ELF inline in th
-invariant-ite-builder-loads-match	ite_builder.rs has a private loads_match helper (memory/ite_builder.rs:8) used by build_strided_ite_tree / build_balance
+invariant-iovec-syscall-handlers	writev/readv native syscall handlers (syscalls/fd_io.rs, NativeWritevSyscall/NativeReadvSyscall) walk a struct iovec[] w
+invariant-ite-builder-loads-match	ite_builder.rs has a private loads_match helper (fn loads_match in memory/ite_builder.rs) used by build_strided_ite_tree
 invariant-keep-ip-symbolic-routing	KEEP_IP_SYMBOLIC semantics (engines/successors.py:297-307,326-331): when a symbolic jump target is concretized to N conc
 invariant-lazy-region-auto-map	Invariant in native/angr/src/memory: when a Python state's page is in Rust's lazy_regions but NOT yet in pages map, the 
 invariant-libc-test-hook-addr	When integration-testing a SimProcedure via RustExplorationManager, the hook address MUST be inside a real loaded binary
+invariant-lift-deadend-message-routing	Rust run loop deadend-vs-errored routing is by MESSAGE SUBSTRING, not error type. exploration/stepping.rs RunResult::Err
 invariant-linux-prot-vs-rust-permission	Linux mprotect PROT bits (PROT_READ=0x1, PROT_WRITE=0x2, PROT_EXEC=0x4) and Rust Permission::from_bits encoding (read=0x
+invariant-loadg-cvt-carries-src-width	VEX LoadG (guarded load) cvt string encodes BOTH source and destination width (e.g. ILGop_16Uto32 = load 16 bits, zero-e
 invariant-loadg-fallback-coverage	Hand-built IRSB JSON via lift_block callback is the cleanest way to test specific VEX statement dispatch paths (LoadG, S
 invariant-local-constraints-struct	native/angr/src/symbolic/context.rs has a private LocalConstraints struct that combines both assumed (Vec<(RustBV, bool)
 invariant-macro-rules-match-arm-position	Rust macro_rules CANNOT expand to multiple match arms when invoked in arm position (i.e. between two commas inside `matc
 invariant-mem-counter-two-paths	When adding global memory-volume counters to the Rust engine, there are TWO independent execution paths and bumping poli
 invariant-mem-ite-depth-counter	Phase 1+ lazy-memory work (angr-czph Multi cells, angr-qh5u STORE) MUST call symbolic::record_mem_ite_depth(depth) on ev
 invariant-mem-perm-default-off	Memory permission enforcement in Rust SymbolicMemory is opt-in via set_enforce_permissions(true), default OFF. This mirr
-invariant-memcache-only-on-entry	INVARIANT: RustExplorationManager._mem_cache (the fast memory-sync data
+invariant-memcache-only-on-entry	INVARIANT: RustExplorationManager._mem_cache (the fast memory-sync data populated from the disk init cache) is only set 
 invariant-min-max-width	SymContext::min(bv, false) and ::max(bv, false) return Option(u128), but the value is the BVs bit pattern reinterpreted 
 invariant-min-max-witness-seeding	INVARIANT for min/max model-cache seeding (native/angr/src/symbolic/context.rs cached_model_eval + min + max): a cached 
-invariant-mips32-inline-elf-opcodes	MIPS32 instruction encodings verified for inline-ELF tests (endian-agnostic at decode; storage byte order set by EI_DATA
+invariant-mips-o32-syscall-stack-args	MIPS O32 is the only Linux syscall ABI that spills syscall args to the stack: args 1-4 in $a0-$a3, args 5+ at [sp+16] (t
+invariant-mips-syscall-error-reg	MIPS Linux syscalls report error in $a3 (0=ok, non-zero=err) separately from $v0 return; glibc branches on it. Rust disp
 invariant-mirror-pattern	Mirror pattern for cross-mixin invariants in Rust rustdoc (angr-a2br.1.5, 2026-06-01): when the source-of-truth contract
 invariant-mmap-base-mirror	RustSimState.mmap_base field (default 0xC100_0000 = heap_base 0xC0000000 + heap_size 0x00800000 * 2) mirrors Python stat
 invariant-mmap-syscall-semantics	Linux mmap(2) syscall flag-decision gotcha: Python's procedures/posix/mmap.py compares 'fd[31:0] == -1' (low 32 bits == 
@@ -203,214 +356,404 @@ invariant-multi-versions	Phase 4.1 introduced multi_versions: FxHashMap<u64, u64
 invariant-multi-vs-symbolic-cell-states	After Phase 1.1, an address byte in Rust SymbolicMemory can be in one of four states: (1) pure Concrete (no bitmap bits,
 invariant-native-dispatch-test-pattern	Native procedure dispatch fires only when hook addr is OUT of binary_regions (skipped extern objects + non-executable se
 invariant-native-proc-fallback-buckets	Three per-reason fallback buckets in NativeProcStats (profiling.rs) MUST sum to python_fallbacks: symbolic_fallbacks_by_
-invariant-native-syscall-dispatch	NativeSyscallRegistry (native/angr/src/syscalls/) follows the same pattern as NativeProcedureRegistry: a HashMap of hand
+invariant-native-syscall-dispatch	NativeSyscallRegistry (native/angr/src/syscalls/mod.rs) mirrors NativeProcedureRegistry: HashMap keyed by (arch_name, sy
 invariant-native-syscall-pc-contract	Native syscall handler PC contract: by the time RunResult::Syscall fires in stepping.rs, the interpreter has already adv
 invariant-nativesimprocedure-name-static	NativeSimProcedure::name() returns &'static str. For Python-registered procedures whose name is dynamic, store the Strin
-invariant-neon-routing-tests	When implementing a previously-unimplemented NEON opcode (e.g. moving from parse_neon_unimplemented to parse_vector with
+invariant-neon-routing-tests	When implementing a previously-unimplemented NEON opcode (moving from parse_neon_unimplemented to parse_vector/parse_flo
 invariant-newtype-impl-into-inference	Public Rust APIs that accept newtype-wrapped values (Address(u64), StateId(u64), etc.) should take 'impl Into<Newtype>'.
 invariant-no-ip-concretization-routing	NO_IP_CONCRETIZATION semantics (Python engines/successors.py:292-296): when set, max_targets is forced to 0 with skip_ma
 invariant-no-return-deadend	Native SimProcedure dispatchers (stepping.rs:handle_simprocedure AND mod.rs:run top-of-loop hook check) MUST honor no_re
+invariant-no-state-store-after-proxy-install	INVARIANT: any state.memory.store() / state.memory.load() in code that runs during _create_state_for_callback (rust_call
 invariant-non-exhaustive-policy	API stability via #[non_exhaustive]: marked on 9 public Rust types in angr-irwe (2026-06-01). 5 error enums (BridgeError
 invariant-non-ffi-unsafe-safety-comments	Invariant: every new unsafe block in non-FFI files under native/angr/src/ MUST carry a // SAFETY: comment (uppercase, no
-invariant-nx-block-fetch	NX (execute) permission is checked at CallbackInterpreter::get_or_lift_block (interpreter_cb/execution.rs ~line 297) via
-invariant-orchestrator-dryrun-side-effects	run_optimization_loop.py --dry-run runs in CI (orchestrator_smoke job in .github/workflows/ci.yml). It MUST NOT acquire 
+invariant-nx-block-fetch	NX (execute) permission is checked at VEXInterpreter::get_or_lift_block (interpreter/execution.rs (fn get_or_lift_block)
 invariant-page-bitmap-authoritative	Page bitmap is the AUTHORITATIVE source of truth for byte-level symbolic-vs-concrete state in SymbolicMemory, NOT symbol
 invariant-partial-overlap-byte-merge	Fixed 2026-05-08 (angr-3zhl, commit 813dbcce3): load_concrete detects when any other symbolic_objects entry starts insid
-invariant-pending-api-extension-impl	pending_api.rs (native/angr/src/exploration/pending_api.rs) holds the bodies for 35 pyclass-exposed methods that read or
-invariant-pending-store-buffer	PendingStoreBuffer (interpreter_cb/pending_store.rs) wraps Vec<(u64, Vec<u8>)> with a HashMap<u64, usize> mapping each b
+invariant-pending-store-buffer	PendingStoreBuffer (interpreter/pending_store.rs) wraps Vec<(u64, Vec<u8>)> with a HashMap<u64, usize> mapping each byte
 invariant-pending-writes-defer-then-flush	PendingWrite path semantics (memory/mod.rs:29 and tests.rs::test_pending_write_visible_after_flush): add_pending_write d
-invariant-prefer-z3-native-bv-ops	When emitting RustBV operators to Z3 (native/angr/src/symbolic/value.rs::to_z3_ast_cached), prefer z3-rs native methods 
-invariant-pyapi-vs-mod-rs	pyapi.rs is NOT included via include!() in mod.rs. Both files define methods on RustExplorationManager, but ONLY mod.rs 
-invariant-pycallbacks-mutable-fields	INVARIANT: any new mutable field added to PythonCallbacks (native/angr/src/callbacks.rs) that needs to be updated AFTER 
-invariant-pyo3-no-new-raw-ptr-surface	INVARIANT: import_z3_constraint_ptrs (exploration/state_api.rs:102) is the ONLY Python-exposed FFI entry in native/angr/
-invariant-pyo3-single-pymethods-impl	PyO3 0.27.2 in this project does NOT enable the 'multiple-pymethods' feature flag (Cargo.toml line: pyo3 = { version = "
+invariant-positioned-io-syscalls	Native pread64/pwrite64 (syscalls/fd_io.rs NativePread64Syscall/NativePwrite64Syscall) need offset-honoring FileSystem I
+invariant-prefer-z3-native-bv-ops	When emitting RustBV operators to Z3 (native/angr/src/symbolic/value_z3.rs::to_z3_ast_cached), prefer z3-rs native metho
+invariant-progress-deadended-needs-predicate-path	Progress-callback deadended_count is only observable via the PREDICATE explore path (mgr.explore(find=lambda s: False)),
+invariant-proxy-python-mgr-vs-mgr	RustStateProxy sub-proxy ctors (RustMemoryProxy, RustRegisterProxy, RustSolverProxyPlugin in angr/exploration/rust_state
+invariant-pycallbacks-mutable-fields	INVARIANT: any new mutable field added to PythonCallbacks (struct defined in native/angr/src/callbacks/mod.rs — dir modu
+invariant-pyo3-needless-pass-by-value	clippy::needless_pass_by_value on a #[pymethods] fn arg (e.g. segmentlist.rs next_pos_with_sort_not_in's sorts: HashSet<
+invariant-pyo3-no-new-raw-ptr-surface	INVARIANT: do NOT add new unchecked Python-exposed FFI surfaces that take a raw integer and dereference it as a Z3 point
+invariant-pyo3-single-pymethods-impl	PyO3 0.27.2 in this project does NOT enable the 'multiple-pymethods' feature flag (Cargo.toml: pyo3 = { version = "0.27.
 invariant-python-procedure-num-args	register_python_procedure (native/angr/src/procedures/python_proc.rs): num_args mismatch is silent — the dispatcher's ex
 invariant-python-procedure-return-extract	register_python_procedure return-value handling: callable returning -1, a value > u64::MAX, a non-int, or a float all fa
 invariant-recip-rsqrt-fresh-symbolic	Iop_RecipEst/Step and Iop_RSqrtEst/Step (FP variants) are emulated as fresh-symbolic per lane — angr Python has _op_fgen
+invariant-register-import-via-claripy-to-rustbv	Subregister symbol identity (angr-21vi5/4ju9e Layer 2): when importing a symbolic register from Python into Rust, route 
+invariant-register-proxy-cache-invalidation	RustRegisterProxy._cache (per-name read cache, rust_state_proxy.py ~line 808) is NEVER invalidated when the underlying R
+invariant-registerfile-arc-cow-makemut	RegisterFile (native/angr/src/arch/mod.rs) stores registers as data: Arc<Vec<u8>> (NOT Vec<u8>) since angr-6t8z3.1. fork
+invariant-resolve-main-direct-call-fallback	Rust init-to-main for thin-entry binaries: _resolve_main_address (rust_manager.py) resolves main via (1) 'main' symbol, 
 invariant-restore-plugins-template-walk	invariant-restore-plugins-template-walk: _restore_plugins_to_state's template selection must walk ancestors in proximity
-invariant-reverse-z3-roundtrip-tests	Invariant for Reverse/Concat Z3 emission in native/angr/src/symbolic/value.rs: any Reverse-related code change MUST incl
-invariant-run-loop-extension-impl	exploration/run_loop.rs at native/angr/src/exploration/run_loop.rs holds the body of the pyclass run() method as pub(cra
+invariant-reverse-z3-roundtrip-tests	Invariant for Reverse/Concat Z3 emission in native/angr/src/symbolic/value_z3.rs: any Reverse-related code change MUST i
+invariant-run-single-partial-stats-on-failure	tests/benchmarks/run_single.py::_run_in_child surfaces partial Rust diagnostics on failure. The _collect_rust_diagnostic
 invariant-rust-auto-init-to-main	RustExplorationManager auto-skips _start->main during construction via _run_python_init_if_needed (rust_manager.py:1449)
-invariant-rust-dirty-pages-pending	INVARIANT: SymbolicMemory.dirty_pages (native/angr/src/memory/mod.rs:88) tracks per-state which pages were mutated since
+invariant-rust-dirty-pages-pending	INVARIANT: SymbolicMemory.dirty_pages (FxHashSet<u64> field in native/angr/src/memory/mod.rs) tracks per-state which pag
 invariant-rust-explore-batches-without-step	RustExplorationManager.explore() and .run() do NOT call self.step() per VEX block — they batch through Rust internally (
-invariant-rust-explore-replacement-needs-predicate-eval	diff-state harness in tests/benchmarks/diff_state.py needs to mirror the live exploration loop's predicate handling. Pro
+invariant-rust-memory-u128-store-width	Concrete stores into rust_memory are width-limited to 128 bits at the value layer: store_concrete (memory/store.rs) comp
 invariant-rust-perm-bit-encoding	RustSimState.map_memory(addr, size, perm_bits) Python perm encoding is the Permission::from_bits scheme (NOT Linux mprot
 invariant-rust-perm-mapping-coarse	Python→Rust memory page permissions are CURRENTLY coarse: angr/exploration/rust_state_sync.py maps binary regions and se
+invariant-rust-proxy-copies-gc	RustStateProxy.__del__ + RustExplorationManager.drop_copy(state_id) reclaim _copies stash entries (angr-yhe0, commit 4cd
+invariant-rust-proxy-copy-add-constraints-non-persistent	RustStateProxy sub-proxies (solver/memory/posix) now SHARE one forked solver context, minted lazily by RustStateProxy._g
 invariant-rust-python-default-divergence	Rust's RustSimState defaults are *not* always equal to angr's loader-set defaults — for posix_brk specifically, Rust har
 invariant-rust-simgr-monkey-patch-guard	Any monkey-patch of angr.factory.AngrObjectFactory.simulation_manager that returns a RustExplorationManager MUST guard t
+invariant-rust-solver-fallback-class	RustSolverContext.min/max (solving_ops.rs) return Option<u128>=None for BOTH unsat AND width>128 (u128 can't hold the ex
 invariant-rust-solver-proxy-required-surface	RustSolverProxyPlugin must expose SimSolver convenience aliases (angr-8oiw, 2026-06-04). When installing the proxy as st
-invariant-rust-state-satisfiable-no-extras	Rust state proxy's solver.satisfiable(**kwargs) IGNORES extra_constraints — the rust path calls rust_ctx.satisfiable() w
-invariant-rust-test-export-constraints-leak	RustExplorationManager test isolation: tests in test_rust_exploration.py share the module-scoped fauxware_project fixtur
+invariant-rust-test-export-constraints-leak	RustExplorationManager test isolation: tests in tests/engines/rust/ share the module-scoped fauxware_project fixture, wh
 invariant-rustbv-clone-cheap	RustBV::Symbolic.name is Arc<str> and RustBV::Expression.operands is Arc<[RustBV]> (an Arc-shared inline slice — NOT Arc
+invariant-rustbv-export-bool-operands	rustbv_to_claripy export (native/angr/src/claripy_bridge/export.rs::rustbv_to_claripy_memo, post zel8z.5 split; was clar
 invariant-rustbv-expression-id-sentinel	RustBV::Expression { id: u64 } is NOT a content hash or interner id. Every Expression constructor sets id = RustBV::EXPR
 invariant-rustbv-rewrite-second-hook	RustBV IR rewrites can be bypassed: extract_into / truncate_into / extract_no_ctx all exist as ways to construct Extract
+invariant-rustbv-u128-chunking	RustBV::Concrete is u128-backed (max 128 bits). Any Python->Rust memory or register sync that takes 'data: &[u8]' and pa
 invariant-rustbv-zero-width	RustBV with width=0 is supported on the concrete path: RustBV::concrete(value, 0) collapses the mask to 0 so any value n
+invariant-rustsimstate-snapshot-serde-default	When adding a new field to RustSimStateSnapshot, prefer #[serde(default = "...")] with a free function returning the can
+invariant-set-register-ip-syncs-pc	RustSimState::set_register (in state/mod.rs main impl block; state.rs split into state/ dir module, angr-zel8z.1) histor
 invariant-shellcode-binary-regions-test	When writing integration tests against load_shellcode binaries that need is_in_binary() to return True (so jmp/ret targe
 invariant-shellcode-blank-state-rust-sync-gap	Test setup gotcha (rust-symex): RustExplorationManager built from angr.load_shellcode + proj.factory.blank_state does NO
 invariant-signext-extend-bits	BVOp::SignExt(n) and BVOp::ZeroExt(n) in native/angr/src/symbolic/value.rs encode the NUMBER OF BITS ADDED, not the targ
+invariant-simoption-matrix-doc-consistency	rust_engine.rst SimOption coverage matrix is now guarded by TestRustSimOptionMatrixConsistency (tests/engines/rust/test_
+invariant-simproc-call-continuation-push-capture	self.call() continuation push is LOST in the Rust callback path unless the grown stack region is captured. Root cause: a
+invariant-simregarg-partial-write	When SimProcedures return a value via cc.teardown_callsite -> SimRegArg.set_value, and the return type is smaller than t
 invariant-sphinx-build-workaround	Sphinx is NOT installed in the angr venv and cannot be added because the venv pip is broken (see avoid-pip-install-broke
 invariant-stash-filter-proxy-pattern	Proxy fast-path pattern in RustExplorationManager filter()/move()/drop() (post angr-9jly, 2026-05-22): each predicate-pa
 invariant-stash-wrapper-attr-access-triggers-resync	After angr-kwpi.2, mgr.active/found/etc return _LazySimStateRef wrappers (angr/exploration/rust_state_export.py). Access
 invariant-state-cache-pinning	_state_cache pinning rule (angr-qm7w, 2026-05-08): _cleanup_state_cache must always pin (a) every root state in self._st
 invariant-state-id-never-reused	INVARIANT (angr-r4r7, 2026-05-10): Rust state IDs are monotonically allocated and never reused. Once a state ID is absen
-invariant-state-metadata-dataclass	StateMetadata dataclass at angr/exploration/_state_metadata.py replaces 3 separate per-state dicts (_symbolic_pages, _ho
 invariant-state-solver-timeout-dual-write	RustSolverProxy.timeout setter writes BOTH to the underlying state's SymContext (via mgr.set_state_solver_timeout) AND t
 invariant-step-error-not-thiserror	thiserror conversion in Rust engine (commit 923c3a6ca, 2026-05-01): 10 of 11 manual error enums converted to thiserror d
 invariant-step-monkey-patch-must-be-bound	When monkey-patching SimulationManager.step (or any method that may be hooked by ExplorationTechniques), use types.Metho
 invariant-stepping-decomposition	stepping.rs has TWO deferred-fork code paths kept intentionally distinct: (1) handle_block_end's inline loop has per-for
+invariant-symbolic-bitcount-sound-export	Symbolic clz/ctz/popcount export from Rust->claripy MUST be tied to the operand AST, not a fresh BVS. claripy_bridge/exp
 invariant-symbolic-context-gating	symbolic/context.rs is in 'pub mod symbolic' which is NOT feature-gated in lib.rs (unlike claripy_bridge, memory, interp
 invariant-symbolic-memory-fork-fields	SymbolicMemory::fork() must clone (not share-by-reference) every mutable per-state field. As of 2026-05-05 the fields ar
 invariant-symbolic-procedure-result-width	Native SimProcedures returning a symbolic result must return at arch.bits() width (state.arch().bits()), not at any inte
 invariant-symbolic-procedures-pattern	When porting libc SimProcedures from concrete-only to symbolic-arg support, share the ITE-chain construction helpers acr
 invariant-symbolic-spans-not-base	symbolic_spans is populated for offsets 1..sym_bytes (NOT including the base addr) in store_concrete (line ~772) and imp
+invariant-symbolic-store-no-zero-bytes	Symbolic store/load forwarding in the VEX interpreter (native/angr/src/interpreter) has a soundness invariant fixed in a
 invariant-symbolic_bitmap-binary	ultrapage's symbolic_bitmap (angr/storage/memory_mixins/paged_memory/pages/ultra_page.py) is a bytearray of ONLY 0x00 (c
 invariant-symcontext-arc-cow	SymContext now has TWO Arc<Vec<...>>/Mutex<Vec<...>> shared/local pairs: z3_assertions_shared/local (cached Z3 Bool for 
 invariant-symcontext-push-not-cache-aware	SymContext::push() is solver-only and is NOT cache-aware. assume_true/false caches the constraint into z3_assertions_loc
-invariant-syscall-arg-extraction	Native syscall handlers receive args from extract_syscall_args (helpers.rs:576), NOT extract_procedure_args. The two dif
+invariant-sync-cb-no-proxy-reentry	Synchronous Rust→Python callbacks (_cb_memory_load/_cb_memory_store/_cb_fetch_page/_cb_memory_load_batch/_cb_memory_stor
+invariant-syscall-arg-extraction	Native syscall handlers receive args from extract_syscall_args (fn in exploration/helpers.rs), NOT extract_procedure_arg
 invariant-syscall-fallback-on-collision	Native syscall fallback-on-collision pattern: when Rust semantics can't faithfully reproduce a Python error path, return
+invariant-syscall-fresh-symbol-names	Native syscall handlers must NOT mint symbolic returns with fixed names via RustBV::symbolic: z3::ast::BV::new_const(nam
 invariant-syscall-outcome-symbolic	SyscallOutcome::ContinueSymbolic { ret: RustBV } added 2026-05-08 to native/angr/src/syscalls/mod.rs for syscalls return
 invariant-syscall-symbolic-arg-message	Native syscall handlers (native/angr/src/syscalls/) follow a SymbolicArgument convention: each call to RustBV::as_u64() 
+invariant-test-split-file-relative-paths	When splitting a test file DEEPER into a package subdir, file-relative path computations break by the depth delta. test_
 invariant-two-solution-stride-strided-branch	Two pinned address solutions whose difference is a power-of-2 / multiple of page size hit the Strided concretization bra
 invariant-unsat-state-stepping	UNSAT state stepping: the engine does NOT check parent-state satisfiability before stepping; it only checks satisfiabili
+invariant-use-system-times-rejected	USE_SYSTEM_TIMES is warn-once rejected (in _REJECTED_OPTION_NAMES, angr/exploration/rust_manager.py) not honored: native
 invariant-v5ht-dismantle-child-none	INVARIANT (commit 971d35545, angr-v5ht): when LINEAGE_DISMANTLED is true, SymContext::fork MUST set child.lineage = None
-invariant-vex-fcmpkind-shared-enum	FCmpKind in vex/ir.rs is shared between FCmpScalarLane (SSE *0x4/*0x2) and FCmpVecPacked (Iop_Cmp*Fx{2,4}). When extendi
+invariant-vex-binop-family-misroute-no-panic	VEX binop family dispatch (native/angr/src/vex/ops.rs): VEXOps::binop() routes ops to 5 private family fns (binop_arith,
+invariant-vex-chain-break-find-avoid	VEX interpreter chain-break invariant (commit ed600427b, angr-027h): run_until_event chains up to max_blocks blocks per 
+invariant-vex-fallback-counter-wiring	Pattern for adding per-reason VEX fallback counters: (1) define a const REASON: &str = ... in native/angr/src/interprete
+invariant-vex-fcmpkind-shared-enum	FCmpKind in vex/ir/ops_def.rs (split out of vex/ir.rs in zel8z.7; re-exported via ir/mod.rs pub use) is shared between F
 invariant-vex-float-to-int-signed-cast	VEX float-to-int conversion stubs in native/angr/src/vex/ops.rs use asymmetric concrete-cast lambdas: signed dst (e.g. f
+invariant-vex-op-no-concrete-zero-fallback	interpreter/expressions.rs eval_unop/binop/triop/qop: the residual Err arm must NOT fabricate Ok(RustBV::concrete(0,widt
 invariant-vex-packed-fp-cmp-shape	VEX packed FP compare opcodes Iop_Cmp{EQ,LT,LE,GT,GE,UN}{32Fx2,32Fx4,64Fx2} have asymmetric coverage in pyvex: 32Fx2 (AR
 invariant-vex-packed-fp-naming	VEX naming for SSE/AVX packed FP ops: Iop_<Op>{32Fx4,64Fx2} for SSE 128-bit; Iop_<Op>{32Fx8,64Fx4} for AVX 256-bit. Scal
 invariant-vex-sse-scalar-lane-cmp-shape	VEX Iop_Cmp{EQ,LT,LE,UN}{32F0x4,64F0x2} (SSE CMPSS/CMPSD) returns V128 — NOT I1. Shape: lane 0 = all-1s (0xFFFFFFFF for 
 invariant-vex-transcendentals	VEX exposes no IROp variants for x87 transcendentals (Iop_SinF64=0x14e6, CosF64=0x14e7, TanF64=0x14e8, 2xm1F64=0x14e9, A
 invariant-vex-triop-qop-rm	VEX Triops/Qops carry a rounding mode (rm) as their first argument: Triop = (rm, a, b), Qop = (rm, a, b, c). The IROp in
-invariant-vsetelem-non-rm-triop	Iop_SetElem* is a VEX Triop but its arg1 is the source VECTOR, NOT a rounding mode. The Rust engine's IRExpr::Triop disp
+invariant-wide-bv-128-import-extrema	angr-cxw7 wide-BV (>128-bit) fix: RustBV::Concrete value field is u128, so >128-bit concretes can't round-trip. claripy_
+invariant-wide-return-needs-python-fallback	Native SimProcedures returning a value wider than the arch's integer return register (e.g. strtoll/strtoull 64-bit long 
 invariant-with-pending-helpers	with_pending(_mut)/with_state(_mut) helpers in native/angr/src/exploration/helpers.rs deduplicate the 'check pending or 
-invariant-z3-ast-validation-limit	Z3 AST pointer validation limit: calling Z3_get_sort on an arbitrary integer (e.g. 0xdeadbeef) will dereference the poin
+invariant-z3-ast-sort-check-before-wrap	Raw Z3 AST extraction (solver.rs extract_z3_ast_ptr) returns a Z3_ast with NO sort check. Consumers must verify sort bef
 invariant-z3-bv-shift-semantics	Z3's bvshl/bvlshr/bvashr handle the 'shift >= operand width' edge case natively: bvshl/bvlshr return 0, bvashr replicate
 invariant-z3-construction-canonicalization	INVARIANT (Z3 4.13.0, verified 2026-05-21): Z3's AST hash-cons applies at construction time (Z3_mk_bvadd etc.). Two call
 invariant-z3-model-cache-soundness	INVARIANT: If a SAT model M satisfies parent constraints C, then C∧cond is SAT (witnessed by M) iff M(cond)=true. Symmet
 invariant-z3-model-output-divergence	codegate_2017-angrybird, sym-write, unmapped_analysis produce BENIGN output divergence between Python and Rust engines. 
-invariant-z3-runpath	INVARIANT: native/angr/build.rs MUST emit 'cargo:rustc-link-arg=-Wl,-rpath,<venv-z3-lib>' so the cdylib loads the venv's
-invariant-z3-solver-stats-keys	Process-wide Z3 profiling counters live in native/angr/src/symbolic/context.rs as static AtomicU64s (Z3_CHECK_COUNT, Z3_
-invariant-zext-fold	ZeroExt(k, x) ⊙ BVV fold lives in native/angr/src/symbolic/value.rs::try_zext_const_cmp_fold and runs from each cmp  op 
+invariant-z3-solver-stats-keys	Process-wide Z3 profiling counters live in native/angr/src/symbolic/stats.rs as pub(crate) static AtomicU64s (Z3_CHECK_C
+invariant-zext-fold	ZeroExt(k, x) ⊙ BVV fold lives in native/angr/src/symbolic/value_ops.rs::try_zext_const_cmp_fold and runs from each cmp 
 inventory-validation-cross-check	angr-f8je learning: validating an inventory by reading source alone misses mixin-supplied methods. RustExplorationManage
 iop-avg-vs-hadd-distinction	VEX Iop_Avg* != claripy _op_generic_HAdd: Iop_Avg{N}{S/U}x{M} is ROUNDING halving add ((a+b+1)>>1, ARM URHADD/SRHADD, SS
 lazy-memory-load-overlay-fails	Lazy memory (pending_writes ITE overlay on loads) does NOT work for sym-write. Every VEX load iterates all pending write
 lazy-memory-sidecar-architecture	Lazy symbolic memory (angr-czph Phase 1) follows a sidecar architecture, NOT an enum-per-byte design. The design doc say
-legacy-engine-unused	Legacy non-callback interpreter (interpreter.rs + engine.rs RustVEXEngine PyO3 class) is unused by production code — ang
+libafl-0153-api-migration	libafl 0.15.3 API drift fixed in fuzzer feature (angr-ckzr): (1) the separate `SetTimeout` executor trait was removed — 
 libz3-soname-mismatch-root-cause	Rust .so linking against wrong libz3 SONAME (libz3.so.4 from /lib/x86_64-linux-gnu vs libz3.so from venv) causes silent 
+live-pending-callback-test-harness	To de-vacuify a test that needs a LIVE pending_callback (with_pending succeeds only while self.pending_callback is Some)
 load-shellcode-blob-binary-none	load_shellcode creates a cle Blob object whose .binary attribute is None (in-memory bytes, not from a file). The default
-loop-stdout-buffering	run_optimization_loop.sh output is block-buffered when piped to tee, so .claude/loop-logs/iteration-*.log files show 0 b
+loopseer-native-wiring	angr-4arn: the native LoopSeer wiring was mostly pre-existing. register_loop_bound (mod.rs) + NativeTechnique::LoopBound
 max-active-states-test-pattern	Test pattern that verifies max_active_states is wired up vs silently no-op: set limit=1 on a forking binary (e.g. fauxwa
+medium-bench-counters-deterministic	MEDIUM-tier bench counters are deterministic (angr-lagp, 2026-06-15, commit ad716b164). 5x-per-bench soak via run_single
+memcpy-memset-python-boundary-test	Native memcpy/memmove/memset had ZERO Python-boundary test coverage despite shipping extensive Cargo unit tests for symb
+memcpy-symbolic-address-native	memcpy/memmove handle a SYMBOLIC dst and/or src address natively via module-level fn copy_symbolic_addr in native/angr/s
+memcpy-symbolic-size-native	memcpy/memmove symbolic-SIZE handled natively (native/angr/src/procedures/memcpy.rs, fn copy_symbolic_size; NativeMemcpy
+memory-citation-rot-path-scan	Periodic memory citation-rot audit. Dump 'bd memories --json' (NOT the plain list — it truncates each body to a snippet 
+memory-dedup-shared-helpers	memory-area dedup (angr-24pv4.3) added shared helpers; anchor by symbol name: load.rs free fns bytes_to_bv + concat_byte
 memory-perm-rust-vs-python	Rust SymbolicMemory store check uses Permission::W (W-only), not Permission::RW. Python angr's privileged_mixin.py also 
-memory-store-symbolic-full-not-registered	memory_store_symbolic_full Python callback is defined in callbacks.rs but no Python code in angr/ ever calls set_memory_
+memory-store-symbolic-full-not-registered	memory_store_symbolic_full IS now registered in production (key name is historical — formerly 'not-registered'). angr/ex
 memory-sync-skip-symbolic	Memory sync MUST skip pages with symbolic_offsets. Syncing all pages overwrites Python's symbolic BVS values (e.g. passw
+mempcpy-stpcpy-integration-coverage	mempcpy/stpcpy native procs (memcpy.rs NativeMempcpy / strcpy.rs NativeStpcpy) now have Python-boundary integration test
+memset-symbolic-address-native	memset SimProc handles a SYMBOLIC destination address natively via the module-level helper fn memset_symbolic_addr in na
+memset-symbolic-size-native	memset symbolic-size is handled natively (native/angr/src/procedures/memset.rs, NativeMemset). The size arg is now 'bv' 
+memset-symbolic-value-native	memset native SimProc (procedures/memset.rs) handles a SYMBOLIC byte value without Python fallback: arg is declared 'val
+merge-memory-test-pattern	SymbolicMemory::merge (memory/mod.rs) test pattern: per-byte ITE selection needs a real solver — gate under #[cfg(featur
+migration-count-is-the-lever	The parallel-exploration blocker is migration COUNT, not transport cost (angr-t3l5o pivot, 2026-06-30). The overhead gat
+mimalloc-global-allocator	mimalloc as #[global_allocator] in native/angr/src/lib.rs delivers NO measurable speedup for the Rust engine. Evaluated 
 min-max-bottleneck	min/max binary-search bottleneck pattern: bench impact is dominated by (a) how many min/max calls happen and (b) how tig
+mips-o32-syscall-audit-clean	Audit (angr-cudgw.1) confirmed the native MIPS-O32 syscall table in syscalls/mod.rs register_syscalls!("MIPS32", ...) is
+mips32-struct-stat-and-omitted-mode	MIPS32 struct stat64 (angr-11djq.5.3, commit e4fade99b) completes the stat-family across all arches. write_mips32_stat i
 mips64-register-dispatch-status	MIPS64 register dispatch status (post angr-w2gj.2): all offsets64 entries now reachable via set_register/get_register. A
+model-stability-eval-nondeterminism-root-cause	test_model_stability_constraint_order (TestSolverOperations) flake root cause: NOT cross-test Z3 pollution as iter-24 la
 multi-stage-manager-reuse	Multi-stage explore (hitcon2017_sakura pattern: simgr.explore→found[0]→new simgr) MUST reuse the old RustExplorationMana
+native-access-parity	Native access() parity: procedures/access.rs NativeAccess mirrors libc/access.py — mint RustBV::symbolic(name,32), build
+native-asprintf-getline-getdelim-parity	native-asprintf-getline-getdelim-parity: ae54t.3 (commit 7e7479a59). KEY GOTCHA: getdelim.py existed but its class was n
+native-bzero-parity	Native bzero (procedures/memset.rs NativeBzero): Python angr's posix/bzero.py subclasses memset and forwards memset(s,0,
+native-char-io-unlocked-aliases	Native char-IO stdio procs (fputc/putc in puts.rs; fgetc/getc/getchar in fgets.rs) now register their _unlocked aliases 
+native-coverage-real-binary-tail	Native libc real-binary coverage tail = epic angr-tx7ec (sibling of angr-11djq). Curated ~12 high-confidence procs that 
+native-ctype-loc-tables	Native locale ctype tables (__ctype_b_loc/__ctype_tolower_loc/__ctype_toupper_loc, angr-tx7ec.4, commit aca498296): the 
+native-dispatch-skipped-for-loaded-libs	Native SimProcs (strcmp/malloc/calloc/getenv...) are BYPASSED on dynamically-linked real binaries loaded with auto_load_
+native-fgets-fgetc-resolves-stream-fd	NativeFgets/NativeFgetc (native/angr/src/procedures/fgets.rs) used to declare `_stream: bv` and IGNORE it, always synthe
+native-fileops-largefile-aliases	Python angr aliases glibc large-file seek variants fseeko=fseek and ftello=ftell (libc/fseek.py, libc/ftell.py tails). N
+native-fscanf-stream-variant	Native fscanf/__isoc99_fscanf (procedures/scanf.rs NativeFscanf/NativeIsoc99Fscanf) is the stream variant of scanf, exac
+native-getopt-design-no-elf-resolution	Native getopt (bead angr-bhk0a) — iter11 NEW risk + touch-point map. (1) NOVEL-CHANNEL RISK that iters9/10 missed: the p
+native-getopt-engine-bhk0a2	Native getopt(3) engine (NativeGetopt in procedures/getopt.rs, bhk0a.2, commit e41c8375b) ports ONLY the short-option pa
+native-getopt-extern-addr-pushdown	Native getopt extern-addr init-push (bead angr-bhk0a.1, DONE iter40, commit 505ae229d). KEY CORRECTION to native-getopt-
+native-getopt-family-parity	getopt/getopt_long/getopt_long_only now HAVE Python SimProcs (angr/procedures/libc/getopt.py, class names match symbol n
+native-htonl-htons-parity	Native htonl/htons live in native/angr/src/procedures/byteorder.rs (NativeHtonl/NativeHtons, host_network_swap helper). 
+native-identity-proc-vs-syscall-dispatch	Native POSIX identity getters getuid/geteuid/getgid/getegid live in TWO places with DIFFERENT dispatch paths: (1) syscal
+native-libc-alias-parity-audit	Native libc alias-parity audit: cross-ref Python 'x_unlocked = x'/'fseeko = fseek' style aliases against native declare_
+native-libc-no-parity-family	Native-coverage leaf tasks tx7ec.11 (memrchr/rawmemchr/strchrnul), tx7ec.12 (getline/getdelim/asprintf), fortify wrapper
+native-locale-string-parity	Native locale string parity (ae54t.8): strcoll/strxfrm now native. In C/POSIX locale (angr default) strcoll==strcmp (reg
+native-memrchr-rawmemchr-strchrnul	ae54t.2 (memrchr/rawmemchr/strchrnul) implemented by extending strchr.rs scan cores with bool flags rather than new scan
 native-only-procedures-pattern	When a libc procedure is decl-only in glibc.json with no Python implementation (ferror, posix_memalign, memalign, aligne
+native-proc-call-counts-keyed-on-hook-name	Native proc call_counts is keyed on the HOOKED SimProc display_name (the lookup key), NOT the base proc.name(). In stepp
+native-proc-extern-region-and-ctype-table-timing	Native SimProcs only fire when the SimProcedure hook lands in angr's EXTERN region — gate on this when building benches/
+native-proc-heap-store-lazy	Native SimProcedures that heap_alloc a struct then write to it (fopen writing _fileno into a fresh _IO_FILE, also calloc
+native-proc-unlocked-aliases	Native SimProcedure dispatch names come from proc.__class__.__name__ (rust_manager._cb_resolve_function), so Python alia
+native-pthread-mutex-noop	Native pthread_mutex_lock/unlock are pure no-ops returning 0 (SUCCESS), word-width, matching Python (both 'return 0'). L
+native-setbuf-parity	native setbuf parity (ae54t.19, commit 356ec6d8d): stdio::NativeSetbuf is a VOID no-op mirroring procedures/libc/setbuf.
+native-simoption-has-option	Native SimProcedures can now read symex-relevant SimOptions via RustSimState::has_option(name)->bool (set via set_option
+native-sleep-usleep-parity	Native sleep/usleep parity (angr-ae54t.15, commit ac0f203df): NativeSleep/NativeUsleep in procedures/sleep.rs return con
+native-stdio-cle-stream-fileno-unmapped	Native read-side stdio procs (fgets/fgetc in fgets.rs) cannot resolve stream->_fileno for cle standard streams (stdin/st
+native-stpcpy-mempcpy-parity	Native stpcpy/mempcpy bases live in strcpy.rs (NativeStpcpy) and memcpy.rs (NativeMempcpy); stpcpy returns dest+strlen(s
+native-stpncpy-parity	stpncpy parity (angr-ae54t.1): added Python SimProc angr/procedures/libc/stpncpy.py + native NativeStpncpy (strcpy.rs, r
+native-strncasecmp-parity	strncasecmp native proc lives under SIM_PROCEDURES['posix'] not ['libc'] (same as strcasecmp). NativeStrncasecmp in proc
+native-strndup-parity	Native strndup (NativeStrndup in procedures/strcpy.rs) is DRY = scan_concrete_bounded(src, min(n,MAX_STRLEN)) for strnle
+native-subcall-dispatcher-design	Native sub-call (CallAndResume) mechanism — IMPLEMENTED (S1+S2+S3, 5gf0s/xxukz). Native procs were return-only (NativeSi
+native-subcall-enum-vs-trait-blastradius	Native sub-call dispatcher (angr-5gf0s / xxukz) risk-#5 enum-vs-trait is QUANTIFIED, not just KISS-asserted. Measured HE
 native-syscall-name-is-diagnostic	NativeSyscall::name() is diagnostic/test-only: production dispatcher in exploration/stepping.rs keys on (arch_name, sysc
 native-syscall-registration-discipline	Native syscall registration pattern (refined angr-0hif.3): for any new syscall family, register ONLY the syscalls that h
-native-technique-architecture	NativeTechnique enum in exploration/mod.rs with 3 variants: LengthLimiter(max_length, drop), Timeout(timeout_secs, start
+native-syslog-parity	Native syslog-family parity (angr-ae54t.20): openlog/closelog are void no-op stubs. Added procedures/syslog.rs via decla
+native-system-parity	Native system() (procedures/system.rs NativeSystem) mirrors angr/procedures/libc/system.py: mints a fresh 8-bit symbolic
+native-technique-architecture	NativeTechnique enum lives in exploration/native_technique.rs (split out of mod.rs per angr-zel8z.3) with 3 variants: Le
+native-time-proc-forwards-to-syscall	Native libc time() proc (procedures/time.rs::NativeTime, angr-ae54t.21) forwards to the linux_kernel time SYSCALL model,
 native-uniqueness-filter	Native uniqueness filter: register_uniqueness_filter(Vec<String>) enables per-step check in Rust. compute_register_tuple
-neon-mla-blob-test-encoding	AArch64 NEON integration test in tests/engines/test_rust_exploration.py (TestMultiArchSupport::test_aarch64_neon_mla_blo
+native-vprintf-family-aliases	Native printf-family va_list variants vprintf/vfprintf are declare_proc! aliases on NativePrintf/NativeFprintf (printf.r
+native-vsnprintf-chk-parity	native __vsnprintf_chk parity: NativeVsnprintfChk (fortify_printf.rs) num_args=6 [dest,maxlen,flag,slen,fmt,ap], drops a
+native-vsprintf-vprintf-vfprintf-parity	ae54t.4 SHIPPED (commit follows 7e7479a59): Python vprintf/vfprintf/vsprintf SimProcs in angr/procedures/libc/ + native 
 no-full-simstate-sync	AVOID full SimState sync for callbacks: Generated 11 caches, identity conflicts, constraint desync, dual-solver bugs. Us
+offline-loop-queue-blocker-map	Offline autonomous-loop queue blocker map (verified iter24; FxHash spike consumed iter25; FxHash FULLY EXHAUSTED iter26)
+offline-workflows-doc-2026-06-06	tools/OFFLINE_WORKFLOWS.md (created iter 283, angr-xll3) is the contributor-facing entry point for the three offline-pre
+okca-statesid-scoping	angr-okca (StateId newtype for exploration/) is a single ATOMIC refactor of 419 non-comment state_id sites across 8 file
+ops-tests-split-design	vex/ops_tests.rs split (angr-9hleg): the 5288-line monolithic test file is now 14 by-family ops_tests_<fam>.rs siblings 
+ovqja5-qfbv-smt-route-infeasible	angr-ovqja.5 spike (route qfbv_smart push/pop loops to incremental smt) is NOGO/DEFERRED. SymContext holds ONE solver (c
 page-clear-symbolic-helper	Page::clear_symbolic(offset, size) added to native/angr/src/memory/page.rs: clears symbolic_bitmap bits in [offset, offs
+panhl1-killgate-pass	angr-panhl.1 Phase-0 kill-gate RESULT = PASS (proceed to Increment 2 angr-panhl.2 RustBV::translate_into). Profiled with
+panhl2-killgate-pass	angr-panhl.2 (parallel kill-gate Increment 2) RESULT = PASS-leaning GO (2026-06-23, commit e4033ac0e). Cross-context Rus
+panic-hardening-symbolic-value-pattern	RustBV::to_u128() (panicking as_u128().expect) was removed in angr-j60q0.1; use as_u128()->Option instead. The 3 prod ca
+panic-hardening-vec-float-pattern	Panic-hardening pattern (angr-j60q0.2): in vec_float dispatch, kept the dev-time debug_assert AS a tripwire AND added a 
+panic-reachability-audit-2026-06	panic/unwrap reachability audit of rust-symex (2026-06-20, bead angr-j60q0). Swept native/angr/src/{procedures,syscalls,
+parallel-cliff-was-bimodal-not-superlinear	CORRECTION to earlier same-session claim of a '>26x super-linear cliff' in the parallel path: that was BIMODAL Z3 VARIAN
 parallel-exploration-recommendation	Per angr-59jk.1 design comparison (commit 5ad385aef, docs/advanced-topics/rust_parallel_design.rst), the recommended thr
+parallel-go-nogo-panhl	Parallel-exploration GO/NOGO sharpened (2026-06-23): design is DONE (angr-59jk closed, docs/advanced-topics/rust_paralle
+parallel-is-transport-bound	Parallel Rust exploration (angr-1ilq, Option A): the 2b' gate (angr-1obng) first showed per-state cross-Z3-context migra
+parallel-migration-model	parallel-migration model (angr-panhl.1, record_migration_sample in exploration/helpers.rs): models a work-stealing sched
+parallel-numfind1-speculative-waste	num_find=1 (first-find) exploration on a WIDE frontier is a worst case for the level-synchronous parallel wave loop, ind
+parallel-per-wave-migration-dominates	The persistent worker pool (commit fa441e13a) and warm per-worker block cache (ec0a0b07d) landed and are correct, but do
+parallel-width-audit-verdict	Parallel-exploration favorability is decided by SUSTAINED concurrent stash width, not peak width or per-task duration. T
+parity-gap-diff-false-positives	Parity-audit gap-diff has a false-positive trap: many native procs use the hand-rolled 'impl NativeSimProcedure { fn nam
 pattern-libc-symbolic-integration-test	Pattern for symbolic libc-procedure integration tests via RustExplorationManager: (1) hook fauxware's mapped .fini area 
 pattern-pyobject-fork-clone-via-attach	When RustSimState (or any Rust struct) holds Py<PyAny> fields and gets cloned/forked from a non-PyO3-method context, the
 pdq8-counter-overhead-validated	angr-pdq8 (2026-05-25, A/B verification): the 2j5v 'zero-cost when not read' counter claim is VALIDATED. Methodology: pa
-pending-writes-scaffold-inactive-not-the-path	PendingWrite scaffolding in native/angr/src/memory/mod.rs:29 (struct), :141 (init), :345 (fork clone), :363 (add), :368 
+pending-writes-scaffold-inactive-not-the-path	PendingWrite scaffolding in native/angr/src/memory/mod.rs (PendingWrite struct + add_pending_write/drain/flush methods) 
+per-arch-syscall-numbers-from-angr	Per-arch syscall registration (syscalls/mod.rs register_syscalls! blocks): pull the authoritative per-arch numbers from 
+per-fork-solver-share-infeasible	Per-fork Z3 solver materialize (context.rs::solver()) re-asserts the Arc-shared prefix per fork (Z3_MATERIALIZE_TIME_NS 
+perf-campaign-p5-deferral-decision	Perf-campaign P5 deferral decision (angr-9w6ad.12, commit on docs/advanced-topics/rust_engine.rst 'Deferral decision (P5
+perf-counter-fishing-exhausted	Perf-counter fishing on safe benches (fauxware/ais3_crackme via run_single.py --counters-json) is EXHAUSTED as a source 
 perf-dashboard-schema	perf dashboard data schema (commit 540313127): tests/benchmarks/run_regression.py --history-record emits {schema_version
 phase3-cache-invariant	MultiPayload::collapse(default_byte, ctx) caches the right-folded ITE keyed on default_byte. Cache is RefCell<Option<Cac
-phase3-cache-residual-gap	Phase 3 collapse cache (angr-j0n4, commit 3bf156896) landed but the Phase 2 gate stays off. Cache helps gate-on sym-writ
+pmovmskb-binary-free-test	Iop_GetMSBs8x16 (x86 PMOVMSKB) IS testable binary-free, contrary to the iter-50/51 handoff claim that it 'needs an SSE-s
+posix-callback-counter-export-only	posix callback counters (callback_posix_count/total_ns, angr-afbx) only increment during state EXPORT/materialization to
 pr-bench-gate-jitter-risk	PR-time benchmark_regression gate in .github/workflows/ci.yml uses --rust-only --skip-bimodal --threshold 0.15. Dry-run 
 predicate-eval-uncached-states	CRITICAL BUG FIXED: _evaluate_predicates_on_active only iterated self._state_cache, which only contains states created d
 predicate-reevaluation-bug	Callable predicate evaluation (find/avoid as callables) had a bug: _evaluated_state_ids permanently prevented re-evaluat
-prefetch-disabled-by-default	Load prefetch (use_load_prefetch in CallbackInterpreter) defaults to false at interpreter_cb/mod.rs:649 with comment 'Di
+prefetch-disabled-by-default	Load prefetch (use_load_prefetch in VEXInterpreter) defaults to false at interpreter/mod.rs:729 (fn with_config) with co
+printf-family-symbolic-format-boundary	printf/scanf/sprintf symbolic-format boundary is asymmetric on symbolic format BYTES (address is uniform: all extract_co
+procedures-cluster5-scan-driver	procedures cluster-5 dedup (commit a444fa02f): the concrete-fast-path-then-symbolic-collect string scans (scan_for_null_
 procedures-format-common-shared-helpers	procedures/format_common.rs is the canonical home for printf/scanf leaf parsers. parse_width_digits returns (width, byte
+procedures-write-and-memcommon-helpers	procedures/ write-side + symbolic-addr shared helpers (angr-24pv4.7, rust-symex). strings.rs now owns the write counterp
 proxy-callstack-manage-required	RustCallStackProxyPlugin._manage() must exist (return None) as a no-op stub — angr.engines.successors.add_successor (~li
+proxy-gate-audit-all-default-off	Proxy-gate audit verdict (angr-sluuj.3, iter41 2026-06-22): ALL 8 RustExplorationManager proxy/fork gates are default-OF
+proxy-gate-cache-pollution-pattern	Cache-pollution pattern under proxy gates: angr/exploration/rust_callback_dispatch.py:1301 and :1143 do self._state_cach
 proxy-writes-design-verdict	DESIGN VERDICT (angr-g7ug, 2026-05-22, commit 45c2c7fdf): Recommend Option C (status quo diff-and-push) for SimProcedure
+public-api-proxy-protocol-surface	test_rust_public_api drift for Rust{Register,Memory}Proxy is the SimMemory plugin protocol (STRONGREF_STATE, SUPPORTS_CO
 pyo3-pyclass-cycle-leak	PyO3 #[pyclass] does NOT implement __traverse__/__clear__ by default. If a pyclass holds Py<PyAny> refs that participate
 pyo3-pymethods-private-fn-still-bridged	PyO3 #[pymethods] blocks pick up EVERY fn in the impl (including private 'fn foo' without pub). If you need a helper met
 pytest-pyo3-method-spy-pattern	PyO3 methods on Python objects (e.g. RustExplorationManager._rust_mgr.register_simprocedures) cannot be monkey-patched i
+python-baseline-tests-audit	PYTHON_BASELINE_TESTS audit (2026-06-06, iter 503): added tests/sim/test_state.py (10 tests). Coverage gap identified — 
+python-bridge-dedup-shared-helpers	python-bridge dedup (angr-24pv4.4): shared solver-proxy primitives now live module-level in rust_state_proxy.py — _cast_
 python-class-reassignment-for-history-plugin	Python __class__ reassignment works cleanly for SimStateHistory: 'state.history.__class__ = _RustOwnedSimStateHistory' p
 python-lazy-memory-is-page-level-not-address-level	Python angr is NOT lazy on address resolution — common misconception. AddressConcretizationMixin (angr/storage/memory_mi
 python-native-procedure-api	register_python_procedure(name, num_args, no_return, callable) on RustExplorationManager (PyO3) lets Python attach nativ
-python-syscall-integration-test-pattern	Python integration test pattern for native syscall handlers in tests/engines/test_rust_exploration.py: load_shellcode(b'
 range-seeded-bisection-asymmetry	Bisection asymmetry for unsigned min/max in SymContext: seeding min with hi=smallest_known cuts iterations from log2(2^w
+read-short-read-model	Native read(fd=0) stdin short-read modeling (angr-kf0uy, commit ba598033c): read.rs::read_stdin_symbolic returns a symbo
+real-binary-readiness-roadmap	Real-binary readiness roadmap = epic angr-11djq (15 beads, tiered for ralph). Goal: PRACTICAL on WELL-HARNESSED real bin
 real-unmapped-vex-ops-list	Verified 2026-06-01 (angr-uprs): real VEX opcodes that route to IROp::Unmapped via execute_irsb_for_test's JSON parser A
+refactor-memory-sweep-rule	Refactor-time memory-hygiene rules so renames stop rotting bd citations. (1) RENAME-SWEEP: any commit that renames/moves
+register-proxy-stale-cache-root-cause	angr-4rq7 root cause (FINAL): the register-proxy gate's PC/state.addr corruption was NOT a Rust-side pc-vs-rip divergenc
 register-sync-bottleneck	_sync_registers_to_rust's symbolic register import path (z3_backend.convert + as_ast().value) is NOT a benchmark hot pat
 regression-flakes-defcamp_r100	Pre-existing regression-suite flakes on this 8GB box (verified 2026-05-17 against baseline aef3e6ac0): defcamp_r100 occa
 rejected-optimizations-apr12	REJECTED optimization proposals (adversarial review 2026-04-12): (1) Batch symbolic memory import — only 1-5 imports per
+ruff-install-recipe	ruff/pre-commit are NOT preinstalled here. The .venv pip is broken (vendored resolvelib ImportError), so 'python3 -m pip
+run-n-ignored-root-cause	RustExplorationManager.run(n=N) historically delegated to explore() whenever step_func was None, and explore() drops n i
 run-single-spawn-tree-sampling	When wrapping tests/benchmarks/run_single.py in a process-tree sampler (e.g. RSS profiling), the angr worker is a GRANDC
-rust-engine-claude-md-pointer	## Pointer, not a snapshot
-rust-engine-lift-failure-silent-deadend	RustExplorationManager.run() does NOT surface typed RustExecutionError on lift failures end-to-end; instead the state si
-rust-fallback-strategy-semantics	Rust interpreter FallbackStrategy semantics (native/angr/src/interpreter/mod.rs:262-323): PythonCallback variants surfac
+rust-ast-identity-rust-side-only	Rust-symex AST identity round-trip is Rust-side only: set_state_addr_to_ast/get_state_addr_to_ast (rust_state_export.py:
+rust-engine-32bit-entry-state-gap	Rust engine + 32-bit x86 + entry_state path: known semantic divergence from Python (iter 277, csci4968_crackme0x00a). Wh
+rust-engine-claude-md-pointer	## Pointer, not a snapshot For Rust engine architecture, test counts, benchmark status, build/bootstrap recipe, arch sup
+rust-errored-stash-unreachable-from-python	The high-level RustExplorationManager.errored stash CANNOT be populated by Python-driven execution. Empirically: unmappe
+rust-fallback-strategy-semantics	Rust interpreter FallbackStrategy semantics (pub enum FallbackStrategy in native/angr/src/interpreter/mod.rs): PythonCal
+rust-fork-metadata-test-pattern	De-vacuifying rust-symex fork/metadata tests: the Python-callable fork path is RustExplorationManager.fork_state_to_stas
+rust-found-state-id-and-progress-signals	When asserting against found/terminal-stash states in RustExplorationManager tests, the Python state proxies in mgr.foun
 rust-history-granularity	RustSimState.history records ONE entry per step_state_with_skip call (native/angr/src/exploration/stepping.rs:110: state
 rust-log-warn-capture-pattern	When testing Rust-emitted log::warn output from Python, use the low-level RustExplorationManager (from angr.rustylib.vex
 rust-manager-get-state-register-pitfall	RustExplorationManager Python wrapper attribute pitfall: `mgr.get_state_register` is NOT a method — `mgr.__getattr__` re
-rust-proxy-architecture-decision	## Decision: RustStateProxy over SimState sync (2026-03-29)
+rust-mgr-stats-property-vs-method	RustExplorationManager Python wrapper (angr/exploration/rust_manager.py) exposes 'stats' as a @property returning a dict
+rust-mod-tests-sibling-extraction	Recipe for sibling-extracting a Rust #[cfg(test)] module: write sibling <name>_tests.rs with 'use super::*;', replace th
+rust-proc-integration-test-rax-only	TestSymbolicLibcProcedures (tests/engines/rust/test_procedures.py) integration tests assert ONLY on rax (the exported re
+rust-proxy-architecture-decision	## Decision: RustStateProxy over SimState sync (2026-03-29) **Problem:** `rust_manager.py` (5,167 lines at the time) cre
+rust-proxy-constraints-vs-exported-state	Showcase vuln-finding demo (tests/benchmarks/show_vuln_finding.py, angr-4n26m.7): to display the PATH CONSTRAINTS that a
+rust-proxy-copy-design	RustStateProxy.copy() landed in angr-d1dr (2026-06-06, commit be05cf9f8) as a Rust-side CoW deep fork. **Architecture:**
 rust-proxy-find-perbyte-fallback	RustMemoryProxy.find() (rust_state_proxy.py:~1440) does a single wide get_state_memory_ast(addr, haystack_size) to build
-rust-python-boundary-audit	Most Python bridge code MUST stay Python — don't try to move it to Rust.
+rust-python-boundary-audit	Most Python bridge code MUST stay Python — don't try to move it to Rust. **Why:** Rust can't construct Python objects (c
+rust-runresult-error-typed-routing	RunResult::Error carries a typed RunErrorKind{Deadend,Fatal} (callbacks/events.rs) so exploration/stepping.rs routes str
+rust-shared-lineage-solver-test-pattern	De-vacuify pattern for the use_shared_lineage_solver kwarg tests (test_strategy_vex.py): the RustExplorationManager expo
+rust-solver-proxy-base	RustSolverProxyBase (angr/exploration/rust_state_proxy.py) is the shared solver-query core for RustSolverProxy (standalo
+rust-stash-assignment-via-move-state	Rust stash assignment (simgr.stashes[name]=[...]) is implementable purely in Python via existing FFI: state_stash(sid) g
+rust-state-depth-via-proxies	RustExplorationManager state-depth measurement: full SimStates from mgr.active have empty history (exported state). To m
 rust-state-proxy-capabilities	**RustStateProxy capabilities + known holes.** Canonical reference for what the proxy at `angr/exploration/rust_state_pr
 rust-test-fork-mmap-pyinit	Pre-existing test failure: native/angr/src/syscalls/mmap.rs::tests::fork_preserves_mmap_base panics with 'The Python int
+rust-tests-conftest-shared	tests/engines/conftest.py (added angr-7gdp) holds the shared Rust-engine test boilerplate: RUST_EXPLORATION_AVAILABLE gu
 rustbv-api-and-syscall-test-gotchas	RustBV API gotcha: the bit-width accessor is .width() on the enum dispatcher, NOT .bits() — .bits() is a method on the i
-rustbv-into-variants	RustBV in value.rs exposes paired ops: add(&self,&other,ctx) and add_into(self,other,ctx). The &self form is a thin wrap
+rustbv-into-variants	RustBV (ops live in value_ops.rs since the angr-7hwz.2 split) exposes paired ops: add(&self,&other,ctx) and add_into(sel
 rustbv-microbench-vs-realworld	When auditing Arc-allocation hot spots in symbolic execution, microbench-only data can mislead. The rustbv_symbolic crit
 rustbv-symbolic-id-not-in-debug	When writing cargo unit tests that need to assert two successive symbolic-syscall calls minted DISTINCT fresh symbols, d
 sampler-perf-test-pattern	Sampler-hook perf test pattern (native/angr/src/symbolic/lineage.rs::test_sampler_hook_overhead_under_budget, commit ec9
+scanf-scanset-unconstrained	Native scanf %[...] scanset (procedures/scanf.rs, scanset_body_len fn + b'[' arm of parse_scanf_format) is modeled like 
 scanf-simproc-design	Native scanf creates symbolic BVS per format specifier: %d/%i/%u/%x/%o=32-bit, %ld/%lld=64-bit, %c=8-bit, %s=N symbolic 
+selfcall-continuation-regression-test	Binary-free regression for a SimProcedure self.call() continuation (the aca6y FFI push fix): build a load_shellcode AMD6
 serde-json-byte-keyed-map-trap	Why RustSimStateSnapshot uses Vec<(Vec<u8>,Vec<u8>)> not BTreeMap for environment: serde_json only allows string-shaped 
 serde-json-unbounded-depth-for-rustbv	serde_json default recursion limit (128) is hit by deep RustBV op-trees when loading snapshots from real benches. Fauxwa
-sgbn-unconstrained-sp-fastpath	_concretize_stack_registers (rust_state_sync.py:804) had a 10ms cold-path cost on blank_state because rbp is filled with
+sgbn-unconstrained-sp-fastpath	_concretize_stack_registers (rust_state_sync.py) had a 10ms cold-path cost on blank_state because rbp is filled with an 
 shared-solver-for-callbacks	Shared solver for callbacks (architecture). RustSolverContext supports SolverCtxStorage::Shared(Rc<RefCell<SymContext>>)
 shared-z3-context-setup-required	RustSolverContext add_constraint_ast + satisfiable/eval ONLY work when Python and Rust share the Z3 thread-local context
+showcase-blog-draft	Rust-symex showcase blog DRAFT lives at docs/blog/rust_symex_showcase.md (angr-4n26m.11, commit 03bdb7011). Markdown, NO
+showcase-blog-epic	Showcase epic angr-4n26m ('Showcase the Rust symex engine: blog post + reproducible demos') scopes a BLOG POST + reprodu
+showcase-checkpoint-resume-demo	Checkpoint/resume showcase demo (show_checkpoint_resume.py, angr-4n26m.8) uses a TWO-PROCESS orchestration: the script r
+showcase-multiarch-parity-demo	show_multiarch.py (tests/benchmarks/) is the multi-arch PARITY showcase demo (angr-4n26m.6). Runs the SAME crackme (symb
+showcase-number-gate	Showcase number gate (angr-4n26m.3): tests/benchmarks/measure_showcase.py runs run_single.py --both N>=5 per target, par
+showcase-raw-speed-harness	Showcase raw-speed harness: tests/benchmarks/show_raw_speed.py builds a reproducible before(python)/after(rust) speed ta
+showcase-resume-target-classification	Checkpoint/resume demo (angr-4n26m.8) target classification, from angr-4n26m.4 probe tests/benchmarks/show_resume_bounda
+showcase-solver-instrumentation-demo	Showcase solver-instrumentation demo (angr-4n26m.9) = tests/benchmarks/show_solver_instrumentation.py. Brackets explore(
 simoption-wiring-template	SimOption wiring template (angr-zmha, follows angr-yl5n NO_IP_CONCRETIZATION pattern): for any per-state SimOption that 
 simprocedure-dispatch-priority	SimProcedure dispatch chain (angr-o0vm, 2026-06-01): native vs Python is decided once per dispatch, never chained except
 sla-regression-flags	tests/benchmarks/run_regression.py SLA flags: --sla-warn-threshold (default 1.0x = warn), --sla-fail-threshold (default 
+smxp-slice-1-dfs-length-limiter-recipe	angr-smxp slice 1 (2026-06-06, commit 873a6f549): DFS + LengthLimiter recipe for grub-class deep-input-loop binaries. Th
 snapshot-rustbv-shadow-type-pattern	RustBV serde shadow type pattern (angr-x04s.1.1, 2026-06-02). The Z3 AST cache on RustBV::Symbolic is non-serializable (
 snapshot-rustsimstate-envelope-shape	RustSimState snapshot envelope shape (angr-x04s.1.3, 2026-06-02). Format: [VERSION:u8] ++ serde_json(RustSimStateSnapsho
 snapshot-solver-smtlib2-design	Snapshot constraint capture design (angr-82g6, 2026-06-02): SymContextSnapshot carries solver_smtlib2: String (full Z3 s
 snapshot-state-bucket-shadow-pattern	RegisterFile + MemoryPage serde shadow type pattern (angr-x04s.1.2, 2026-06-02). Same shape as the RustBV pattern: defin
 sokohashv2-two-bugs	Sokohashv2 had TWO bugs: (1) angr-ctct FIXED 2026-05-14 commit c6b2824cb: _extract_symbolic_pages missed filler-material
+solver-equality-contradiction-detected	Characterization update (angr-e548): the Rust solver NOW correctly detects equality contradictions. RustSolverContext().
 solver-fork-o-n-root-cause-symcontext-fork	Solver fork O(n²) root cause: SymContext::fork() eagerly replays all Z3 assertions into fresh solver. Python angr avoids
 solver-test-pattern-fork-witness	Solver test pattern for proving constraint admissibility: rather than calling eval() and checking the value (which only 
+sphinx-cross-link-audit-method	Sphinx cross-link audit pattern for docs/: grep -rEho ':ref:`[^`]+`' docs/ | sort -u → enumerate all :ref: usages. Two s
 stack-page-concrete-load	Stack page init sync bottleneck: _extract_symbolic_regions scans 4096 bytes byte-by-byte via memory.load(addr,1) = 137ms
-state-roots-every-fork	INVARIANT: Every forked state MUST be in state_roots. v2 had 11 fork sites, one missed at exploration.rs:1528. Audit all
+state-export-identity-not-passthrough	RustExplorationManager construction is NOT a pure state pass-through: _run_python_init_if_needed simulates the program p
+state-roots-every-fork	INVARIANT: Every forked state MUST be registered in `state_roots` (lineage map). Historically (v2) there were 11 fork si
+stateid-newtype-boundary-okca	StateId newtype carve-out (angr-okca, exploration/) differs from the memory/address.rs precedent in a key way: explorati
+stdio-fwrite-fputs-arbitrary-fd	NativeFwrite (native/angr/src/procedures/stdio.rs) and NativeFputs are sibling stdio shims that resolve a FILE struct's 
+steady-state-loop-opt-in-net-negative-corpus	Steady-state parallel loop (angr-nkoct, RUST_PARALLEL_STEADY=1, delivered 2026-07-03) is OPT-IN and net-negative on the 
 step-error-size-numbers	StepError on x86_64 release is 2256 bytes — Result<(), StepError> = 2256, Result<(), Box<StepError>> = 8. The size is dr
 strcpy-find-regression-root-cause	strcpy_find 0.21x regression was NOT a Rust engine perf issue. Root cause: run_single.py monkey-patch of simulation_mana
+strcpy-strcat-integration-coverage	strcpy/strncpy/strcat native procs now have Python-boundary integration tests (angr-0ndrs, iter17) in TestNativeMemoryCo
+strnlen-bad-integration-test-target	strnlen is a poor target for TestSymbolicLibcProcedures-style integration tests: the harness hooks at an IN-BINARY addre
+strnlen-fallback-root-cause	CONFIRMED root cause (angr-duav3): native NativeStrnlen does NOT defer due to any strnlen-specific defect. It is never A
+symbolic-stream-fd-read-slice	11djq.6.1 (symbolic file content for non-stdin fds) shipped as the STREAM slice, not the FILE slice. FileDescriptor.symb
+symlink-seeding-from-python	Seeding the Rust FileSystem from a Python harness: RustExplorationManager(symlinks={'/link': b'/target'}) -> stored in s
+symlink-table-readlink-model	FileSystem symlink table (angr-11djq.6.2): native/angr/src/state/filesystem.rs FileSystem has a symlinks: Arc<HashMap<St
 symwrite-eager-vs-lazy-memory	sym-write 6.9x slower than Python is due to FUNDAMENTAL architectural difference: Rust uses eager concretization for sym
 symwrite-rustbv-to-claripy-bottleneck	sym-write 5.9s bottleneck was rustbv_to_claripy() in deferred fork Exit handler. The guard expression contains deeply ne
 sync-memory-pipeline-phases	_sync_memory_to_rust pipeline (post-refactor 2026-05-03, rust_state_sync.py): 11 phases run in fixed order — fast cache 
+syscall-arch-number-table-staleness	file_path_stubs_registered_on_all_arches in native/angr/src/syscalls/mod_tests.rs is a registration table (arch -> lstat
 syscall-audit-promote-stub-pattern	Syscall stub audit pattern (angr-6009): when a syscall is registered as 'native' but only mirrors syscall_stub.py (fresh
 syscall-handlers-arch-agnostic	Existing native syscall handlers in native/angr/src/syscalls/ (read/write/exit/brk/mprotect/munmap/gettimeofday/time/clo
+syscall-native-count-stat	Rust engine exposes syscall_native_count + syscall_native_by_num in mgr.stats (symmetric to syscall_python_fallback_coun
 syscall-readwrite-full-fdtable	Native read/write FD-table generalization (angr-8j16, commit 5fbc987bb): NativeRead/NativeWrite (procedure + syscall) ac
+syscall-registry-keyed-lookup	NativeSyscallRegistry (native/angr/src/syscalls/mod.rs) keys handlers by arch then num as HashMap<&'static str, HashMap<
 syscall-stub-fresh-symbolic-pattern	Pattern for native syscall handlers with no Python SimProcedure (e.g. setuid/setgid in angr-pqgu): use SyscallOutcome::C
 syscall-vs-procedure-dispatch	Native syscall handlers (native/angr/src/syscalls/) and native libc procedures (native/angr/src/procedures/) live in two
+t2-measure-xmllint-fallback-profile	T2-MEASURE (angr-11djq.4 iter17) xmllint_getenv fallback profile via run_single.py --counters-json: bounded find=getenv 
+technique-filter-reevaluation	apply_technique_filters (rust_techniques.py) re-runs ExplorationTechnique.filter() on (addr,stdout_len) signature CHANGE
 terminal-state-stash-divergence	Counting terminated states across engines: Rust engine stashes terminated states (returning to symbolic addresses from b
 test-isolation-class-property-monkeypatch	RustCallStackProxyPlugin._frames is a CLASS property defined directly on the class (rust_state_proxy.py line ~1976) — NO
 test-monkeypatch-pyo3-readonly	PyO3 manager attrs are read-only in tests. monkeypatch.setattr(mgr._rust_mgr, 'export_state_flushed', ...) fails with 'a
+test-package-split-map	test_rust_exploration.py was split (angr-yg2m) into the tests/engines/rust/ PACKAGE: 14 modules grouped by area (manager
+tier-drift-ci-gate	ci.yml::benchmark_regression has TWO complementary tier-gate steps as of iter-502 (angr-dhhb): (1) 'Validate EXAMPLE_CAT
+tier-drift-validator-tool	tests/benchmarks/validate_tier.py cross-checks EXAMPLE_CATALOG tier against measured rust_time (or python_time when rust
+time-in-counters-predicate-path-only	invariant: time_in_rust_run/time_in_predicate_eval/time_in_active_check/time_in_explore are ONLY populated by RustExplor
 tool-bimodal-variance-py-general-use	tests/benchmarks/bimodal_variance.py is the right tool for ANY benchmark variance characterization, not just the three a
+track-action-history-semantics	TRACK_ACTION_HISTORY in current angr is a metadata flag, NOT an action-recording switch. heavy/actions.py consults ONLY 
+translate-into-primitive	RustBV::translate_into(target_ctx:&z3::Context)->RustBV (symbolic/value_z3.rs, commit e4033ac0e) is the cross-context Z3
+translate-state-fixed-floor-cost	translate_state wall cost (bench_translate_state_scaling in native/angr/benches/vex_engine.rs, angr-9pwjd): at realistic
+translate-state-whole-state-primitive	RustSimState::translate_state(target_ctx:&z3::Context)->RustSimState (state/fork.rs, commit 9ca2fce61) is the whole-stat
 unsat-load-fallback-stash	When a symbolic load address is pinned (via constraint) to a single unmapped concrete value like 0xDEADBEEF under STRICT
+upstream-pr-offline-prepare-slice-pattern	Pattern: when a bd task is gated on an external resource that's partially reachable (e.g. pip works but github does not)
 v5ht-sampler-tick-bottleneck	angr-v5ht discovery (2026-05-24 iter 8): hook for the thrash sampler in exploration/run_loop.rs MUST be at TOP of the fo
+vacuous-perf-test-rename-not-assert	Subprocess-based perf-named tests (e.g. test_rust_no_worse_than_3x in tests/engines/test_rust_integration.py) that only 
 vec-float-scalar-ssemax-ite	SSE scalar MAXSS/MINSS/MAXSD/MINSD vector ops have no FloatOpKind::Max/Min variant. The Rust concrete branch uses '>' an
-vec-ops-savings-bottleneck	angr-q1oq vector op dispatch macro task estimated 250-350 line savings. Actual: -33 lines (net). Reason: each vec_* func
+venv-ecosystem-deps-bytecode-only	The hand-assembled .venv ships the angr-ecosystem deps (archinfo/claripy/cle/pyvex) as BYTECODE-ONLY (.pyc, NO .py sourc
 venv-rebuild-cargo-direct-copy	When pip rebuild fails due to corrupted setuptools/pip in .venv but cargo+rustc work, build the Rust .so directly: 'carg
 vex-atomic-ops-already-implemented	VEX has NO Iop_CmpxChg / Iop_AtomicLoad / Iop_AtomicStore IROps — atomic ops are expressed as statements: (1) Stmt::CAS 
 vex-irop-scope-verification	VEX IROp scope check before adding handlers: bd task descriptions occasionally reference ops that don't exist as VEX IRO
+vex-ops-dedup-playbook	vex-ops consolidation: the ops_*.rs files are #[path=...] mod children of ops.rs, each an 'impl VEXOps' block, so Self::
+vex-ops-floatprec-z3sort	value_z3.rs FP-builder Sort selection is now centralized in FloatPrec::z3_sort() (value.rs, cfg(vex-engine-z3), next to 
+vex-ops-int-lane-driver	VEX packed-integer per-lane ops share one driver: VEXOps::vec_int_lane_op in native/angr/src/vex/ops_vec_int_lane.rs, mi
+vex-ops-narrow-lanes-driver	VEX NEON narrow ops share one driver: VEXOps::narrow_lanes in native/angr/src/vex/ops_vec_lane.rs. It takes inputs:&[&Ru
+vex-ops-simd-lane-test-helpers	vex/ops.rs SIMD lane test helpers (angr-ec82) now live in native/angr/src/vex/ops_test_helpers.rs (the inline test mod w
+vexops-god-file-split-pattern	Splitting the VEXOps god-file (vex/ops.rs): extract a family into a SIBLING file but declare it as a CHILD module inside
+vfpwadd-neon-pairwise-fp-add	Iop_PwAdd32Fx2 (NEON pairwise FP add) is implemented as IROp::VFPwAdd{elem,count}, routed via parse_float in opcode_map.
+vh834-phase2-minting-deferred	angr-vh834 Phase 2 (deterministic symbol minting) DEFERRED, 2026-06-30. The global procedures/mod.rs::symbol_counter(pre
+vh834-phase6-go-not-materialized	angr-vh834 Phase 6 LIVE GO MEASUREMENT (2026-06-30): wall-clock GO does NOT materialize. cmu_binary_bomb_partial workers
+wheel-ast-passthrough-smoke-test	AST-passthrough wheel smoke test lives at tests/smoke/wheel_ast_passthrough.py (fn check_ast_passthrough + test_wheel_as
+wheel-distribution-shared-libz3	Wheel distribution for the Rust engine (angr-ivwn): a prebuilt manylinux wheel MUST NOT bundle libz3.so. The Rust cdylib
 wide-load-endianness	INVARIANT: Wide symbolic loads (>64 bit) use Iend_BE + claripy.Reverse() to preserve BVS identity. Iend_LE wraps in Reve
+write-fd-position-aware	FileSystem::write (native/angr/src/state/filesystem.rs) is now POSIX position-aware: it does write_at(desc.position) — z
+write-side-fileno-fallback-correct	Write-side native stdio procs (fputc/putc/fputs/fwrite in puts.rs/stdio.rs) resolve FILE._fileno via read_fileno_for_str
+write-stream-heavy-bench	write_stream_heavy synthetic bench (tests/benchmarks/synthetic_examples/write_stream_heavy/) quantifies the write-side c
+write-through-gate-promotion-keep-off-verdict	Write-through gate promotion verdict (angr-rpqk, 2026-06-13): KEEP DEFAULT-OFF. Triage of the 5 write-through gates forc
+xel4-bfs-vs-dfs-spike-result	angr-xel4 spike result (2026-06-06, deep_loop_search characterization): DFS dominates BFS for deep-input-loop binaries (
+xmllint-path-b-glibc-init-wall	xmllint path-b (use_sim_procedures=False, full real glibc) is a dead end on BOTH engines — NOT an engine bug, NOT a miss
+xmllint-path-b-tractability-probe	angr-75mc path-(b) tractability probed offline (iter 11, 2026-06-19). Naive symbolic xmllint exploration (Python engine,
+xmllint-simprocs-cross-engine-divergence	xmllint use_sim_procedures=True cross-engine divergence (bug angr-aca6y). UPDATE iter34: ROOT CAUSE LOCALIZED to pthread
 xmllint-uses-rust-fuzzer-not-symex	xmllint angr-example solve.py uses angr.rustylib.fuzzer (icicle/libafl/pcode based), NOT symbolic exploration. Requires 
 xtse.1-most-callback-types-never-fire	Surprising finding from angr-xtse.1 (2026-05-23): in the current 21-bench corpus, FOUR of the five 'callback' types we m
-z3-ast-construction-c-api-z3-mk-bvadd	Z3 AST construction: C API (Z3_mk_bvadd, etc.) creates raw AST nodes WITHOUT simplification. The bv_rewriter (invoked by
+z3-ast-construction-c-api-z3-mk-bvadd	Z3 AST construction & BV rewriting internals (mined from z3-4.13.0 source): C API (Z3_mk_bvadd, etc.) creates raw AST no
 z3-ast-ptr-design-decision	Z3AstPtr design: opted against the originally-spec'd <'ctx> lifetime parameter (task angr-6zpl described 'struct Z3AstPt
 z3-bit-blasting-ite-cost-ite-cond-bv	Z3 bit-blasting ITE cost: ITE(cond, bv_x, bv_y) creates one per-bit multiplexer — 4 SAT clauses per bit worst case (128 
 z3-bv-sort-ac-bench-killer	Z3 bv_sort_ac=true sounds free (just canonicalize AC-op args) but on the angr bench matrix it BLOWS UP defcon2016quals_b
 z3-fp-ast-refcounting	Z3 FFI ref-count pitfall: Z3 uses ref-counted ASTs. Calling Z3_mk_fpa_to_fp_bv() and stuffing the raw Z3_ast into a Vec 
 z3-fp-conversion-helpers	Z3 FP conversion design pattern (commit 37983a77b): each conversion kind that has a non-FP or differently-sized operand 
 z3-global-param-set-pattern	When a Z3 module-level param needs to be pinned from PyO3-exposed Rust (e.g. smt.random_seed, sat.random_seed, parallel.
-z3-has-no-native-bitvector-reverse-operation-both	Z3 has NO native bitvector Reverse operation. Both Python and Rust decompose to Extract+Concat chains. Z3's bv_rewriter 
+z3-hotpath-attribution-iter-ovqja1	z3-hotpath attribution (angr-ovqja.1, 2026-06-23, commit b8e43fce2): counter-based ranking of the Z3-heavy bench set. KE
+z3-param-survey-negative-result	z3-hotpath param survey (angr-ovqja.2) NEGATIVE RESULT. Surveyed Z3 4.13 QF_BV-relevant solver params via the ANGR_Z3_PA
 z3-push-pop-is-o-1-just-records	Z3 push/pop is O(1): just records trail position + reinit stack position + inconsistency flag (~50 bytes). No clause cop
-z3-solver-params-for-bv-optimization-1-bv	Z3 solver params for BV optimization: (1) bv_extract_prop=false by default — enabling propagates extraction inward throu
+z3-source-mining-ovqja	z3-source mining session (epic angr-ovqja, 2026-06-23): checked external/z3 out to tag z3-4.13.0 (matches runtime libz3 
 z3-sys-build-script-ordering	z3-sys's build.rs runs FIRST as a dependency, then our crate's build.rs. So 'cargo:rustc-env=Z3_SYS_Z3_HEADER=...' from 
 z3-timeout-test-pattern	Z3 timeout tests can't reliably observe SatResult::Unknown because SymContext::is_sat collapses Unknown→false. To verify
 z3-universality-parity-test-template	Z3-universality test patterns for VEX ops (consolidated). THREE variants used in #[cfg(feature='vex-engine-z3')] tests a
 z3-with_z3_context-test-pattern	When writing a Rust unit test that needs to operate inside a freshly-allocated Z3 context, use with_z3_context(&new_ctx,
-zdho-structural-duplicate-rate	angr-zdho measurement (2026-05-20): RustBV structural-duplicate rate
+zdho-structural-duplicate-rate	angr-zdho measurement (2026-05-20): RustBV structural-duplicate rate across asserted-constraint graphs on 8 fast-tier be
