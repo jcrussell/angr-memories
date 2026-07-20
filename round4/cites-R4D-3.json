@@ -1,0 +1,90 @@
+{
+ "out": {
+  "flareon-5rjbq-proxy-store-not-seen-by-native-root-cause": [
+   "flareon-5rjbq-ebp-cross-solver-root-cause"
+  ],
+  "flareon-5rjbq-proxy-store-not-seen-by-native-root-cause-fixlead": [
+   "flareon-5rjbq-proxy-store-not-seen-by-native-root-cause"
+  ],
+  "flareon-5rjbq-store-visibility-disambiguated": [
+   "flareon-5rjbq-proxy-store-not-seen-by-native-root-cause"
+  ],
+  "foreign-snapshot-zero-constraints-root-cause": [
+   "avoid-python-cross-process-snapshot-test",
+   "invariant-mirror-solver-constraints-not-authoritative"
+  ],
+  "fork-skip-gil-attach-empty-metadata": [
+   "invariant-fork-metadata-arc-not-py"
+  ],
+  "god-module-split-free-fns": [
+   "god-module-split-state-rs"
+  ],
+  "gorvf19-register-acquire-once": [
+   "memreplay-bottleneck-root-cause"
+  ],
+  "gorvf31-xmllint-all-bucket-a": [
+   "a8epx-gate-measured-defer",
+   "native-dispatch-skipped-for-loaded-libs"
+  ],
+  "inspect-vexlift-dual-dispatch": [
+   "invariant-native-lift-bypasses-lift-callback"
+  ],
+  "libvex-callee-addr-normalize": [
+   "libvex-corpus-parity-gate"
+  ],
+  "libvex-corpus-parity-gate": [
+   "libvex-lift-params"
+  ],
+  "loop-head-policy-caplg": [
+   "coverage-guided-policy-m9fpp",
+   "selection-policy-seam",
+   "selection-policy-seam-limits"
+  ]
+ },
+ "in": {
+  "flareon-5rjbq-proxy-store-not-seen-by-native-root-cause": [
+   "flareon-5rjbq-proxy-store-not-seen-by-native-root-cause-fixlead",
+   "flareon-5rjbq-store-visibility-disambiguated"
+  ],
+  "flareon-5rjbq-store-visibility-disambiguated": [
+   "avoid-flareon-5rjbq-store-visibility-lead",
+   "flareon-5rjbq-address-witness-collision-root-cause"
+  ],
+  "flareon-5rjbq-witness-mismatch": [
+   "flareon-5rjbq-ebp-cross-solver-root-cause"
+  ],
+  "foreign-snapshot-zero-constraints-root-cause": [
+   "avoid-python-cross-process-snapshot-test"
+  ],
+  "fork-carries-model-cache": [
+   "benchmark-zeropy-milestone-met",
+   "csgames2018-residual-bounded-by-lineage-gating",
+   "z3-materialize-is-solver-replay"
+  ],
+  "ilq8-post-cancel-waste": [
+   "find-directed-policy-lnzcu",
+   "scheduler-selection-policy-seam"
+  ],
+  "libvex-corpus-parity-gate": [
+   "libvex-callee-addr-normalize"
+  ],
+  "libvex-lift-params": [
+   "libvex-corpus-parity-gate"
+  ],
+  "memreplay-bottleneck-root-cause": [
+   "gorvf19-register-acquire-once"
+  ],
+  "merge-cow-skip-soundness": [
+   "s5a-merge-cost-shape-divergence-proportional"
+  ],
+  "native-dispatch-gate-prefer-native": [
+   "a8epx-gate-measured-defer"
+  ],
+  "native-library-hooks-default-on": [
+   "a8epx-gate-measured-defer"
+  ],
+  "native-library-hooks-parity-cleared": [
+   "a8epx-gate-measured-defer"
+  ]
+ }
+}

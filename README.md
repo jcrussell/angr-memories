@@ -1,8 +1,8 @@
 # angr-memories — bd memory cleanup archive
 
-Snapshot of the three-round cleanup of the `angr` bd memory corpus
-(2026-06-04 round 1 + 2026-06-05 round 2 + 2026-07-04 round 3). Use this
-directory to:
+Snapshot of the four-round cleanup of the `angr` bd memory corpus
+(2026-06-04 round 1 + 2026-06-05 round 2 + 2026-07-04 round 3 +
+2026-07-20 round 4). Use this directory to:
 
 - Study **what was forgotten** — body archives + per-decision audit logs
 - Re-run a forgotten memory's recovery — pre-prune snapshots are full JSON dumps
@@ -20,7 +20,8 @@ round-3 completion. The original directories remain in the repo (gitignored).
 | Round 1 (2026-06-04) | 1,296 | 832 (−36%) |
 | Round 2 (2026-06-05) | 832 | 414 (−50%) |
 | Round 3 (2026-07-04) | 934 | 757 (−19%) |
-| Combined           | peak 1,296 | 757 |
+| Round 4 (2026-07-20) | 1,082 | 1,000 (−8%) |
+| Combined           | peak 1,296 | 1,000 |
 
 Round 1 used heuristic triage + light agent review. Round 2 did an
 exhaustive body-by-body agent review with an aggressive forget/merge
@@ -29,7 +30,12 @@ round-2 process on the corpus after it regrew from 414 to 934 (four weeks
 of new work): cheap triage sweeps forgot 70, then an 18-batch exhaustive
 agent re-review forgot another 70 and merged 66 (37 subordinates folded
 into 29 canonicals). Zero promotes — the round-2 "when in doubt, forget
-rather than duplicate docs" precedent held again.
+rather than duplicate docs" precedent held again. Round 4 started as a
+full re-review but pivoted mid-run to delta-scope (see Round-4 notes):
+sweep forgot 22, four full survivor-heavy batches plus five delta batches
+forgot 43 and merged 34 (17 subordinates into 17 canonicals), and the 553
+untouched round-3 survivors were auto-kept on the strength of the
+measured ~0 forget yield from re-reviewing scrubbed survivors.
 
 ## Layout
 
@@ -93,6 +99,20 @@ rather than duplicate docs" precedent held again.
 │   ├── cites-R3-*.json          — per-batch citation subset given to agents
 │   ├── decisions.jsonl          — append-only audit log (round 3 only)
 │   └── intermediate/            — citation-surgery originals (2 repaired citers)
+├── round4/              (full .bd-prune-part4/ snapshot from 2026-07-20)
+│   ├── batch-index.json         — final chunking record (4 R4-INVARIANT + 5 R4D delta batches)
+│   ├── snapshot-pre-prune-original.json — 1,082 memories at the very start of round 4
+│   ├── snapshot-pre-prune.json  — 1,060 memories after the status sweep, before agent review
+│   ├── snapshot-post-prune.json — all 1,000 memories at end of round 4
+│   ├── review-instructions.md   — the per-batch agent brief (round-2 decision tree)
+│   ├── validate_manifest.py     — per-batch manifest validator (new in round 4)
+│   ├── manifest-R4-status.jsonl — cheap sweep (22 forgets after a manual 8-key durability pull)
+│   ├── manifest-R4-INVARIANT-*.jsonl — 4 full survivor-heavy batches (pre-pivot)
+│   ├── manifest-R4D-*.jsonl     — 5 delta batches (new/updated keys only, post-pivot)
+│   ├── manifest-R4-autokeep.jsonl — 553 unchanged round-3 survivors auto-kept at pivot
+│   ├── manifest-R4-combined-auto.jsonl — one combined apply (1,060 rows)
+│   ├── decisions.jsonl          — append-only audit log (round 4 only)
+│   └── intermediate/citation-surgery-originals.json — 5 pre-surgery canonical bodies
 └── claude-logs/
     ├── round1-session.jsonl     — Claude Code transcript driving round 1
     ├── round2-session.jsonl     — Claude Code transcript driving round 2
@@ -221,6 +241,32 @@ is angr-specific — replace with your project's anchors before reuse.
   (defaults to `R2` for backcompat) so batch IDs/filenames aren't hardcoded
   to one round.
 
+## Round-4 notes worth re-reading
+
+- **Mid-run pivot from full to delta scope**: round 4 began as a round-3-style
+  full re-review (user's call), but session-limit pressure forced a rescope
+  after 4 of 21 batches. The completed full batches provided the evidence for
+  the pivot: 278 already-scrubbed survivor keys yielded exactly 1 forget.
+  The remaining 553 unchanged round-3 survivors were auto-kept
+  (`manifest-R4-autokeep.jsonl`) and only the 229 new/updated keys got agent
+  review (5 `R4D-*` batches). Delta batches ran 9–26% forget rates vs ~0.4%
+  for scrubbed survivors — strong evidence future rounds should default to
+  delta scope and re-review survivors only after major refactors.
+- **Sweep needs a durability pull**: the status-shape+closed-only sweep
+  matched 30 keys, but 8 were durable invariants whose bodies merely
+  contained "fixed"/"resolved" phrasing (`invariant-never-prime-sat-cache`,
+  `benchmark-regression-noise-floor`, etc.). They were pulled from the sweep
+  manifest by hand and routed to agent review instead — all 8 survived
+  (one absorbed as a merge subordinate). Eyeball the sweep before applying.
+- **Citation surgery (5 keys)**: all five dangling refs were merge canonicals
+  whose merged bodies said "absorbed from <subordinate>". Rephrased to
+  "(absorbed in the R4 merge)"; originals in
+  `round4/intermediate/citation-surgery-originals.json`.
+- **Zero promotes for the third consecutive round.**
+- **Tooling addition**: `round4/validate_manifest.py` — checks per-batch
+  manifest coverage, verdict fields, in-batch merge targets, and
+  mandatory-keep violations; both the orchestrator and the batch agents ran it.
+
 ## Recovery
 
 If a forgotten key turns out to be load-bearing:
@@ -248,6 +294,10 @@ else:
 - Round 1 driven by Claude Code session `671c1d6c-cb62-4d8c-ad0e-da0fb1c2f733`
 - Round 2 driven by Claude Code session `194c8d59-ecfc-43df-92f8-149659bfbd57`
 - Round 3 driven by Claude Code session `session_01TTjnmeZXQvTj1A5Qe72cqy`
+- Round 4 driven by Claude Code (Fable 5) session
+  `797e88b2-d108-4852-b0d7-f9500891ac30` on 2026-07-19/20
+  (transcript archived up to the Phase-D bookkeeping step; the final
+  commit/verification turns post-date the copy)
 - Round-3 tooling change (`bd_chunk_for_review.py --round`) committed to this
   archive repo; the `DEFAULT_KEEP_LIST` in `bd_gen_manifest.py` already
   matched the current CLAUDE.md quick-keys (13 anchors, all survived).

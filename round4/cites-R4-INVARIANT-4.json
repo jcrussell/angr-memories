@@ -1,0 +1,42 @@
+{
+  "in": {
+    "invariant-snapshot-finalize-steady-session": [
+      "invariant-snapshot-flush-parked-bounces"
+    ],
+    "invariant-state-cache-mirror-id": [
+      "proxy-stale-addr-root-cause"
+    ],
+    "invariant-symbol-id-process-global": [
+      "warm-process-exploration-divergence"
+    ],
+    "invariant-symbolic-memory-fork-fields": [
+      "invariant-registerfile-arc-cow-makemut"
+    ],
+    "invariant-syscall-fallback-on-collision": [
+      "invariant-native-syscall-dispatch"
+    ],
+    "invariant-v5ht-dismantle-child-none": [
+      "shared-lineage-gating-decision"
+    ],
+    "invariant-zeropy-gate-levers-are-count-not-ns": [
+      "bounce-reduction-low-roi-corpus",
+      "simprocedure-bounce-service-dominates"
+    ]
+  },
+  "out": {
+    "invariant-snapshot-flush-parked-bounces": [
+      "invariant-snapshot-finalize-steady-session"
+    ],
+    "invariant-symbolic-register-writes-sync": [
+      "invariant-dirty-pages-survive-migration"
+    ],
+    "invariant-syscall-arg-extraction": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-zeropy-gate-levers-are-count-not-ns": [
+      "bounce-reduction-low-roi-corpus",
+      "rust-python-boundary-audit",
+      "simprocedure-bounce-service-dominates"
+    ]
+  }
+}

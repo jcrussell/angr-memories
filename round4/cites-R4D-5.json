@@ -1,0 +1,109 @@
+{
+ "out": {
+  "snapshot-constraint-count-pin": [
+   "avoid-add-constraint-for-context-rebuild",
+   "snapshot-solver-smtlib2-design"
+  ],
+  "snapshot-resume-leaf-loss-falsified-theories": [
+   "snapshot-resume-leaf-loss-root-cause"
+  ],
+  "stdin-seed-binding-architecture": [
+   "invariant-native-stdin-readers-use-mint-stdin-bytes"
+  ],
+  "steady-found-cap-fix": [
+   "steady-loop-overcollects-found-stash"
+  ],
+  "steady-loop-overcollects-found-stash": [
+   "steady-found-cap-fix"
+  ],
+  "symlink-table-readlink-model": [
+   "filesystem-module-layout"
+  ],
+  "unsat-core-on-demand-not-tracked": [
+   "invariant-residual-sink-vs-assumed-ir"
+  ],
+  "warm-process-exploration-divergence": [
+   "invariant-symbol-id-process-global"
+  ],
+  "wave-symbolic-branch-condition-not-serialized": [
+   "invariant-active-empty-not-partial-found"
+  ],
+  "write-fd-position-aware": [
+   "filesystem-module-layout",
+   "stdio-fwrite-fputs-arbitrary-fd"
+  ],
+  "ype54-python-probing-infeasible": [
+   "ype54-second-branch-feasibility-divergence",
+   "ype54-taken-constraint-hypothesis-disproven"
+  ],
+  "ype54-root-cause": [
+   "invariant-dirty-pages-survive-migration"
+  ],
+  "ype54-root-cause-dropped-constraint": [
+   "avoid-ype54-guard-serialization"
+  ],
+  "z3-materialize-is-solver-replay": [
+   "fork-carries-model-cache"
+  ],
+  "z3-param-survey-bimodal-negative": [
+   "angr-z3-params-env-override",
+   "z3-param-survey-negative-result"
+  ],
+  "zeropy-callback-site-lever-ranking": [
+   "batch-fetch-pages-discarded-eval-root-cause"
+  ],
+  "zeropy-gate-libvex-build-recipe": [
+   "venv-rebuild-cargo-direct-copy"
+  ],
+  "zeropy-memory-load-is-the-stack-canary": [
+   "invariant-servable-pages-is-not-a-load-oracle"
+  ]
+ },
+ "in": {
+  "snapshot-bucket-d-overlay-loss": [
+   "avoid-snapshot-pc-and-name-counter-theories"
+  ],
+  "snapshot-resume-leaf-loss-root-cause": [
+   "snapshot-resume-leaf-loss-falsified-theories"
+  ],
+  "snapshot-resume-spread-is-dump-side": [
+   "parallel-drain-depth-ground-truth"
+  ],
+  "steady-found-cap-fix": [
+   "steady-loop-overcollects-found-stash"
+  ],
+  "steady-loop-overcollects-found-stash": [
+   "steady-found-cap-fix"
+  ],
+  "syscall-fallback-root-cause": [
+   "invariant-callback-state-no-vex-pseudoregs"
+  ],
+  "unsat-core-on-demand-not-tracked": [
+   "invariant-residual-sink-vs-assumed-ir"
+  ],
+  "warm-process-exploration-divergence": [
+   "parallel-drain-depth-ground-truth"
+  ],
+  "write-fd-position-aware": [
+   "stdio-fwrite-fputs-arbitrary-fd"
+  ],
+  "ype54-root-cause": [
+   "invariant-dirty-pages-survive-migration"
+  ],
+  "ype54-second-branch-feasibility-divergence": [
+   "ype54-python-probing-infeasible"
+  ],
+  "ype54-taken-constraint-hypothesis-disproven": [
+   "ype54-python-probing-infeasible"
+  ],
+  "zeropy-callback-site-lever-ranking": [
+   "rust-page-fetch-probe-technique"
+  ],
+  "zeropy-fetch-page-servable-snapshot": [
+   "avoid-memory-proxy-for-fetch-page"
+  ],
+  "zeropy-memory-load-is-the-stack-canary": [
+   "benchmark-zeropy-pass-count-iter142"
+  ]
+ }
+}

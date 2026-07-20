@@ -1,0 +1,49 @@
+{
+  "in": {
+    "avoid-add-constraint-for-context-rebuild": [
+      "snapshot-constraint-count-pin"
+    ],
+    "avoid-bd-remember-without-key-flag": [
+      "bd-comment-append-only"
+    ],
+    "avoid-cadet-phase3-sticky-eager-retry": [
+      "benchmark-cadet-phase3-materialize-forks",
+      "block-granular-step-mode"
+    ],
+    "avoid-content-fingerprint-on-found-states": [
+      "invariant-repeat-run-equality-projections"
+    ],
+    "avoid-eager-symbolic-register-export": [
+      "clz-ctz-symbolic-concretization-bug"
+    ],
+    "avoid-fixing-only-one-native-dispatch-path": [
+      "invariant-native-dispatch-find-avoid-gate"
+    ],
+    "avoid-fxhash-dedup-set-spike": [
+      "offline-loop-queue-blocker-map"
+    ],
+    "avoid-pip-install-deps": [
+      "wheel-distribution-shared-libz3"
+    ]
+  },
+  "out": {
+    "avoid-bd-remember-without-key-flag": [
+      "bd-update-notes-overwrites"
+    ],
+    "avoid-eager-symbolic-register-export": [
+      "clz-ctz-symbolic-concretization-bug"
+    ],
+    "avoid-flareon-5rjbq-store-visibility-lead": [
+      "flareon-5rjbq-address-witness-collision-root-cause",
+      "flareon-5rjbq-store-visibility-disambiguated"
+    ],
+    "avoid-fxhash-dedup-set-spike": [
+      "benchmark-memory-fxhash",
+      "benchmark-memory-fxhash-stash-done",
+      "offline-loop-queue-blocker-map"
+    ],
+    "avoid-memory-proxy-for-fetch-page": [
+      "zeropy-fetch-page-servable-snapshot"
+    ]
+  }
+}

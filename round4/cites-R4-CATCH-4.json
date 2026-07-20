@@ -1,0 +1,126 @@
+{
+  "in": {
+    "fread-python-boundary-unreachable-content": [
+      "symbolic-stream-fd-read-slice"
+    ],
+    "gan1-memory-load-clone-not-hot": [
+      "invariant-rustbv-clone-cheap"
+    ],
+    "god-module-split-impl-across-files": [
+      "god-module-split-state-rs"
+    ],
+    "god-module-split-private-struct": [
+      "god-module-split-test-glob-imports"
+    ],
+    "god-module-split-state-rs": [
+      "god-module-split-free-fns"
+    ],
+    "god-module-split-test-glob-imports": [
+      "god-module-split-impl-across-files"
+    ],
+    "god-module-split-visibility-pitfall": [
+      "god-module-split-private-mod-deadcode",
+      "god-module-split-private-struct",
+      "god-module-split-test-glob-imports"
+    ],
+    "hackcon-z3-ast-structure": [
+      "z3-source-mining-ovqja"
+    ],
+    "i386-struct-stat-and-angr-syscall-map": [
+      "syscall-arch-number-table-staleness"
+    ],
+    "iaol1-seed-pin-empirically-broken": [
+      "avoid-z3-solver-set-params-for-random-seed",
+      "deterministic-seed-narrows-not-collapses",
+      "invariant-deterministic-mode-plumbing",
+      "z3-source-mining-ovqja"
+    ],
+    "ilq8-post-cancel-waste": [
+      "find-directed-policy-lnzcu",
+      "scheduler-selection-policy-seam"
+    ],
+    "lazy-memory-load-overlay-fails": [
+      "invariant-pending-writes-defer-then-flush",
+      "pending-writes-scaffold-inactive-not-the-path"
+    ],
+    "libvex-corpus-parity-gate": [
+      "libvex-callee-addr-normalize"
+    ],
+    "libvex-lift-params": [
+      "libvex-corpus-parity-gate"
+    ],
+    "load-shellcode-blob-binary-none": [
+      "invariant-shellcode-binary-regions-test"
+    ],
+    "memcpy-symbolic-size-native": [
+      "memset-symbolic-address-native"
+    ]
+  },
+  "out": {
+    "gan1-memory-load-clone-not-hot": [
+      "invariant-rustbv-clone-cheap"
+    ],
+    "god-module-split-free-fns": [
+      "god-module-split-state-rs"
+    ],
+    "god-module-split-impl-across-files": [
+      "god-module-split-test-glob-imports"
+    ],
+    "god-module-split-private-mod-deadcode": [
+      "god-module-split-visibility-pitfall"
+    ],
+    "god-module-split-private-struct": [
+      "god-module-split-visibility-pitfall"
+    ],
+    "god-module-split-state-rs": [
+      "god-module-split-impl-across-files"
+    ],
+    "god-module-split-test-glob-imports": [
+      "god-module-split-private-struct",
+      "god-module-split-visibility-pitfall"
+    ],
+    "gorvf19-register-acquire-once": [
+      "memreplay-bottleneck-root-cause"
+    ],
+    "gorvf31-xmllint-all-bucket-a": [
+      "a8epx-gate-measured-defer",
+      "native-dispatch-skipped-for-loaded-libs"
+    ],
+    "i386-struct-stat-and-angr-syscall-map": [
+      "mips32-struct-stat-and-omitted-mode"
+    ],
+    "iaol1-seed-pin-empirically-broken": [
+      "avoid-z3-parallel-enable"
+    ],
+    "internal-patches-offline-prepare-pattern": [
+      "aggregation-doc-v1-partial-pattern",
+      "upstream-pr-offline-prepare-slice-pattern"
+    ],
+    "iop-avg-vs-hadd-distinction": [
+      "z3-universality-parity-test-template"
+    ],
+    "lazy-memory-sidecar-architecture": [
+      "invariant-mem-ite-depth-counter"
+    ],
+    "libvex-callee-addr-normalize": [
+      "libvex-corpus-parity-gate"
+    ],
+    "libvex-corpus-parity-gate": [
+      "libvex-lift-params"
+    ],
+    "loop-head-policy-caplg": [
+      "coverage-guided-policy-m9fpp",
+      "selection-policy-seam",
+      "selection-policy-seam-limits"
+    ],
+    "loopseer-native-wiring": [
+      "concretization-config-readback"
+    ],
+    "memcpy-symbolic-address-native": [
+      "memset-symbolic-address-native"
+    ],
+    "memcpy-symbolic-size-native": [
+      "memset-symbolic-size-native"
+    ]
+  }
+}

@@ -8,6 +8,7 @@
    27  iteration receipt; closed bead angr-v5a5
    23  Low-signal scrap
    22  Stale dated snapshot (≤May 2026)
+   22  closed-only AND status-shape
    17  Pure benchmark snapshot, no design rule or gotcha
    14  stale-file-ref
    12  Location anchor or code pointer
@@ -495,3 +496,63 @@
     1  Status snapshot of the same campaign; threshold/exhaustion detail folded into the canonical recipe.
     1  Overlaps z3-ast-construction-c-api-z3-mk-bvadd on Concat/Extract fusion and QF_BV preprocessing; unique content (no native Reverse, full pipeline order) folded into the canonical.
     1  Raw param catalog from source mining; same cluster as the ovqja.2 survey which is the actionable conclusion. Catalog facts preserved verbatim in the canonical's merged body.
+    1  dead-lead scrap: angr-5rjbq is CLOSED (root-caused and fixed); root-cause memories live outside this batch and supersede it; no in-cites
+    1  stated purpose expired: angr-grji4 CLOSED (proxy default-on landed 2d9bb6598) and fetch-page site retired per zeropy-fetch-page-servable-snapshot (cited, out-of-batch); no in-cites
+    1  same rule as avoid-stdout-probes-in-run-single (run_single captures stdout; probe via stderr)
+    1  stale: angr-ibx8j CLOSED, aliasing fixed (00233f45e) with regression test TestActiveProxyAddrMatchesRust; described behavior no longer exists; no in-cites
+    1  falsified-theory scrap for angr-op0dn.13.14, which is CLOSED (root cause: phase-2 double-count + stdin graft, not snapshot loss; recorded in snapshot-resume-stdin-solve-root-cause); no in-cites
+    1  falsified-theory scrap for CLOSED angr-op0dn.13.14; the 6-vs-8 gap was proven not-a-bug and root cause is recorded elsewhere; no in-cites
+    1  falsified-theory scrap for CLOSED angr-op0dn.13.14; its own remaining suspicion (BVS name counter) was itself falsified by later iterations; references dead /tmp probes; no in-cites
+    1  fully covered by docs/advanced-topics/rust_parallel_design.rst section 'Distributed (cross-machine) migration - measured KILL' (table, f* analysis, excluded costs, verdict, human-decision rule all present); no in-cites
+    1  One-off baseline-refresh receipt for landed commit 807bfd74d; the durable rule (hand-edit, never --update repin bimodals) lives in default-flip-requires-baseline-refresh; baseline_timings.json is the authoritative record
+    1  Both decisions (pure-Rust probe vs CPython false-positives; slope-not-absolute gate) plus baseline/threshold are fully covered by CLAUDE.md's 'Nightly valgrind leak check' section; memory adds only byte-level trivia
+    1  Census program fully executed (gorvf.13 retired the reducible benches, parent epic angr-gorvf closed); bucket taxonomy preserved in bounce-reduction-low-roi-corpus scope-limit and on-disk zeropy_bounce_census.json
+    1  Intermediate status snapshot (12/36) superseded by benchmark-zeropy-milestone-met (13/36 final); its action guidance (flip libvex-ffi default) landed via angr-3trr7; fauxware blocker gorvf.15 closed
+    1  Self-declared SUPERSEDED by iter142, which is itself superseded by milestone-met; only citer is iter142 (also forgotten this batch); bounce-accounting correction lives in invariant-bounce-gil-accounting
+    1  Status snapshot (8/36) superseded twice over (gate-after-13, milestone-met); its stock-build 0/36 caveat mooted by the angr-3trr7 default flip; lever ranking re-inverted by later measurements; only citer is iter136
+    1  Self-declared HISTORICAL/FIXED; current state lives in out-of-batch invariant-run-single-simos-not-callable-exclusion and benchmark-callable-benches-real-rust-numbers; its run_leak_check-is-Python-only claim is now stale (CLAUDE.md: leak harness installs the Rust engine swap)
+    1  Point-in-time audit receipt; toggle docs live in rust_engine.rst / rust_parallel_design.rst, and the ANGR_Z3_PARAMS wiring detail is fully covered by rust_engine.rst plus out-of-batch memory angr-z3-params-env-override
+    1  Overturned intermediate hypothesis: ebp-is-pinned-not-free proved ebp IS pinned (addresses unique), and closed bead angr-5rjbq's final root cause was no-op proxy store callbacks (e41b51804); external citer avoid-flareon-5rjbq-store-visibility-lead may cause apply to defer
+    1  Hypothesis killed by ebp-is-pinned-not-free (measured ebp=0x80003 under both configs) and by the closed bead's final root cause (store-callback drop, not solver disagreement); external citer flareon-5rjbq-proxy-store-not-seen-by-native-root-cause may cause apply to defer
+    1  Fix landed (25c5e2646) and the commit message covers the coherence rationale; the 'residual downstream / NEXT: instrument' half is spent — the investigation closed with a different final root cause
+    1  Static-disasm debugging detail of a closed bug; its register-write prediction was resolved by d84344559 and the ultimate root cause (no-op store callbacks) lay elsewhere; NEXT steps spent
+    1  Mid-investigation checklist for angr-5rjbq, now CLOSED: final root cause (interpreter dropped concretized-Single stores to no-op proxy callbacks) + fix e41b51804 supersede this iter66 snapshot
+    1  Intermediate framing for angr-5rjbq, now CLOSED: bead close reason records the actual mechanism (store dispatch dropped to no-op callbacks, fixed via buffer_store_for_rust_memory, e41b51804); later bead notes already superseded the 'store visibility' framing
+    1  Fix lead pointing at resume.rs pre_callback_snapshot was not the actual fix (buffer_store_for_rust_memory in the interpreter was); bead angr-5rjbq CLOSED, lead consumed
+    1  Explicitly marked WRONG/SUPERSEDED by outside memory avoid-flareon-5rjbq-store-visibility-lead; bead angr-5rjbq CLOSED with a different final root cause. Has outside citers, so apply step may defer
+    1  Early witness-concretization hypothesis, refuted by later iterations (ebp pinned unique at setup) and by the final angr-5rjbq close; outside citer is itself part of the overturned framing
+    1  Superseded snapshot: claims both events are python-dispatched and lists two MVP gaps, all overturned by op0dn.14.4.1/.2 (the dual-dispatch memories); unique BP-size/attribution detail preserved in canonical
+    1  rationale for the rust_only tuple field; folded into the suite-format canonical (also now documented in run_regression.py comments)
+    1  stale: DCAS is now implemented natively (interpreter/statements_cas.rs handles single+DCAS); the Err raise site the memory pins is gone and no code emits the 'double compare-and-swap' reason string anymore (grep-verified) — the memory itself predicted this obsolescence
+    1  same deterministic-mode cluster; SymContext witness mechanics folded into the plumbing canonical (M2.2 layer of M2.3)
+    1  same EXPRESSION_BY_OPERANDS_PTR cache; identity-pattern detail folded into the externally-cited export-key canonical
+    1  Same fork-metadata invariant; mechanism/caller detail folded into canonical arc-not-py memory
+    1  Subset of scan-python-bounds' mechanism (1); decline conditions and require_null=false detail folded into canonical
+    1  same rule as invariant-required-option-inverse-polarity-gate (EXTENDED_IROP_SUPPORT absence = unsupported); probe pattern folded into canonical
+    1  same dump-guard invariant as flush-parked-bounces (its only citer, in-batch); steady-guard detail folded into canonical
+    1  Stage-1.1 DONE receipt (commit d4902afac, 'NEXT: 3s5js.2'); the durable build recipe (PYVEX_FFI_LIB_DIR, direct-cargo invocation) recurs in libvex-ffi-decls-bindgen and libvex-ffi-default-on
+    1  Feasibility-GO planning memory fully consumed: all stages landed (default-on) and the risks it lists (arena clobber, cdef pin/regen, non-reentrant globals) are covered in docs/advanced-topics/rust_libvex_ffi.rst (verified by grep)
+    1  Superseded by libvex-ffi-default-on (angr-3trr7 made the feature itself default-on, so 'stock build is inert' is now stale); its evidence table lives in rust_libvex_ffi.rst 'Stage-3 verdict' (verified)
+    1  Bead-sizing status snapshot (2026-07-11); tracker since taken to 0 open and statuses superseded by roadmap-2026-07-18-housekeeping (same batch); premise corrections live on the beads themselves
+    1  Fixed-commit receipt (5fafd7915, pinned by test_memory_write_int_value_defaults_to_arch_word); durable flip-discipline lesson folded into the gate-flip pattern canonical
+    1  Same init-prefix find/avoid cluster; its 'STILL BROKEN' claim is superseded by the bdeqa replay in python-init-prefix-find-replay; mechanism detail folded into canonical
+    1  Duplicated by docs: rust_engine.rst lists exactly the 5 unsupported inspect events plus rationale and python-dispatch nuance (lines ~2559-2570, 2649)
+    1  Self-declared mirror: errors.rs module doc is authoritative and rust_engine.rst has the 'Internal error convention' subsection; memory adds nothing beyond them
+    1  Roadmap-status cluster; bead routing/statuses superseded by the 2026-07-18 housekeeping; durable framing (Z3-floor focus, structural-count GO gates, in-tree bricks) folded into canonical
+    1  Progress increment on the same S10 flip-gate ledger as the verdict memory; exoneration details folded into canonical
+    1  Fix for the latent issue documented in scheduler-selection-policy-seam (same scheduler-policy-routing rule); folded into canonical so the stale 'not yet fixed' claim dies
+    1  Fully covered by rust_engine.rst 'Gating policy: the kwarg stays opt-in' section (numbers, sampler failure modes, auto-enable refutation) + solver_pool_design.md sec 7; follow-up is tracked on bead angr-g1fev
+    1  Superseded in-cluster: its registry/CLARIPY-cache theory was killed by falsified-theories item 3 (warm same-process resume fails identically) and the real cause is the phase-2 accounting in snapshot-resume-leaf-loss-root-cause; bead angr-op0dn.13.14 closed
+    1  Same investigation as snapshot-resume-leaf-loss-root-cause (cross-cites it); theory list + lesson folded into canonical
+    1  Self-declared OBSOLETE, superseded by steady-found-cap-fix; its one surviving note (wave-only kwarg, perf gating) folded into canonical
+    1  Dated one-off attribution snapshot (dva9j.1 closed): bucket detail covered by rust_engine.rst 'Known slower benchmarks'; lever ranking superseded by zeropy-callback-site-lever-ranking; numbers pre-date proxy and libvex-ffi default flips
+    1  Refuted diagnosis: avoid-ype54-guard-serialization (kept, out of batch) proves the ValueError benign and guard-carry both insufficient and regressive; real cause was dirty-pages migration (invariant-dirty-pages-survive-migration); beads lq9rz/ype54 closed
+    1  Investigation scrap for closed bead angr-ype54 (W=2 probing blockers, /tmp repros, next-probe planning); root cause + reusable method preserved in invariant-dirty-pages-survive-migration
+    1  Falsified intermediate hypothesis (iter35) with NEXT-step planning for closed bead angr-ype54; superseded by invariant-dirty-pages-survive-migration
+    1  Superseded iteration state (iter45) for closed bead angr-ype54: fix guidance moot after dirty-pages fix; guard-serialization refutation already kept in avoid-ype54-guard-serialization
+    1  Mis-labeled 'root cause' (iter29) — the feasibility divergence was a downstream symptom of the stale-dirty-pages callback state; superseded by invariant-dirty-pages-survive-migration; bead closed
+    1  Falsified-hypothesis receipt (iter30, reverted experiment, /tmp repros) for closed bead; the by-design empty deferred_forks note is speculative/unverified and the bug was fixed elsewhere
+    1  Duplicated by the kept avoid-ype54-guard-serialization (guard-carry fails + regresses, ValueError phase-2 artifact); final root cause in invariant-dirty-pages-survive-migration; bead closed
+    1  One-off fidelity-gate receipt: feature now default-ON (angr-3trr7) so the special build method is moot; counter-reading guidance lives in docs/advanced-topics/rust_libvex_ffi.rst; the vex_engine-submodule gotcha survives in the merged seam memory
+    1  Same native-lift feature as the seam memory; wiring chain + _phase_boot ctor-kwarg trap folded into canonical (its 'default False' detail is stale — Stage-3 flipped to True)
+    1  One-off perf-gate receipt (gate MET, Stage-3 since shipped via angr-3trr7); measured-win table and shipping status live in docs/advanced-topics/rust_libvex_ffi.rst; build env-var detail duplicated in zeropy-gate-libvex-build-recipe

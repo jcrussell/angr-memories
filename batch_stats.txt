@@ -61,3 +61,16 @@
   R3-future                            2       0        0       0       2
   R3-stale                             4       0        0       0       4
   R3-status                           64       0        0       0      64
+
+# --- round 4 (2026-07-20) ---
+  R4-AUTOKEEP                          0       0        0     553     553
+  R4-INVARIANT-1                       1       6        0      63      70
+  R4-INVARIANT-2                       0       4        0      66      70
+  R4-INVARIANT-3                       0       2        0      67      69
+  R4-INVARIANT-4                       0       2        0      67      69
+  R4-status                           22       0        0       0      22
+  R4D-1                                7       2        0      36      45
+  R4D-2                               12       0        0      34      46
+  R4D-3                                8       2        0      36      46
+  R4D-4                                4      10        0      32      46
+  R4D-5                               11       6        0      29      46

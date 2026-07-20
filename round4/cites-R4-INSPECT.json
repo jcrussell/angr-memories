@@ -1,0 +1,12 @@
+{
+  "in": {
+    "inspect-enabled-clone-pitfall": [
+      "invariant-pycallbacks-mutable-fields"
+    ]
+  },
+  "out": {
+    "inspect-vexlift-dual-dispatch": [
+      "invariant-native-lift-bypasses-lift-callback"
+    ]
+  }
+}

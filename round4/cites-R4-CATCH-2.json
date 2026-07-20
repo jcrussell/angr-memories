@@ -1,0 +1,71 @@
+{
+  "in": {
+    "clz-ctz-symbolic-concretization-bug": [
+      "avoid-eager-symbolic-register-export"
+    ],
+    "concretization-config-readback": [
+      "loopseer-native-wiring"
+    ],
+    "constraint-export-no-pre-pin": [
+      "benchmark-p3-synthesis-conclusion",
+      "flareon-5rjbq-address-witness-collision-root-cause",
+      "flareon-5rjbq-pin-and-automap-fix",
+      "invariant-mirror-solver-constraints-not-authoritative",
+      "rust-engine-claude-md-pointer",
+      "rust-proxy-constraints-vs-exported-state"
+    ],
+    "core-goal-design-philosophy": [
+      "rust-engine-claude-md-pointer"
+    ],
+    "coverage-guided-policy-m9fpp": [
+      "loop-head-policy-caplg",
+      "selection-policy-seam-limits"
+    ],
+    "default-flip-requires-baseline-refresh": [
+      "benchmark-libvex-ffi-default-flip"
+    ],
+    "docs-citation-audit-method": [
+      "bd-memory-path-audit-method"
+    ],
+    "docs-dead-memory-key-sweep-method": [
+      "refactor-memory-sweep-rule"
+    ],
+    "ds-directed-search-greedy-trap": [
+      "directed-policy-a32jl4"
+    ]
+  },
+  "out": {
+    "clz-ctz-symbolic-concretization-bug": [
+      "avoid-eager-symbolic-register-export"
+    ],
+    "counter-attribution-sweep-2026-07": [
+      "bounce-reduction-low-roi-corpus",
+      "per-fork-solver-share-infeasible"
+    ],
+    "coverage-guided-policy-m9fpp": [
+      "selection-policy-seam",
+      "selection-policy-seam-limits"
+    ],
+    "coverage-report-found-set-not-seen-set": [
+      "findall-parallel-slower-than-serial"
+    ],
+    "csgames2018-residual-bounded-by-lineage-gating": [
+      "fork-carries-model-cache"
+    ],
+    "declare-proc-aliases-arg-order": [
+      "native-proc-call-counts-keyed-on-hook-name"
+    ],
+    "default-flip-requires-baseline-refresh": [
+      "benchmark-bimodal-variance-rules"
+    ],
+    "deterministic-seed-narrows-not-collapses": [
+      "iaol1-seed-pin-empirically-broken"
+    ],
+    "directed-policy-a32jl4": [
+      "ds-directed-search-greedy-trap"
+    ],
+    "docs-citation-audit-method": [
+      "refactor-memory-sweep-rule"
+    ]
+  }
+}
