@@ -1,0 +1,52 @@
+{{define "head"}}
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{.Title}}</title>
+<link rel="stylesheet" href="{{url "/static/site.css"}}">
+<link rel="stylesheet" href="{{url "/static/chroma.css"}}">
+</head>
+{{end}}
+
+{{define "header"}}
+<header>
+  <div class="container">
+    <a href="{{url "/"}}" class="brand">angr-memories</a>
+    <nav>
+      <a href="{{url "/"}}">Home</a>
+      {{if .Site.RepoURL}}<a href="{{.Site.RepoURL}}">GitHub</a>{{end}}
+    </nav>
+  </div>
+</header>
+{{end}}
+
+{{define "footer"}}
+<footer>
+  <div class="container">
+    <p>angr-memories — a continuously-synced archive of the angr project's <code>bd</code> memory corpus.</p>
+  </div>
+</footer>
+{{end}}
+
+{{define "groups"}}
+{{range .}}
+<section class="group{{if .Recreated}} recreated{{end}}" id="{{.Key}}">
+  <h2><a href="#{{.Key}}"><code>{{.Key}}</code></a>
+    {{if .Current.Remembered}}<span class="badge remembered">remembered</span>{{else}}<span class="badge forgotten">forgotten</span>{{end}}
+    {{if .Recreated}}<span class="badge recreated">recreated</span>{{end}}
+  </h2>
+  {{if .Recreated}}
+  <p class="recreated-note">
+    {{range $i, $inc := .Incarnations}}{{if $i}} — recreated {{$inc.FirstSeen}}{{if not $inc.Remembered}}, forgotten again {{$inc.DecidedAt}}{{end}}{{else}}first seen {{$inc.FirstSeen}}, forgotten {{$inc.DecidedAt}}{{end}}{{end}}
+  </p>
+  {{end}}
+  {{with .Current}}
+    {{if .Remembered}}
+      <div class="body">{{.BodyHTML}}</div>
+    {{else}}
+      <p class="forgotten-summary">forgotten {{.DecidedAt}}{{if .Reason}} — {{.Reason}}{{end}}{{if .MergedInto}} (merged into <code>{{.MergedInto}}</code>){{end}}</p>
+    {{end}}
+  {{end}}
+</section>
+{{end}}
+{{end}}

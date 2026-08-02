@@ -1,8 +1,0 @@
-{
-  "in": {
-    "bd-update-notes-overwrites": [
-      "avoid-bd-remember-without-key-flag"
-    ]
-  },
-  "out": {}
-}

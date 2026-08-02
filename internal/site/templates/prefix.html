@@ -1,0 +1,26 @@
+{{define "prefix.html"}}<!DOCTYPE html>
+<html lang="en">
+{{template "head" .}}
+<body>
+{{template "header" .}}
+<main class="container home">
+<article class="content">
+<p class="breadcrumb"><a href="{{url "/"}}">Home</a> / <code>{{.Prefix.Name}}</code></p>
+<h1><code>{{.Prefix.Name}}</code></h1>
+<p class="lede">{{.Prefix.Remembered}} remembered, {{.Prefix.Forgotten}} forgotten.</p>
+
+{{if .Prefix.Chunked}}
+<ul class="chunk-list">
+  {{range .Prefix.Chunks}}
+  <li><a href="{{url .Path}}">{{$.Prefix.Name}}/{{.Label}}</a> — {{.Remembered}} remembered, {{.Forgotten}} forgotten ({{len .Groups}} keys)</li>
+  {{end}}
+</ul>
+{{else}}
+{{template "groups" .Prefix.Groups}}
+{{end}}
+</article>
+</main>
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

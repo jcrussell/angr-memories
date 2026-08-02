@@ -1,1 +1,0 @@
-{"key": "v5a5-step-3a-predictor-2026-05-24", "batch": "R2-OPS-V5A5", "reason": "Iter-7 predictor analysis (counter dump deltas, candidate heuristics) for a spike that closed without landing; cited only by avoid-dfs-coupling-for-shared-lineage which is itself spike-residue.", "verdict": "forget"}

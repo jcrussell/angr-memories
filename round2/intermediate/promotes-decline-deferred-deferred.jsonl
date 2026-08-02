@@ -1,1 +1,0 @@
-{"key": "invariant-rust-inspect-unsupported", "verdict": "forget", "reason": "topic already covered in rust_engine.rst (state.inspect dispatch section); user-declined promotion", "batch": "R2-promotes-declined"}

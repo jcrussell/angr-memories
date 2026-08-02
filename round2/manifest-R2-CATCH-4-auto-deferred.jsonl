@@ -1,1 +1,0 @@
-{"key": "satisfiable-wrong-answer", "verdict": "forget", "reason": "Fixed-bug receipt with two commit hashes; principle is general (don't swallow exceptions as UNSAT)", "batch": "R2-CATCH-4"}

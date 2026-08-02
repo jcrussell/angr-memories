@@ -1,2 +1,0 @@
-{"key": "arch-support-matrix-2026-05-08", "verdict": "forget", "reason": "dated snapshot of arch matrix; CLAUDE.md 'Architecture Support Matrix' is the live canonical source per the memory's own pointer", "batch": "B5"}
-{"key": "state-cache-root-eviction-bug", "verdict": "forget", "reason": "bug-fix anchor; the merge-roots-into-live invariant is now baked into the cleanup code (commit 7fe7baf79). Closed bead context.", "batch": "B5"}

@@ -1,5 +1,0 @@
-{"key": "cargo-direct-so-teardown-segfault", "verdict": "forget", "reason": "stale-file-ref", "batch": "R3-stale"}
-{"key": "neon-mla-blob-test-encoding", "verdict": "forget", "reason": "stale-file-ref", "batch": "R3-stale"}
-{"key": "python-syscall-integration-test-pattern", "verdict": "forget", "reason": "stale-file-ref", "batch": "R3-stale"}
-{"key": "uahs-mremap-no-motivator-closure", "verdict": "forget", "reason": "stale-file-ref", "batch": "R3-stale"}
-{"key": "x86-e2e-blob-test-pattern", "verdict": "forget", "reason": "stale-file-ref", "batch": "R3-stale"}

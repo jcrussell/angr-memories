@@ -1,8 +1,0 @@
-{"key": "build-z3-header-resolution", "verdict": "forget", "reason": "fully duplicated by CLAUDE.md 'Z3 dev headers' build-config section; CLAUDE.md is canonical", "batch": "B0"}
-{"key": "decision-v1-no-real-multiprocess", "verdict": "forget", "reason": "memory explicitly cites docs/advanced-topics/rust_engine.rst::v1.0 scope (lines 94-111) as canonical home", "batch": "B0"}
-{"key": "decision-v1-single-threaded", "verdict": "forget", "reason": "memory explicitly cites docs/advanced-topics/rust_engine.rst::v1.0 scope as canonical home", "batch": "B0"}
-{"key": "decision-v1-no-posix-dump-fd", "verdict": "forget", "reason": "memory explicitly cites docs/advanced-topics/rust_engine.rst v1.0 scope (lines 113-131) as canonical home", "batch": "B0"}
-{"key": "rust-engine-inheritance-contract", "verdict": "forget", "reason": "use_rust_engine inheritance contract documented in docs/advanced-topics/rust_engine.rst (per-analysis verdict) and pinned by tests/engines/test_factory_rust_inheritance.py", "batch": "B0"}
-{"key": "vex-interpreter-rename-landed", "verdict": "forget", "reason": "rename to native/angr/src/interpreter/ + VEXInterpreter reflected in CLAUDE.md 'Key Files' section; all linked beads closed", "batch": "B0"}
-{"key": "view", "verdict": "forget", "reason": "4-char stub (body equals 'view')", "batch": "B0"}
-{"key": "x87-transcendentals-two-path-status", "verdict": "forget", "reason": "memory explicitly cites docs/extending-angr/rust_vex_ops.rst::'x87 transcendental ops' as canonical home", "batch": "B0"}

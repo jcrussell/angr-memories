@@ -1,4 +1,0 @@
-{"key": "invariant-bimodal-variance-benchmarks", "verdict": "forget", "reason": "final closer; merged into benchmark-bimodal-variance-rules anchor (citing ref pruned)", "batch": "R2-orphans-final"}
-{"key": "benchmark-fairlight-2026-05", "verdict": "forget", "reason": "dated bench snapshot; superseded by baseline_timings.json", "batch": "R2-orphans-final"}
-{"key": "benchmark-fairlight-2026-05-18", "verdict": "forget", "reason": "dated bench snapshot; superseded by baseline_timings.json", "batch": "R2-orphans-final"}
-{"key": "benchmark-sokohashv2-2026-05-18", "verdict": "forget", "reason": "dated bench snapshot; superseded by baseline_timings.json", "batch": "R2-orphans-final"}

@@ -1,6 +1,0 @@
-{"key": "avoid-491g-already-implemented", "verdict": "forget", "reason": "do-not-reopen note for closed bead angr-491g; the optimization is in concretize.rs as a default; the closure rationale is self-documenting from the code", "batch": "B1-rule"}
-{"key": "invariant-angr-ecosystem-deps-pin", "verdict": "forget", "reason": "fully duplicated by CLAUDE.md pyproject.toml dep-pin section (==9.2.209 rationale)", "batch": "B1-rule"}
-{"key": "invariant-defcamp-r100-pre-existing-drift", "verdict": "forget", "reason": "memory body explicitly says 'this memory is now historical context only — the gate should pass on defcamp_r100 going forward'", "batch": "B1-rule"}
-{"key": "invariant-pufm-original-gaps-closed", "verdict": "forget", "reason": "do-not-reopen note for closed angr-pufm hard-error sites; the closure is in commits 0c90d4962 + b1qq fix; live work tracked in open beads angr-czph/qh5u/pogf", "batch": "B1-rule"}
-{"key": "invariant-symcontext-fork-isolation-verified", "verdict": "forget", "reason": "verification log for closed angr-agvl; the invariant is pinned by tests test_fork_constraint_bidirectional_isolation + test_fork_inside_push_isolation", "batch": "B1-rule"}
-{"key": "benchmark-2026-05-05-sweep", "verdict": "forget", "reason": "historical sweep snapshot from 2026-05-05; baseline_timings.json is the authoritative source", "batch": "B1-rule"}

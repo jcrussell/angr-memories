@@ -1,4 +1,0 @@
-{"key": "invariant-init-cache-lazy-regions-order", "verdict": "forget", "reason": "'Preserve original ordering as cheap insurance' — too narrow, says nothing actively required; refactor receipt.", "batch": "R2-INVARIANT-2"}
-{"key": "invariant-lazy-mem-deferred-2026-05-09", "verdict": "forget", "reason": "Dated status snapshot ('as of 207th loop audit'); decisions already enacted in angr-pogf; obsolete tracking note.", "batch": "R2-INVARIANT-2"}
-{"key": "invariant-mips-no-calling-convention", "verdict": "forget", "reason": "Explicitly marked OBSOLETE; superseded by invariant-mips-n64-cc-2026-05-10 and Mips O32 wiring landed.", "batch": "R2-INVARIANT-2"}
-{"key": "invariant-neon-scaffolding-panic-not-fallback", "verdict": "forget", "reason": "Superseded by invariant-neon-unimplemented-not-panic (panic → typed error per angr-tkbr.3); old guidance now wrong.", "batch": "R2-INVARIANT-2"}

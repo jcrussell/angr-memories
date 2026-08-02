@@ -1,0 +1,28 @@
+{{define "index.html"}}<!DOCTYPE html>
+<html lang="en">
+{{template "head" .}}
+<body>
+{{template "header" .}}
+<main class="container home">
+<article class="content">
+<h1>angr-memories</h1>
+<p class="lede">{{.Site.TotalRemembered}} remembered, {{.Site.TotalForgotten}} forgotten, across {{len .Site.Prefixes}} key-prefix families.</p>
+
+<table class="prefix-table">
+<thead><tr><th>Prefix</th><th>Remembered</th><th>Forgotten</th></tr></thead>
+<tbody>
+{{range .Site.Prefixes}}
+<tr>
+  <td><a href="{{url .Path}}"><code>{{.Name}}</code></a>{{if .Chunked}} <span class="chunked-note">({{len .Chunks}} pages)</span>{{end}}</td>
+  <td>{{.Remembered}}</td>
+  <td>{{.Forgotten}}</td>
+</tr>
+{{end}}
+</tbody>
+</table>
+</article>
+</main>
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

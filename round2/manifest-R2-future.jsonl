@@ -1,4 +1,0 @@
-{"key": "admin-defer-pattern", "verdict": "forget", "reason": "future-date", "batch": "R2-future"}
-{"key": "autonomous-loop-queue-drained-2026-05-24", "verdict": "forget", "reason": "future-date", "batch": "R2-future"}
-{"key": "avoid-deferred-implementation-quality-review-b-beads", "verdict": "forget", "reason": "future-date", "batch": "R2-future"}
-{"key": "ralph-loop-noop-streak-iter100", "verdict": "forget", "reason": "future-date", "batch": "R2-future"}

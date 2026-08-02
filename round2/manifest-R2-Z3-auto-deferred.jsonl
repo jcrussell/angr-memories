@@ -1,2 +1,0 @@
-{"key": "z3-solver-translate-same-context-bug-z3-solver", "verdict": "forget", "reason": "Documented in rust_z3_sharing.rst 'Why not Z3_solver_translate?' section verbatim; cited by avoid-z3-solver-translate-same-context (which is the canonical avoid-rule)", "batch": "R2-Z3"}
-{"key": "z3-spec-replay-test-template", "verdict": "merge", "merged_into": "z3-universality-test-patterns", "reason": "Spec-replay variant of universality parity test — merge with z3-universality-parity-test-template and z3-universality-vs-python-parity", "batch": "R2-Z3"}
