@@ -214,6 +214,36 @@ func TestSaveLoadRoundtrip(t *testing.T) {
 	}
 }
 
+func TestAggregate(t *testing.T) {
+	records := []*Memory{
+		{Key: "invariant-a", Body: "x", FirstSeen: "2026-06-04T00:00:00Z"},
+		{Key: "invariant-b", Body: "x", FirstSeen: "2026-06-04T00:00:00Z", DecidedAt: "2026-06-11T00:00:00Z", Reason: "r"},
+		{Key: "avoid-c", Body: "x1", FirstSeen: "2026-06-04T00:00:00Z", DecidedAt: "2026-06-05T00:00:00Z", Reason: "r"},
+		{Key: "avoid-c", Body: "x2", FirstSeen: "2026-07-04T00:00:00Z"}, // recreated
+	}
+	s := Aggregate(records)
+
+	if s.TotalRemembered != 2 || s.TotalForgotten != 2 {
+		t.Errorf("TotalRemembered=%d TotalForgotten=%d, want 2 and 2", s.TotalRemembered, s.TotalForgotten)
+	}
+	if s.Recreated != 1 {
+		t.Errorf("Recreated = %d, want 1", s.Recreated)
+	}
+	if got := s.ByPrefix["invariant"]; got == nil || got.Remembered != 1 || got.Forgotten != 1 {
+		t.Errorf("ByPrefix[invariant] = %+v, want {Remembered:1 Forgotten:1}", got)
+	}
+	if got := s.ByPrefix["avoid"]; got == nil || got.Remembered != 1 || got.Forgotten != 1 {
+		t.Errorf("ByPrefix[avoid] = %+v, want {Remembered:1 Forgotten:1}", got)
+	}
+	if len(s.SurvivalDurations) != 2 {
+		t.Fatalf("got %d survival durations, want 2 (one per forgotten record)", len(s.SurvivalDurations))
+	}
+	// sorted ascending: avoid-c survived 1 day, invariant-b survived 7 days.
+	if s.SurvivalDurations[0] != 24*time.Hour || s.SurvivalDurations[1] != 7*24*time.Hour {
+		t.Errorf("SurvivalDurations = %v, want [24h, 168h] ascending", s.SurvivalDurations)
+	}
+}
+
 func TestSaveIsAtomic(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "memories.jsonl")

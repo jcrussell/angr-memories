@@ -1,0 +1,40 @@
+{{define "dashboard.html"}}<!DOCTYPE html>
+<html lang="en">
+{{template "head" .}}
+<body>
+{{template "header" .}}
+<main class="container home">
+<article class="content">
+<p class="breadcrumb"><a href="{{url "/"}}">Home</a> / Dashboard</p>
+<h1>Dashboard</h1>
+<p class="lede">{{.Site.TotalRemembered}} remembered, {{.Site.TotalForgotten}} forgotten, across {{len .Site.Prefixes}} key-prefix families.</p>
+
+<section class="chart-section">
+<h2>Corpus size over time</h2>
+<p class="chart-caption">Running remembered-record count, one point per day with any change.</p>
+{{.Site.Dashboard.CorpusTimeline}}
+</section>
+
+<section class="chart-section">
+<h2>Prefix family sizes</h2>
+<p class="chart-caption">Remembered vs forgotten per key-prefix family.</p>
+{{.Site.Dashboard.PrefixSizes}}
+</section>
+
+<section class="chart-section">
+<h2>Survival time</h2>
+<p class="chart-caption">How long forgotten memories lasted, from first seen to forgotten.</p>
+{{.Site.Dashboard.SurvivalHistogram}}
+</section>
+
+<section class="chart-section">
+<h2>Most-cited memories</h2>
+<p class="chart-caption">Remembered keys mentioned by the most other remembered memories — load-bearing, and riskiest to forget without checking who cites them.</p>
+{{.Site.Dashboard.TopCited}}
+</section>
+</article>
+</main>
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

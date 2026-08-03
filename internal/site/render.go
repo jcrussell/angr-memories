@@ -67,6 +67,12 @@ func Render(s *Site, outDir string) error {
 		return err
 	}
 
+	if err := writePage(tpl, "dashboard.html", filepath.Join(outDir, "dashboard", "index.html"), pageData{
+		Site: s, Title: "Dashboard — angr-memories",
+	}); err != nil {
+		return err
+	}
+
 	for _, pi := range s.Prefixes {
 		if err := writePage(tpl, "prefix.html", filepath.Join(outDir, "prefix", pi.Name, "index.html"), pageData{
 			Site: s, Prefix: pi, Title: pi.Name + " — angr-memories",

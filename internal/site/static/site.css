@@ -79,3 +79,17 @@ h1 { font-size: 1.85rem; margin: 0 0 8px; }
 
 footer { border-top: 1px solid var(--border); margin-top: 40px; }
 footer .container { padding: 20px 24px; color: var(--fg-subtle); font-size: 0.85rem; }
+
+.chart-section { margin: 32px 0; }
+.chart-section h2 { font-size: 1.15rem; margin: 0 0 4px; }
+.chart-caption { color: var(--fg-subtle); font-size: 0.85rem; margin: 0 0 12px; }
+.chart { display: block; width: 100%; height: auto; max-width: 640px; }
+.chart-empty { color: var(--fg-subtle); font-size: 0.9rem; font-style: italic; }
+.chart-label, .chart-value, .chart-axis-label { font-size: 11px; fill: var(--fg-muted); }
+.chart-value { font-variant-numeric: tabular-nums; }
+.chart-axis-label-x { fill: var(--fg-subtle); }
+.chart-axis { stroke: var(--border); stroke-width: 1; }
+.chart-line { fill: none; stroke: var(--accent); stroke-width: 2; }
+.chart-bar-default { fill: var(--accent); }
+.chart-bar-remembered { fill: var(--remembered-fg); }
+.chart-bar-forgotten { fill: var(--forgotten-fg); }

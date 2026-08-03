@@ -58,7 +58,12 @@ angr-memories apply    --round R5 [--apply] [--force]                # apply a r
 `site` groups memories by key-prefix family (`invariant`, `avoid`, `z3`,
 `rust`, `benchmark`, `ops`, `v5a5`, `inspect`, `syscall`, and a `catch`-all)
 and renders one page per family — split into several pages for the largest
-families so no single page balloons past a reasonable size.
+families so no single page balloons past a reasonable size. It also renders
+a `/dashboard/` page: corpus size over time, prefix family sizes, a
+survival-time histogram, and the most-cited remembered keys (a proxy for
+"load-bearing, risky to forget"), each as inline SVG generated server-side
+— the site stays zero-JavaScript, so charts are baked into the static HTML
+rather than drawn client-side.
 
 `sync` runs `bd memories --json` against a live `bd`-backed project
 (auto-discovering its `.beads/` DB) and diffs the result against the
@@ -125,9 +130,10 @@ As of the last `sync`:
 ```
 memories.jsonl                the canonical data
 cmd/angr-memories/main.go     entrypoint
-internal/memory/              Memory struct, JSONL load/save, prefix + chunking logic
+internal/memory/              Memory struct, JSONL load/save, prefix + chunking + aggregate logic
 internal/prune/                pruning-round mechanics: triage tags, citation graph, manifest validate/apply
-internal/site/                static site generator (goldmark + Chroma, styled after byob-go-cli)
+internal/chart/                 hand-rolled inline-SVG chart primitives (bar, line) -- no charting dependency
+internal/site/                static site generator (goldmark + Chroma, styled after byob-go-cli); dashboard.go builds the /dashboard/ charts
 pkg/cmd/{site,stats,sync}/    CLI subcommands
 pkg/cmd/{triage,chunk,validate,apply}/  pruning-round CLI subcommands
 rounds/                        pruning-round artifacts: mandatory-keep.txt, review-instructions.md, rounds/<name>/

@@ -54,6 +54,7 @@ func TestSiteSmoke_writesExpectedFiles(t *testing.T) {
 
 	for _, p := range []string{
 		filepath.Join(out, "index.html"),
+		filepath.Join(out, "dashboard", "index.html"),
 		filepath.Join(out, "prefix", "invariant", "index.html"),
 		filepath.Join(out, "prefix", "avoid", "index.html"),
 		filepath.Join(out, "static", "site.css"),
@@ -70,5 +71,13 @@ func TestSiteSmoke_writesExpectedFiles(t *testing.T) {
 	}
 	if got := string(body); !strings.Contains(got, "<strong>bold</strong>") {
 		t.Errorf("expected markdown body rendered to HTML, got: %s", got)
+	}
+
+	dashboard, err := os.ReadFile(filepath.Join(out, "dashboard", "index.html"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := string(dashboard); !strings.Contains(got, "<svg") {
+		t.Errorf("expected the dashboard page to embed at least one inline SVG chart, got: %s", got)
 	}
 }

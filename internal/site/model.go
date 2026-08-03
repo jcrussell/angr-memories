@@ -19,6 +19,8 @@ type Site struct {
 	TotalRemembered int
 	TotalForgotten  int
 
+	Dashboard *Dashboard // pre-rendered charts for /dashboard/
+
 	BaseURL string // e.g. "" for local preview
 	RepoURL string
 }

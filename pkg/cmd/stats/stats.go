@@ -36,74 +36,36 @@ func NewCmdStats(f *cmdutil.Factory, runF func(*Options) error) *cobra.Command {
 	return cmd
 }
 
-type bucket struct{ remembered, forgotten int }
-
 func statsRun(opts *Options) error {
 	records, err := memory.Load(opts.MemoriesPath)
 	if err != nil {
 		return err
 	}
-
-	byPrefix := map[string]*bucket{}
-	var totalRemembered, totalForgotten int
-	var survivalDurations []time.Duration
-	incarnationsPerKey := map[string]int{}
-
-	for _, m := range records {
-		incarnationsPerKey[m.Key]++
-
-		p := memory.PrefixOf(m.Key)
-		b := byPrefix[p]
-		if b == nil {
-			b = &bucket{}
-			byPrefix[p] = b
-		}
-
-		if m.Remembered() {
-			b.remembered++
-			totalRemembered++
-			continue
-		}
-		b.forgotten++
-		totalForgotten++
-		if fs, err := time.Parse(time.RFC3339, m.FirstSeen); err == nil {
-			if da, err := time.Parse(time.RFC3339, m.DecidedAt); err == nil {
-				survivalDurations = append(survivalDurations, da.Sub(fs))
-			}
-		}
-	}
-
-	recreated := 0
-	for _, n := range incarnationsPerKey {
-		if n > 1 {
-			recreated++
-		}
-	}
+	s := memory.Aggregate(records)
 
 	out := opts.IO.Out
 	fmt.Fprintf(out, "total: %d remembered, %d forgotten (%d records, %d recreated key%s)\n",
-		totalRemembered, totalForgotten, len(records), recreated, plural(recreated))
+		s.TotalRemembered, s.TotalForgotten, len(records), s.Recreated, plural(s.Recreated))
 	fmt.Fprintln(out)
 
-	prefixes := make([]string, 0, len(byPrefix))
-	for p := range byPrefix {
+	prefixes := make([]string, 0, len(s.ByPrefix))
+	for p := range s.ByPrefix {
 		prefixes = append(prefixes, p)
 	}
 	sort.Strings(prefixes)
 	fmt.Fprintf(out, "%-12s %10s %10s\n", "prefix", "remembered", "forgotten")
 	for _, p := range prefixes {
-		b := byPrefix[p]
-		fmt.Fprintf(out, "%-12s %10d %10d\n", p, b.remembered, b.forgotten)
+		b := s.ByPrefix[p]
+		fmt.Fprintf(out, "%-12s %10d %10d\n", p, b.Remembered, b.Forgotten)
 	}
 
-	if len(survivalDurations) > 0 {
-		sort.Slice(survivalDurations, func(i, j int) bool { return survivalDurations[i] < survivalDurations[j] })
+	if len(s.SurvivalDurations) > 0 {
 		var total time.Duration
-		for _, d := range survivalDurations {
+		for _, d := range s.SurvivalDurations {
 			total += d
 		}
-		mean := total / time.Duration(len(survivalDurations))
-		median := survivalDurations[len(survivalDurations)/2]
+		mean := total / time.Duration(len(s.SurvivalDurations))
+		median := s.SurvivalDurations[len(s.SurvivalDurations)/2]
 		fmt.Fprintln(out)
 		fmt.Fprintf(out, "forgotten-memory survival time: mean %s, median %s\n",
 			roundToDay(mean), roundToDay(median))

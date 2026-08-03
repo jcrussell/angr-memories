@@ -104,6 +104,8 @@ func Walk(memoriesPath string) (*Site, error) {
 		s.Prefixes = append(s.Prefixes, pi)
 	}
 
+	s.Dashboard = buildDashboard(records)
+
 	return s, nil
 }
 
