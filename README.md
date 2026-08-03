@@ -48,7 +48,7 @@ just gets a second line with a later `first_seen` — group by `key`, sort by
 angr-memories site     --memories memories.jsonl --out _site   # render the browsable static site
 angr-memories stats    --memories memories.jsonl               # remembered/forgotten counts by prefix
 angr-memories sync     --source ~/repos/angr --memories memories.jsonl  # pull the live corpus, fold in changes
-angr-memories search   <query> [--prefix] [--all] [--fuzzy] [--limit 20]  # ranked search over memories.jsonl
+angr-memories search   <query> [--prefix] [--all] [--fuzzy] [--no-cache] [--limit 20]  # ranked search over memories.jsonl
 
 angr-memories triage   [--source] [--docs-dir] --out triage.jsonl   # heuristic tags per remembered key
 angr-memories chunk    --round R5 [--delta-since <RFC3339>]         # bucket remembered keys into review batches
@@ -66,12 +66,15 @@ survival-time histogram, and the most-cited remembered keys (a proxy for
 — the site stays zero-JavaScript, so charts are baked into the static HTML
 rather than drawn client-side.
 
-`search` builds a fresh in-memory [bleve](https://github.com/blevesearch/bleve)
-index from `memories.jsonl` on every invocation and ranks matches by
-relevance — no persisted index directory, so nothing can go stale after
-`sync`/`apply` change the archive (costs a couple of seconds on the full
-~1,300-remembered-record corpus; not sub-second, but simplicity over
-speed at this size). `<query>` is bleve's query-string syntax by default
+`search` ranks matches with a [bleve](https://github.com/blevesearch/bleve)
+index, cached on disk under the OS cache directory
+(`$XDG_CACHE_HOME/angr-memories` on Linux) and keyed by a content hash of
+`memories.jsonl`: an unchanged archive is a cache hit (~50ms on the real
+corpus); any change from `sync`/`apply` produces a new hash and rebuilds
+automatically on the next search (~0.6s), garbage-collecting the old
+entry. `--no-cache` skips the cache entirely (always rebuilds in-memory) —
+useful for a one-off run against a scratch `memories.jsonl` you don't want
+polluting the cache. `<query>` is bleve's query-string syntax by default
 (phrase/boolean operators); `--fuzzy` switches to edit-distance matching
 for typo-tolerant or near-duplicate lookups — useful during a pruning
 review to check "have I already written something like this" before

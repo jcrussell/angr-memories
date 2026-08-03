@@ -13,17 +13,21 @@ import (
 
 func TestNewCmdSearch_runFOverride(t *testing.T) {
 	var captured *Options
-	cmd := NewCmdSearch(&cmdutil.Factory{IOStreams: iostreams.System()}, func(o *Options) error {
+	fakeCacheDir := func() (string, error) { return "/fake/cache/dir", nil }
+	cmd := NewCmdSearch(&cmdutil.Factory{IOStreams: iostreams.System(), CacheDir: fakeCacheDir}, func(o *Options) error {
 		captured = o
 		return nil
 	})
-	cmd.SetArgs([]string{"solver eval", "--memories", "m.jsonl", "--prefix", "invariant", "--all", "--fuzzy", "--limit", "5"})
+	cmd.SetArgs([]string{"solver eval", "--memories", "m.jsonl", "--prefix", "invariant", "--all", "--fuzzy", "--no-cache", "--limit", "5"})
 	if err := cmd.Execute(); err != nil {
 		t.Fatal(err)
 	}
 	if captured.Query != "solver eval" || captured.MemoriesPath != "m.jsonl" || captured.Prefix != "invariant" ||
-		!captured.All || !captured.Fuzzy || captured.Limit != 5 {
+		!captured.All || !captured.Fuzzy || !captured.NoCache || captured.Limit != 5 {
 		t.Errorf("flags not wired: %+v", captured)
+	}
+	if captured.CacheDir == nil {
+		t.Error("expected NewCmdSearch to wire Options.CacheDir from the Factory")
 	}
 }
 
@@ -153,7 +157,7 @@ func TestSearchRun_limitCapsResults(t *testing.T) {
 	}
 }
 
-func TestBuildIndex_indexesOnlyLatestIncarnation(t *testing.T) {
+func TestLatestByKey_keepsOnlyTheLatestIncarnation(t *testing.T) {
 	dir := t.TempDir()
 	memPath := filepath.Join(dir, "memories.jsonl")
 	// Write two incarnations of the same key directly, oldest first, as
@@ -176,10 +180,7 @@ func TestBuildIndex_indexesOnlyLatestIncarnation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_, byKey, err := buildIndex(records)
-	if err != nil {
-		t.Fatalf("buildIndex: %v", err)
-	}
+	byKey := latestByKey(records)
 	if got := byKey["invariant-recreated-key"]; got.Body != "new body" {
 		t.Errorf("indexed body = %q, want the latest incarnation's body", got.Body)
 	}
