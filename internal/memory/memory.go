@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -45,7 +46,35 @@ func Load(path string) ([]*Memory, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", path, err)
 	}
+	if err := validateAtMostOneRememberedPerKey(out); err != nil {
+		return nil, fmt.Errorf("%s: %w", path, err)
+	}
 	return out, nil
+}
+
+// validateAtMostOneRememberedPerKey rejects a data-integrity violation: two
+// records for the same key that are both currently remembered (DecidedAt
+// == "") at once. The invariant this protects (documented at
+// internal/prune.BuildGraph and relied on there) is that a key has at most
+// one open incarnation at a time -- an older incarnation must be forgotten
+// (DecidedAt set) before a newer one can exist. Two simultaneously-open
+// records for one key would otherwise be silently double-counted by
+// Aggregate and mislabeled "recreated" even though no forget ever happened.
+// Only checked here, not in Parse -- a caller reading raw bytes for another
+// purpose (e.g. hashing them as a search cache key) shouldn't gain a new
+// failure mode from a check it doesn't need.
+func validateAtMostOneRememberedPerKey(records []*Memory) error {
+	seen := map[string]bool{}
+	for _, m := range records {
+		if !m.Remembered() {
+			continue
+		}
+		if seen[m.Key] {
+			return fmt.Errorf("key %q has more than one currently-remembered record", m.Key)
+		}
+		seen[m.Key] = true
+	}
+	return nil
 }
 
 // Parse reads Memory records from r, one JSON object per line -- the same
@@ -101,7 +130,9 @@ func Save(path string, records []*Memory) (err error) {
 		return err
 	}
 	tmpPath := tmp.Name()
+	TrackPending(tmpPath)
 	defer func() {
+		UntrackPending(tmpPath)
 		if err != nil {
 			os.Remove(tmpPath)
 		}
@@ -128,6 +159,43 @@ func Save(path string, records []*Memory) (err error) {
 		return err
 	}
 	return os.Rename(tmpPath, path)
+}
+
+var (
+	pendingMu    sync.Mutex
+	pendingPaths = map[string]bool{}
+)
+
+// TrackPending registers a temp file or directory that must be removed if
+// the process is killed before it can clean up after itself normally.
+// Go doesn't run deferred cleanup (like Save's own os.Remove(tmpPath)) on
+// an unhandled SIGINT/SIGTERM, so a long write killed mid-flight would
+// otherwise leave the temp file behind forever. Call UntrackPending once
+// path is either renamed into place or removed through the caller's own
+// normal cleanup path.
+func TrackPending(path string) {
+	pendingMu.Lock()
+	pendingPaths[path] = true
+	pendingMu.Unlock()
+}
+
+// UntrackPending reverses TrackPending.
+func UntrackPending(path string) {
+	pendingMu.Lock()
+	delete(pendingPaths, path)
+	pendingMu.Unlock()
+}
+
+// CleanupPending removes every currently-tracked pending path and clears
+// the registry. Meant to be called from a signal handler right before the
+// process exits.
+func CleanupPending() {
+	pendingMu.Lock()
+	defer pendingMu.Unlock()
+	for p := range pendingPaths {
+		os.RemoveAll(p)
+		delete(pendingPaths, p)
+	}
 }
 
 // families is the key-prefix grouping validated by the historical

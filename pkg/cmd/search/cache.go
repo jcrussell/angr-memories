@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
+	"time"
 
 	"github.com/blevesearch/bleve/v2"
 
@@ -14,8 +14,22 @@ import (
 )
 
 // tmpDirPrefix marks an in-progress build's temp directory under the cache
-// root -- gcStaleEntries must never remove one of these, even mid-build.
+// root -- gcStaleEntries's grace period is what keeps one of these safe
+// while its build is still running (see gcGracePeriod).
 const tmpDirPrefix = ".tmp-"
+
+// gcGracePeriod is how long a non-keep entry survives gcStaleEntries after
+// its last modification, before being treated as safe to remove. This
+// covers two races: another process's search still has a just-evicted
+// entry open via bleve.Open when this run's GC would otherwise delete it
+// out from under that read (bleve tolerates this -- scorch retries -- but
+// it prints alarming "unable to load snapshot" stderr noise for a live
+// process); and a .tmp-* build directory abandoned by a crashed/killed
+// process, which used to be skipped forever and never reclaimed. Real
+// search invocations open+query in tens of milliseconds to under a
+// second (cold build ~0.6-0.7s), so this bounds the race without turning
+// the cache into an unbounded-growth directory.
+const gcGracePeriod = 30 * time.Second
 
 // cacheSchemaVersion namespaces the on-disk cache. Bump it whenever
 // indexedDoc's shape (or the bleve version) changes in a way that could
@@ -39,12 +53,13 @@ func openCachedOrBuildIndex(cacheDir string, fileBytes []byte, byKey map[string]
 	root := filepath.Join(cacheDir, "search-index-"+cacheSchemaVersion)
 	target := filepath.Join(root, contentHashHex(fileBytes))
 
-	if idx, err := bleve.Open(target); err == nil {
+	if idx, ok := openLiveIndex(target, len(byKey)); ok {
 		return idx, nil
 	}
-	// Any Open failure (not found, corrupt, incompatible bleve version)
-	// falls through to a full rebuild. A bad cache entry is never fatal --
-	// worst case this run pays the build cost the cache exists to avoid.
+	// Any Open/liveness failure (not found, corrupt, incompatible bleve
+	// version, or a doc-count short of expected) falls through to a full
+	// rebuild. A bad cache entry is never fatal -- worst case this run
+	// pays the build cost the cache exists to avoid.
 
 	idx, err := buildAndInstallIndex(root, target, byKey)
 	if err != nil {
@@ -52,6 +67,27 @@ func openCachedOrBuildIndex(cacheDir string, fileBytes []byte, byKey map[string]
 	}
 	gcStaleEntries(root, filepath.Base(target))
 	return idx, nil
+}
+
+// openLiveIndex opens path and reports whether it's actually usable: bleve's
+// scorch backend tolerates a missing/corrupt segment by logging a warning
+// and silently excluding it from results, so a successful Open (and even a
+// successful, error-free DocCount) doesn't guarantee every document is
+// really there. Comparing the count against the known-good wantDocs is what
+// catches that -- a missing segment never produces a Go error, only a
+// quietly-short count. On any failure this closes the index (if opened at
+// all) and returns ok=false, leaving the caller to rebuild.
+func openLiveIndex(path string, wantDocs int) (idx bleve.Index, ok bool) {
+	idx, err := bleve.Open(path)
+	if err != nil {
+		return nil, false
+	}
+	n, err := idx.DocCount()
+	if err != nil || n != uint64(wantDocs) {
+		idx.Close()
+		return nil, false
+	}
+	return idx, true
 }
 
 // contentHashHex is the cache key for a given memories.jsonl content.
@@ -76,6 +112,8 @@ func buildAndInstallIndex(root, target string, byKey map[string]*memory.Memory) 
 	if err != nil {
 		return nil, fmt.Errorf("create search cache temp dir: %w", err)
 	}
+	memory.TrackPending(tmp)
+	defer memory.UntrackPending(tmp)
 	// os.MkdirTemp creates the dir; bleve.New refuses to create an index at
 	// a path that already exists, so remove it and let bleve create it
 	// fresh at the same name.
@@ -106,7 +144,7 @@ func buildAndInstallIndex(root, target string, byKey map[string]*memory.Memory) 
 		if renameErr == nil {
 			break
 		}
-		if idx, openErr := bleve.Open(target); openErr == nil {
+		if idx, ok := openLiveIndex(target, len(byKey)); ok {
 			os.RemoveAll(tmp)
 			return idx, nil
 		}
@@ -129,16 +167,19 @@ func buildAndInstallIndex(root, target string, byKey map[string]*memory.Memory) 
 }
 
 // gcStaleEntries removes every entry under root except keep (the content
-// hash just installed) -- otherwise every distinct memories.jsonl content
-// (every sync/apply run) leaves its old index behind forever. This is a
-// single-slot cache, not an LRU: alternating between two different
-// memories.jsonl contents against the same cache root evicts on every
-// switch. Entries named with tmpDirPrefix are always skipped, never just
-// best-effort-ignored-on-error -- one is a concurrent invocation's
-// in-progress build (buildAndInstallIndex builds into one before renaming
-// it away), and deleting it out from under that build would turn its own
-// install rename into a hard failure. Removal of any other stale entry is
-// best-effort: an error there just means it lingers until the next GC.
+// hash just installed) and anything younger than gcGracePeriod -- otherwise
+// every distinct memories.jsonl content (every sync/apply run) leaves its
+// old index behind forever. This is a single-slot cache, not an LRU:
+// alternating between two different memories.jsonl contents against the
+// same cache root evicts on every switch (once each entry ages past the
+// grace period). The age check applies equally to tmpDirPrefix entries --
+// a concurrent invocation's in-progress build lives in one of these until
+// its own install rename moves it out, and a build takes well under the
+// grace period, so a tmp dir that's still there after it is either about
+// to finish (protected by the age check for a little longer) or abandoned
+// by a crashed/killed process (worth reclaiming, unlike before). Removal
+// of any stale entry is best-effort: an error there just means it lingers
+// until the next GC.
 func gcStaleEntries(root, keep string) {
 	entries, err := os.ReadDir(root)
 	if err != nil {
@@ -146,7 +187,11 @@ func gcStaleEntries(root, keep string) {
 	}
 	for _, e := range entries {
 		name := e.Name()
-		if name == keep || strings.HasPrefix(name, tmpDirPrefix) {
+		if name == keep {
+			continue
+		}
+		info, err := e.Info()
+		if err != nil || time.Since(info.ModTime()) < gcGracePeriod {
 			continue
 		}
 		os.RemoveAll(filepath.Join(root, name))

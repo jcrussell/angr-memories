@@ -38,11 +38,14 @@ func Run(root *cobra.Command, args []string, ios *iostreams.IOStreams) int {
 	}
 }
 
-// classify wraps cobra-emitted "unknown command" and "required flag(s) ..."
-// errors as FlagError so they exit 2 alongside flag-parse errors.
-// MarkFlagRequired's violation (e.g. `sync` without --source) has no
-// public sentinel either, same as unknown-command -- match on the message
-// prefix cobra emits in (*Command).ValidateRequiredFlags.
+// classify wraps cobra-emitted "unknown command", "required flag(s) ...",
+// and "accepts N arg(s)..." errors as FlagError so they exit 2 alongside
+// flag-parse errors. None of these have a public sentinel to match on
+// (MarkFlagRequired's violation, e.g. `sync` without --source; an unknown
+// subcommand; or an Args validator like ExactArgs rejecting the wrong
+// positional arg count, e.g. `search` with no query) -- match on the
+// message prefixes cobra emits in (*Command).ValidateRequiredFlags,
+// (*Command).Find, and (*Command).ValidateArgs respectively.
 func classify(err error) error {
 	if err == nil {
 		return nil
@@ -52,7 +55,8 @@ func classify(err error) error {
 		return err
 	}
 	if strings.HasPrefix(err.Error(), "unknown command ") ||
-		strings.HasPrefix(err.Error(), "required flag(s) ") {
+		strings.HasPrefix(err.Error(), "required flag(s) ") ||
+		strings.HasPrefix(err.Error(), "accepts ") {
 		return &cmdutil.FlagError{Err: err}
 	}
 	return err

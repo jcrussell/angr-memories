@@ -57,7 +57,7 @@ func Validate(rows []Row, batchKeys map[string]bool, mandatoryKeep map[string]bo
 			errs = append(errs, fmt.Sprintf("%s: bad verdict %q", r.Key, r.Verdict))
 			continue
 		}
-		if mandatoryKeep[r.Key] && r.Verdict != VerdictKeep && !r.Canonical {
+		if mandatoryKeep[r.Key] && r.Verdict != VerdictKeep && !canonical[r.Key] {
 			errs = append(errs, fmt.Sprintf("%s: mandatory-keep violated (verdict=%s)", r.Key, r.Verdict))
 		}
 		switch r.Verdict {

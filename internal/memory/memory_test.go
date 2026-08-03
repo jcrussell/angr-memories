@@ -228,6 +228,46 @@ func TestParse(t *testing.T) {
 	})
 }
 
+func TestLoad_atMostOneRememberedPerKey(t *testing.T) {
+	write := func(t *testing.T, lines string) string {
+		t.Helper()
+		dir := t.TempDir()
+		path := filepath.Join(dir, "memories.jsonl")
+		if err := os.WriteFile(path, []byte(lines), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		return path
+	}
+
+	t.Run("two simultaneously-remembered records for one key is rejected", func(t *testing.T) {
+		path := write(t, `{"key":"dup","body":"first version","first_seen":"2026-01-01T00:00:00Z"}`+"\n"+
+			`{"key":"dup","body":"second version","first_seen":"2026-01-02T00:00:00Z"}`+"\n")
+		if _, err := Load(path); err == nil {
+			t.Error("expected Load to reject two simultaneously-remembered records for the same key")
+		}
+	})
+
+	t.Run("Parse (not Load) does not reject the same data", func(t *testing.T) {
+		input := `{"key":"dup","body":"first version","first_seen":"2026-01-01T00:00:00Z"}` + "\n" +
+			`{"key":"dup","body":"second version","first_seen":"2026-01-02T00:00:00Z"}` + "\n"
+		if _, err := Parse(strings.NewReader(input)); err != nil {
+			t.Errorf("Parse should not apply Load's duplicate-key check, got: %v", err)
+		}
+	})
+
+	t.Run("a forgotten-then-recreated key is accepted", func(t *testing.T) {
+		path := write(t, `{"key":"k","body":"old","first_seen":"2026-01-01T00:00:00Z","decided_at":"2026-01-02T00:00:00Z","reason":"stale"}`+"\n"+
+			`{"key":"k","body":"new","first_seen":"2026-02-01T00:00:00Z"}`+"\n")
+		got, err := Load(path)
+		if err != nil {
+			t.Fatalf("expected a legitimate recreate (forgotten, then remembered again) to be accepted, got: %v", err)
+		}
+		if len(got) != 2 {
+			t.Fatalf("got %d records, want 2", len(got))
+		}
+	})
+}
+
 func TestSaveLoadRoundtrip(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "memories.jsonl")
@@ -330,4 +370,82 @@ func TestSaveIsAtomic(t *testing.T) {
 	// temp-file + rename (this test only proves no temp litter and correct
 	// final content; the crash-mid-write case can't be simulated cheaply
 	// in a unit test, but the temp+rename shape is what makes it safe).
+}
+
+// TestCleanupPending covers the registry a signal handler calls into on
+// SIGINT/SIGTERM to reclaim temp files/dirs a killed process's own
+// deferred cleanup never got to run. No real signal is involved -- that
+// can't be tested deterministically -- just the registry's own bookkeeping.
+func TestCleanupPending(t *testing.T) {
+	t.Run("removes every tracked path", func(t *testing.T) {
+		dir := t.TempDir()
+		a := filepath.Join(dir, "a.tmp")
+		b := filepath.Join(dir, "b.tmp")
+		if err := os.WriteFile(a, []byte("x"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(b, []byte("x"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+
+		TrackPending(a)
+		TrackPending(b)
+		CleanupPending()
+
+		if _, err := os.Stat(a); !os.IsNotExist(err) {
+			t.Errorf("expected %s to be removed, stat err: %v", a, err)
+		}
+		if _, err := os.Stat(b); !os.IsNotExist(err) {
+			t.Errorf("expected %s to be removed, stat err: %v", b, err)
+		}
+	})
+
+	t.Run("untracked path is left alone", func(t *testing.T) {
+		dir := t.TempDir()
+		untracked := filepath.Join(dir, "keep.tmp")
+		if err := os.WriteFile(untracked, []byte("x"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+
+		CleanupPending() // nothing tracked -- must be a no-op
+
+		if _, err := os.Stat(untracked); err != nil {
+			t.Errorf("expected untracked file to survive, got: %v", err)
+		}
+	})
+
+	t.Run("UntrackPending removes a path from the pending set", func(t *testing.T) {
+		dir := t.TempDir()
+		path := filepath.Join(dir, "safe.tmp")
+		if err := os.WriteFile(path, []byte("x"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+
+		TrackPending(path)
+		UntrackPending(path)
+		CleanupPending()
+
+		if _, err := os.Stat(path); err != nil {
+			t.Errorf("expected untracked-before-cleanup file to survive, got: %v", err)
+		}
+	})
+}
+
+// A successful Save must not leave its temp path registered as pending --
+// otherwise a signal arriving after Save returns would try to remove
+// (and, worse, could race-remove) the now-renamed real file's old temp
+// name, which no longer refers to anything meaningful.
+func TestSave_untracksPendingOnSuccess(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "memories.jsonl")
+	if err := Save(path, []*Memory{{Key: "k", FirstSeen: "2026-06-04T00:00:00Z"}}); err != nil {
+		t.Fatalf("Save: %v", err)
+	}
+
+	pendingMu.Lock()
+	n := len(pendingPaths)
+	pendingMu.Unlock()
+	if n != 0 {
+		t.Errorf("expected no pending paths after a successful Save, got %d", n)
+	}
 }

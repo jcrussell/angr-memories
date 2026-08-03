@@ -77,6 +77,18 @@ func TestValidate(t *testing.T) {
 		}
 	})
 
+	t.Run("mandatory-keep key cannot bypass the check with a stray canonical flag", func(t *testing.T) {
+		rows := []Row{
+			{Key: "a", Verdict: VerdictForget, Canonical: true, Reason: "x"},
+			{Key: "b", Verdict: VerdictKeep},
+			{Key: "c", Verdict: VerdictKeep},
+		}
+		errs := Validate(rows, batch, map[string]bool{"a": true})
+		if !containsSubstring(errs, "mandatory-keep violated") {
+			t.Errorf("expected a mandatory-keep error (canonical:true on a non-merge verdict must not exempt it), got %v", errs)
+		}
+	})
+
 	t.Run("merge canonical without merged_body is rejected", func(t *testing.T) {
 		rows := []Row{
 			{Key: "a", Verdict: VerdictMerge, Canonical: true},

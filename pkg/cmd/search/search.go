@@ -11,6 +11,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 
 	"github.com/blevesearch/bleve/v2"
@@ -60,6 +61,9 @@ func NewCmdSearch(f *cmdutil.Factory, runF func(*Options) error) *cobra.Command 
 			"phrase/boolean operators); --fuzzy switches to edit-distance matching " +
 			"instead, for typo-tolerant or near-duplicate lookups. Remembered records " +
 			"only by default; --all includes forgotten ones.",
+		Example: `  angr-memories search "constraint solver"
+  angr-memories search --fuzzy solvr
+  angr-memories search --memories m.jsonl -- -exclude-this-term`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			opts.Query = args[0]
@@ -133,6 +137,16 @@ func searchRun(opts *Options) error {
 	if err != nil {
 		return fmt.Errorf("search: %w", err)
 	}
+	// bleve doesn't guarantee a stable tie-break for equal scores, and the
+	// on-disk vs. in-memory backends order ties differently -- sort by key
+	// as a deterministic secondary key so --no-cache and cached runs (and
+	// repeated runs generally) produce identical output.
+	sort.SliceStable(res.Hits, func(i, j int) bool {
+		if res.Hits[i].Score != res.Hits[j].Score {
+			return res.Hits[i].Score > res.Hits[j].Score
+		}
+		return res.Hits[i].ID < res.Hits[j].ID
+	})
 
 	out := opts.IO.Out
 	shown := 0

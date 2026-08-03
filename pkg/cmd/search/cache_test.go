@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/blevesearch/bleve/v2"
 
@@ -77,13 +78,17 @@ func TestOpenCachedOrBuildIndex_contentChangeRebuildsAndGCsOldEntry(t *testing.T
 	}
 	idx1.Close()
 
+	root := filepath.Join(cacheDir, "search-index-"+cacheSchemaVersion)
+	// The old entry only gets GC'd once it's aged past gcGracePeriod --
+	// backdate it here to simulate that, rather than sleeping in a test.
+	backdateAll(t, root, gcGracePeriod*2)
+
 	idx2, err := openCachedOrBuildIndex(cacheDir, []byte("version-2"), byKey)
 	if err != nil {
 		t.Fatalf("second build (different content): %v", err)
 	}
 	defer idx2.Close()
 
-	root := filepath.Join(cacheDir, "search-index-"+cacheSchemaVersion)
 	entries, err := os.ReadDir(root)
 	if err != nil {
 		t.Fatal(err)
@@ -120,6 +125,44 @@ func TestOpenCachedOrBuildIndex_corruptCacheEntryFallsBackToRebuild(t *testing.T
 	assertIndexHasDoc(t, idx, "invariant-solver-eval-timing")
 }
 
+// bleve.Open succeeding doesn't mean every segment file is intact -- a
+// missing/corrupt segment inside an otherwise-openable index needs its own
+// liveness check (DocCount) to be caught, per the code's own claim that
+// "any Open failure...falls through to a full rebuild" (finding from an
+// adversarial concurrency pass: a deleted segment file used to slip past
+// this and only surface as a runtime error on the actual query).
+func TestOpenCachedOrBuildIndex_missingSegmentFileTriggersRebuild(t *testing.T) {
+	cacheDir := t.TempDir()
+	content := []byte("memories-v1")
+	byKey := sampleByKey()
+
+	idx, err := openCachedOrBuildIndex(cacheDir, content, byKey)
+	if err != nil {
+		t.Fatalf("initial build: %v", err)
+	}
+	idx.Close()
+
+	root := filepath.Join(cacheDir, "search-index-"+cacheSchemaVersion)
+	target := filepath.Join(root, contentHashHex(content))
+	segments, err := filepath.Glob(filepath.Join(target, "store", "*.zap"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(segments) == 0 {
+		t.Fatalf("expected at least one segment file under %s/store", target)
+	}
+	if err := os.Remove(segments[0]); err != nil {
+		t.Fatal(err)
+	}
+
+	idx2, err := openCachedOrBuildIndex(cacheDir, content, byKey)
+	if err != nil {
+		t.Fatalf("expected a missing segment to be silently rebuilt, got error: %v", err)
+	}
+	defer idx2.Close()
+	assertIndexHasDoc(t, idx2, "invariant-solver-eval-timing")
+}
+
 func TestBuildAndInstallIndex_targetAlreadyBuiltByAnotherRunIsReused(t *testing.T) {
 	root := t.TempDir()
 	byKey := sampleByKey()
@@ -146,6 +189,7 @@ func TestGCStaleEntries_removesEverythingExceptKeep(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
+	backdateAll(t, root, gcGracePeriod*2)
 	gcStaleEntries(root, "keep-me")
 
 	entries, err := os.ReadDir(root)
@@ -157,28 +201,64 @@ func TestGCStaleEntries_removesEverythingExceptKeep(t *testing.T) {
 	}
 }
 
-// A concurrent invocation's in-progress build lives in a tmpDirPrefix
-// directory under root until its own install rename moves it out. GC must
-// never remove one of these -- doing so would yank the build's source out
-// from under its own rename, turning a harmless race into a hard failure
-// for the other process (finding from peer review of the initial version).
-func TestGCStaleEntries_neverRemovesInProgressTmpDirs(t *testing.T) {
+// A stale entry that's younger than the grace period must survive GC --
+// another process may still have it open (e.g. a concurrent `search`
+// reading a just-evicted cache entry, or an in-progress .tmp-* build).
+// Deleting it out from under that reader is exactly the race this grace
+// period exists to bound (finding from an adversarial concurrency pass).
+func TestGCStaleEntries_recentEntriesSurviveTheGracePeriod(t *testing.T) {
 	root := t.TempDir()
-	inProgress := filepath.Join(root, tmpDirPrefix+"abc123")
-	if err := os.MkdirAll(inProgress, 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.MkdirAll(filepath.Join(root, "stale-hash"), 0o755); err != nil {
-		t.Fatal(err)
+	for _, name := range []string{"stale-hash", tmpDirPrefix + "abc123"} {
+		if err := os.MkdirAll(filepath.Join(root, name), 0o755); err != nil {
+			t.Fatal(err)
+		}
 	}
 
 	gcStaleEntries(root, "current-hash")
 
-	if _, err := os.Stat(inProgress); err != nil {
-		t.Errorf("expected the in-progress tmp dir to survive GC, got: %v", err)
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		t.Fatal(err)
 	}
-	if _, err := os.Stat(filepath.Join(root, "stale-hash")); err == nil {
-		t.Error("expected the actually-stale entry to still be removed")
+	if len(entries) != 2 {
+		t.Errorf("expected both recently-created entries to survive GC, got %v", entries)
+	}
+}
+
+// Once an entry (tmp or not) ages past the grace period, GC reclaims it --
+// this is what prevents an abandoned .tmp-* build directory from a
+// crashed/killed process from leaking forever.
+func TestGCStaleEntries_removesEntriesOlderThanTheGracePeriod(t *testing.T) {
+	root := t.TempDir()
+	for _, name := range []string{"stale-hash", tmpDirPrefix + "abandoned"} {
+		if err := os.MkdirAll(filepath.Join(root, name), 0o755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	backdateAll(t, root, gcGracePeriod*2)
+
+	gcStaleEntries(root, "current-hash")
+
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != 0 {
+		t.Errorf("expected both aged-out entries to be removed, got %v", entries)
+	}
+}
+
+func backdateAll(t *testing.T, root string, age time.Duration) {
+	t.Helper()
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	old := time.Now().Add(-age)
+	for _, e := range entries {
+		if err := os.Chtimes(filepath.Join(root, e.Name()), old, old); err != nil {
+			t.Fatal(err)
+		}
 	}
 }
 

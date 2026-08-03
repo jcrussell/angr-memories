@@ -157,6 +157,38 @@ func TestSearchRun_limitCapsResults(t *testing.T) {
 	}
 }
 
+// bleve doesn't guarantee a stable tie-break, and the on-disk vs. in-memory
+// backends have been observed to order equal-score hits differently. Two
+// records with identical bodies force a tie, so this pins the deterministic
+// key-order tiebreak searchRun applies after bleve's own scoring.
+func TestSearchRun_tiedScoresAreDeterministicallyOrdered(t *testing.T) {
+	memPath := writeMemories(t, []*memory.Memory{
+		{Key: "invariant-zzz-topic", Body: "identical body text for scoring", FirstSeen: "2026-06-01T00:00:00Z"},
+		{Key: "invariant-aaa-topic", Body: "identical body text for scoring", FirstSeen: "2026-06-01T00:00:00Z"},
+	})
+
+	io, _, out, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, Query: "identical body text", Limit: 20, NoCache: true}
+	if err := searchRun(opts); err != nil {
+		t.Fatalf("searchRun (no-cache): %v", err)
+	}
+
+	cacheDir := t.TempDir()
+	io2, _, out2, _ := iostreams.Test()
+	opts2 := &Options{
+		IO: io2, CacheDir: func() (string, error) { return cacheDir, nil },
+		MemoriesPath: memPath, Query: "identical body text", Limit: 20,
+	}
+	if err := searchRun(opts2); err != nil {
+		t.Fatalf("searchRun (cached): %v", err)
+	}
+
+	if out.String() != out2.String() {
+		t.Errorf("expected identical output for tied scores between --no-cache and cached runs, got:\n--no-cache--\n%s\n--cached--\n%s",
+			out.String(), out2.String())
+	}
+}
+
 func TestLatestByKey_keepsOnlyTheLatestIncarnation(t *testing.T) {
 	dir := t.TempDir()
 	memPath := filepath.Join(dir, "memories.jsonl")

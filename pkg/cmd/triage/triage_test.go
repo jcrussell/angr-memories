@@ -90,6 +90,44 @@ func TestTriageRun_writesOneRowPerRememberedKey(t *testing.T) {
 	}
 }
 
+func TestTriageRun_warnsAboutUnverifiedClosedOnlyWithoutSource(t *testing.T) {
+	dir := t.TempDir()
+	memPath := filepath.Join(dir, "memories.jsonl")
+	if err := memory.Save(memPath, []*memory.Memory{
+		{Key: "invariant-alpha", Body: "see angr-abc123 for context", FirstSeen: "2026-06-01T00:00:00Z"},
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	io, _, _, errOut := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, Out: filepath.Join(dir, "triage.jsonl"), Timeout: 30}
+	if err := triageRun(opts); err != nil {
+		t.Fatalf("triageRun: %v", err)
+	}
+	if !strings.Contains(errOut.String(), "warning: --source not set") {
+		t.Errorf("expected an unverified-closed_only warning on stderr, got:\n%s", errOut.String())
+	}
+}
+
+func TestTriageRun_noWarningWhenNoClosedOnlyTags(t *testing.T) {
+	dir := t.TempDir()
+	memPath := filepath.Join(dir, "memories.jsonl")
+	if err := memory.Save(memPath, []*memory.Memory{
+		{Key: "invariant-alpha", Body: "plain prose, no bead references", FirstSeen: "2026-06-01T00:00:00Z"},
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	io, _, _, errOut := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, Out: filepath.Join(dir, "triage.jsonl"), Timeout: 30}
+	if err := triageRun(opts); err != nil {
+		t.Fatalf("triageRun: %v", err)
+	}
+	if errOut.String() != "" {
+		t.Errorf("expected no warning when nothing is tagged closed_only, got:\n%s", errOut.String())
+	}
+}
+
 func TestLoadDocsText_concatenatesRSTFilesOnly(t *testing.T) {
 	dir := t.TempDir()
 	if err := os.MkdirAll(filepath.Join(dir, "sub"), 0o755); err != nil {

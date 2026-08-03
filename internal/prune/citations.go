@@ -44,7 +44,7 @@ func BuildGraph(records []*memory.Memory) *Graph {
 			if candidate == key || len(candidate) < minCiteKeyLen {
 				continue
 			}
-			if strings.Contains(m.Body, candidate) {
+			if hasWordBoundaryMatch(m.Body, candidate) {
 				cited = append(cited, candidate)
 			}
 		}
@@ -61,4 +61,30 @@ func BuildGraph(records []*memory.Memory) *Graph {
 		sort.Strings(g.CitedBy[k])
 	}
 	return g
+}
+
+// hasWordBoundaryMatch reports whether candidate appears in body as a
+// standalone key, not merely as a substring of a longer token (e.g. a hash
+// or compound word that happens to contain it). Keys are exclusively
+// lowercase alnum + hyphen (see memory.PrefixOf's callers), so any adjacent
+// key-char on either side of a match disqualifies it.
+func hasWordBoundaryMatch(body, candidate string) bool {
+	for i := 0; ; {
+		j := strings.Index(body[i:], candidate)
+		if j < 0 {
+			return false
+		}
+		start := i + j
+		end := start + len(candidate)
+		beforeOK := start == 0 || !isKeyChar(body[start-1])
+		afterOK := end == len(body) || !isKeyChar(body[end])
+		if beforeOK && afterOK {
+			return true
+		}
+		i = start + 1
+	}
+}
+
+func isKeyChar(b byte) bool {
+	return b == '-' || (b >= 'a' && b <= 'z') || (b >= '0' && b <= '9')
 }

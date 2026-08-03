@@ -7,7 +7,9 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"os/exec"
 	"time"
 
@@ -81,7 +83,12 @@ func syncRun(opts *Options) error {
 	}
 
 	records, err := memory.Load(opts.MemoriesPath)
-	if err != nil {
+	if errors.Is(err, fs.ErrNotExist) {
+		// No archive at this path yet -- sync's job is to create one, so
+		// seed from empty instead of requiring a pre-existing (even if
+		// empty) file.
+		records = nil
+	} else if err != nil {
 		return err
 	}
 
@@ -131,7 +138,7 @@ func sanityCheckLive(live map[string]string, open []*memory.Memory) error {
 		}
 	}
 	if frac := float64(wouldClose) / float64(len(open)); frac > maxCloseFraction {
-		return fmt.Errorf("live snapshot would close %d/%d (%.0f%%) of currently-remembered records, "+
+		return fmt.Errorf("live snapshot would close %d/%d (%.1f%%) of currently-remembered records, "+
 			"above the %.0f%% sanity threshold -- refusing; pass --force if this is genuinely correct",
 			wouldClose, len(open), frac*100, maxCloseFraction*100)
 	}
@@ -145,7 +152,7 @@ func sanityCheckLive(live map[string]string, open []*memory.Memory) error {
 // that bd's stderr can't be trusted mixed into stdout.
 func liveSnapshot(dir string, timeout time.Duration) (map[string]string, error) {
 	if dir == "" {
-		return nil, fmt.Errorf("--source is required")
+		return nil, cmdutil.FlagErrorf("--source is required")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)

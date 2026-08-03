@@ -1,9 +1,15 @@
 package sync
 
 import (
+	"errors"
+	"os"
+	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/jcrussell/angr-memories/internal/memory"
+	"github.com/jcrussell/angr-memories/pkg/cmdutil"
+	"github.com/jcrussell/angr-memories/pkg/iostreams"
 )
 
 func openRecords(n int) []*memory.Memory {
@@ -93,4 +99,60 @@ func TestSanityCheckLive_NoClosuresAlwaysPasses(t *testing.T) {
 	if err := sanityCheckLive(live, open); err != nil {
 		t.Errorf("no closures should never be rejected, got: %v", err)
 	}
+}
+
+// liveSnapshot's own "--source is required" check must exit 2 like every
+// other flag-validation error, not 1 -- it's currently only reachable by a
+// caller bypassing cobra's MarkFlagRequired("source"), but that's exactly
+// what a test calling syncRun/liveSnapshot directly does.
+func TestLiveSnapshot_EmptySourceIsAFlagError(t *testing.T) {
+	_, err := liveSnapshot("", time.Second)
+	if err == nil {
+		t.Fatal("expected an error for an empty --source")
+	}
+	var fe *cmdutil.FlagError
+	if !errors.As(err, &fe) {
+		t.Errorf("expected a *cmdutil.FlagError so it maps to exit code 2, got %T: %v", err, err)
+	}
+}
+
+// A truly nonexistent --memories path (not even an empty file) must
+// bootstrap a fresh archive, since creating the archive is sync's job.
+func TestSyncRun_bootstrapsFromNonexistentMemoriesPath(t *testing.T) {
+	sourceDir := t.TempDir()
+	installFakeBd(t, `{"fresh-key-one":"body one","fresh-key-two":"body two"}`)
+
+	memPath := filepath.Join(t.TempDir(), "does-not-exist.jsonl")
+	io, _, _, _ := iostreams.Test()
+	opts := &Options{
+		IO:           io,
+		Source:       sourceDir,
+		MemoriesPath: memPath,
+		Timeout:      5 * time.Second,
+	}
+
+	if err := syncRun(opts); err != nil {
+		t.Fatalf("syncRun: %v", err)
+	}
+
+	records, err := memory.Load(memPath)
+	if err != nil {
+		t.Fatalf("expected sync to create %s, got: %v", memPath, err)
+	}
+	if len(records) != 2 {
+		t.Fatalf("expected 2 fresh records, got %d: %v", len(records), records)
+	}
+}
+
+// installFakeBd puts a fake `bd` executable on PATH that answers `bd
+// memories --json` with jsonOut, so syncRun can be exercised without a
+// real bd binary or .beads/ database.
+func installFakeBd(t *testing.T, jsonOut string) {
+	t.Helper()
+	dir := t.TempDir()
+	script := "#!/bin/sh\ncat <<'FAKE_BD_EOF'\n" + jsonOut + "\nFAKE_BD_EOF\n"
+	if err := os.WriteFile(filepath.Join(dir, "bd"), []byte(script), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	t.Setenv("PATH", dir+string(os.PathListSeparator)+os.Getenv("PATH"))
 }

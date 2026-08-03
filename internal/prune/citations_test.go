@@ -56,6 +56,28 @@ func TestBuildGraph(t *testing.T) {
 		}
 	})
 
+	t.Run("does not match a key embedded inside a longer unrelated token", func(t *testing.T) {
+		records := []*memory.Memory{
+			{Key: "arm-return-addr", Body: "some unrelated body"},
+			{Key: "avoid-cargo-fmt-scope-creep", Body: "build hash 9f3arm-return-addr8b1c2d, unrelated"},
+		}
+		g := BuildGraph(records)
+		if len(g.Cites) != 0 {
+			t.Errorf("expected no citation from a substring collision, got %v", g.Cites)
+		}
+	})
+
+	t.Run("still matches a key adjacent to punctuation like a real reference", func(t *testing.T) {
+		records := []*memory.Memory{
+			{Key: "arm-return-addr", Body: "some unrelated body"},
+			{Key: "avoid-cargo-fmt-scope-creep", Body: "see (arm-return-addr) for details"},
+		}
+		g := BuildGraph(records)
+		if got, want := g.Cites["avoid-cargo-fmt-scope-creep"], []string{"arm-return-addr"}; !reflect.DeepEqual(got, want) {
+			t.Errorf("Cites = %v, want %v", got, want)
+		}
+	})
+
 	t.Run("multiple citers of the same key are all recorded, sorted", func(t *testing.T) {
 		records := []*memory.Memory{
 			{Key: "invariant-solver-eval-timing", Body: "body"},

@@ -54,11 +54,13 @@ func NewCmdTriage(f *cmdutil.Factory, runF func(*Options) error) *cobra.Command 
 			"deleted tools/bd_triage.py: status/closure shape, doc-length-and-language " +
 			"(promote candidate), stale/future dates, citing another memory, a verbatim " +
 			"fragment match against --docs-dir, and citing a repo path --source's " +
-			"`git ls-files` doesn't know about. --source also enables a closed_only tag " +
-			"via `bd list --status=... --json` bead-status lookups. Both --source and " +
-			"--docs-dir are optional -- their tags simply stay false without them. " +
-			"Writes one JSON row per key to --out; use the tags to prioritize `chunk` " +
-			"batches instead of reviewing everything with equal attention.",
+			"`git ls-files` doesn't know about. --docs-dir alone gates dup_of_docs, " +
+			"which does stay false without it. --source gates two tags, and they don't " +
+			"behave the same way when it's omitted: stale_file_ref stays false, but " +
+			"closed_only defaults to an *unverified* true for any memory referencing an " +
+			"angr-XXXX bead (an unknown bead status is treated as closed-compatible) -- " +
+			"omitting --source produces *more*, not fewer, closed_only candidates. Pass " +
+			"--source whenever closed_only is going to inform a real decision.",
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := opts.Validate(); err != nil {
 				return err
@@ -133,6 +135,12 @@ func triageRun(opts *Options) error {
 		}
 		n++
 		addTagTotals(totals, tags)
+	}
+
+	if opts.Source == "" && totals["closed_only"] > 0 {
+		fmt.Fprintf(opts.IO.ErrOut, "warning: --source not set; %d closed_only tags are unverified "+
+			"(any angr-XXXX reference is treated as closed-compatible) -- rerun with --source for real bd status\n",
+			totals["closed_only"])
 	}
 
 	out := opts.IO.Out
