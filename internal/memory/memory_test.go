@@ -1,9 +1,11 @@
 package memory
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -177,6 +179,51 @@ func TestDiff(t *testing.T) {
 		}
 		if len(edited) != 1 || edited[0] != toEdit {
 			t.Errorf("edited = %+v, want just toEdit", edited)
+		}
+	})
+}
+
+func TestParse(t *testing.T) {
+	t.Run("parses one record per line, skipping blank lines", func(t *testing.T) {
+		input := `{"key":"a","body":"x","first_seen":"2026-06-04T00:00:00Z"}` + "\n\n" +
+			`{"key":"b","body":"y","first_seen":"2026-06-05T00:00:00Z"}` + "\n"
+		got, err := Parse(strings.NewReader(input))
+		if err != nil {
+			t.Fatalf("Parse: %v", err)
+		}
+		if len(got) != 2 || got[0].Key != "a" || got[1].Key != "b" {
+			t.Errorf("got %+v, want records for keys a and b", got)
+		}
+	})
+
+	t.Run("Load is Parse over the file's bytes -- same result either way", func(t *testing.T) {
+		dir := t.TempDir()
+		path := filepath.Join(dir, "memories.jsonl")
+		want := []*Memory{{Key: "solo", Body: "b", FirstSeen: "2026-06-04T00:00:00Z"}}
+		if err := Save(path, want); err != nil {
+			t.Fatal(err)
+		}
+
+		raw, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		fromParse, err := Parse(bytes.NewReader(raw))
+		if err != nil {
+			t.Fatalf("Parse: %v", err)
+		}
+		fromLoad, err := Load(path)
+		if err != nil {
+			t.Fatalf("Load: %v", err)
+		}
+		if !reflect.DeepEqual(fromParse, fromLoad) {
+			t.Errorf("Parse(bytes) = %+v, Load(path) = %+v, want equal", fromParse, fromLoad)
+		}
+	})
+
+	t.Run("malformed JSON line errors", func(t *testing.T) {
+		if _, err := Parse(strings.NewReader("not json\n")); err == nil {
+			t.Error("expected an error for a malformed line")
 		}
 	})
 }

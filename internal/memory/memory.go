@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"sort"
@@ -40,8 +41,24 @@ func Load(path string) ([]*Memory, error) {
 	}
 	defer f.Close()
 
+	out, err := Parse(f)
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", path, err)
+	}
+	return out, nil
+}
+
+// Parse reads Memory records from r, one JSON object per line -- the same
+// format Load reads from a path. Factored out so a caller that needs the
+// raw bytes for another purpose (e.g. hashing them as a cache key) can
+// parse from that exact byte slice instead of re-opening the path for a
+// second, independent read: two separate reads of the same path aren't
+// atomic with each other even though each one individually is safe (Save
+// writes via temp-file + rename), so a concurrent writer landing between
+// them could make the two reads see different content.
+func Parse(r io.Reader) ([]*Memory, error) {
 	var out []*Memory
-	scanner := bufio.NewScanner(f)
+	scanner := bufio.NewScanner(r)
 	scanner.Buffer(make([]byte, 0, 64*1024), 16*1024*1024)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -50,12 +67,12 @@ func Load(path string) ([]*Memory, error) {
 		}
 		var m Memory
 		if err := json.Unmarshal([]byte(line), &m); err != nil {
-			return nil, fmt.Errorf("%s: %w", path, err)
+			return nil, err
 		}
 		out = append(out, &m)
 	}
 	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("%s: %w", path, err)
+		return nil, err
 	}
 	return out, nil
 }

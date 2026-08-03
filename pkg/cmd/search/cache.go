@@ -6,11 +6,16 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/blevesearch/bleve/v2"
 
 	"github.com/jcrussell/angr-memories/internal/memory"
 )
+
+// tmpDirPrefix marks an in-progress build's temp directory under the cache
+// root -- gcStaleEntries must never remove one of these, even mid-build.
+const tmpDirPrefix = ".tmp-"
 
 // cacheSchemaVersion namespaces the on-disk cache. Bump it whenever
 // indexedDoc's shape (or the bleve version) changes in a way that could
@@ -67,7 +72,7 @@ func buildAndInstallIndex(root, target string, byKey map[string]*memory.Memory) 
 	if err := os.MkdirAll(root, 0o755); err != nil {
 		return nil, fmt.Errorf("create search cache dir: %w", err)
 	}
-	tmp, err := os.MkdirTemp(root, ".tmp-*")
+	tmp, err := os.MkdirTemp(root, tmpDirPrefix+"*")
 	if err != nil {
 		return nil, fmt.Errorf("create search cache temp dir: %w", err)
 	}
@@ -81,27 +86,37 @@ func buildAndInstallIndex(root, target string, byKey map[string]*memory.Memory) 
 		return nil, err
 	}
 
-	if err := os.Rename(tmpIndexPath, target); err != nil {
-		// target already exists. Two different reasons land here, and they
-		// need opposite responses:
-		//   - a concurrent `search` invocation finished building the same
-		//     content hash first -- their index is just as valid as ours;
-		//   - a stale/corrupt entry is sitting there (this is exactly the
-		//     case openCachedOrBuildIndex's own bleve.Open miss couldn't
-		//     rule out: Open failing on target only means it's unreadable
-		//     *now*, not that the directory was ever removed) -- clear it
-		//     and retry, since nothing valid is there to lose.
+	// Install with one retry. A rename conflict (target already exists)
+	// has two different causes that need opposite responses, and either
+	// one can happen on *either* attempt -- a concurrent build can finish
+	// and win the race at any point, not just before our first try:
+	//   - a concurrent `search` invocation finished building the same
+	//     content hash first -- their index is just as valid as ours, so
+	//     open and reuse it instead of discarding a perfectly good result;
+	//   - a stale/corrupt entry is sitting there (this is exactly the case
+	//     openCachedOrBuildIndex's own bleve.Open miss couldn't rule out:
+	//     Open failing on target only means it's unreadable *now*, not
+	//     that the directory was ever removed) -- clear it and retry,
+	//     since nothing valid is there to lose.
+	// Both checks run identically on both attempts; only the "clear and
+	// retry" action is limited to once, so a permanently broken target
+	// (e.g. unremovable) fails after two tries instead of looping forever.
+	for attempt := 0; ; attempt++ {
+		renameErr := os.Rename(tmpIndexPath, target)
+		if renameErr == nil {
+			break
+		}
 		if idx, openErr := bleve.Open(target); openErr == nil {
 			os.RemoveAll(tmp)
 			return idx, nil
 		}
+		if attempt > 0 {
+			os.RemoveAll(tmp)
+			return nil, fmt.Errorf("install search cache: %w", renameErr)
+		}
 		if rmErr := os.RemoveAll(target); rmErr != nil {
 			os.RemoveAll(tmp)
 			return nil, fmt.Errorf("install search cache: replacing broken cache entry: %w", rmErr)
-		}
-		if err := os.Rename(tmpIndexPath, target); err != nil {
-			os.RemoveAll(tmp)
-			return nil, fmt.Errorf("install search cache: %w", err)
 		}
 	}
 	os.RemoveAll(tmp) // the "index" subdir moved out; drop the now-empty temp parent
@@ -115,19 +130,25 @@ func buildAndInstallIndex(root, target string, byKey map[string]*memory.Memory) 
 
 // gcStaleEntries removes every entry under root except keep (the content
 // hash just installed) -- otherwise every distinct memories.jsonl content
-// (every sync/apply run) leaves its old index behind forever. Best-effort:
-// errors are ignored, since a sibling may be a concurrent invocation's
-// in-progress build (a ".tmp-*" dir) or another process's still-valid
-// cache for a hash this run no longer needs but hasn't raced past yet.
+// (every sync/apply run) leaves its old index behind forever. This is a
+// single-slot cache, not an LRU: alternating between two different
+// memories.jsonl contents against the same cache root evicts on every
+// switch. Entries named with tmpDirPrefix are always skipped, never just
+// best-effort-ignored-on-error -- one is a concurrent invocation's
+// in-progress build (buildAndInstallIndex builds into one before renaming
+// it away), and deleting it out from under that build would turn its own
+// install rename into a hard failure. Removal of any other stale entry is
+// best-effort: an error there just means it lingers until the next GC.
 func gcStaleEntries(root, keep string) {
 	entries, err := os.ReadDir(root)
 	if err != nil {
 		return
 	}
 	for _, e := range entries {
-		if e.Name() == keep {
+		name := e.Name()
+		if name == keep || strings.HasPrefix(name, tmpDirPrefix) {
 			continue
 		}
-		os.RemoveAll(filepath.Join(root, e.Name()))
+		os.RemoveAll(filepath.Join(root, name))
 	}
 }

@@ -8,6 +8,7 @@
 package search
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -88,18 +89,25 @@ type indexedDoc struct {
 }
 
 func searchRun(opts *Options) error {
-	// Two reads of memories.jsonl (raw bytes for the cache-key hash, then
-	// memory.Load's own parse) rather than threading a byte-parsing path
-	// through the shared Load function just for this one command -- the
-	// file is a couple MB and the OS page cache makes the second read
-	// effectively free.
-	records, err := memory.Load(opts.MemoriesPath)
+	// One read of memories.jsonl, parsed via memory.Parse from the exact
+	// bytes also used for the cache-key hash -- not memory.Load (a second,
+	// independent open+read of the same path). Two separate reads aren't
+	// atomic with each other even though Save's temp-file+rename makes
+	// each one individually safe: a concurrent sync/apply landing between
+	// them could make the parsed records reflect one version of the file
+	// while the hash reflects another, silently caching an index built
+	// from stale content under the new content's hash.
+	raw, err := os.ReadFile(opts.MemoriesPath)
 	if err != nil {
 		return err
 	}
+	records, err := memory.Parse(bytes.NewReader(raw))
+	if err != nil {
+		return fmt.Errorf("%s: %w", opts.MemoriesPath, err)
+	}
 	byKey := latestByKey(records)
 
-	idx, err := buildOrOpenIndex(opts, byKey)
+	idx, err := buildOrOpenIndex(opts, raw, byKey)
 	if err != nil {
 		return err
 	}
@@ -178,11 +186,13 @@ func latestByKey(records []*memory.Memory) map[string]*memory.Memory {
 }
 
 // buildOrOpenIndex routes to the on-disk cache (cache.go) unless
-// --no-cache was passed or the Factory couldn't resolve a cache directory
-// (e.g. os.UserCacheDir() failing on an unusual platform/environment) --
-// either way, falling back to an in-memory, always-rebuild index is always
-// correct, just slower.
-func buildOrOpenIndex(opts *Options, byKey map[string]*memory.Memory) (bleve.Index, error) {
+// --no-cache was passed, the Factory couldn't resolve a cache directory
+// (e.g. os.UserCacheDir() failing on an unusual platform/environment), or
+// the cache itself fails for any reason (disk full, permissions, a lost
+// install race) -- in every case, falling back to an in-memory,
+// always-rebuild index is always correct, just slower. A cache is only
+// worth having if it can never turn a working search into a failing one.
+func buildOrOpenIndex(opts *Options, fileBytes []byte, byKey map[string]*memory.Memory) (bleve.Index, error) {
 	if opts.NoCache || opts.CacheDir == nil {
 		return buildMemIndex(byKey)
 	}
@@ -191,11 +201,11 @@ func buildOrOpenIndex(opts *Options, byKey map[string]*memory.Memory) (bleve.Ind
 		return buildMemIndex(byKey)
 	}
 
-	fileBytes, err := os.ReadFile(opts.MemoriesPath)
+	idx, err := openCachedOrBuildIndex(dir, fileBytes, byKey)
 	if err != nil {
-		return buildMemIndex(byKey) // fall back rather than fail the whole search over a cache-key read
+		return buildMemIndex(byKey)
 	}
-	return openCachedOrBuildIndex(dir, fileBytes, byKey)
+	return idx, nil
 }
 
 // indexMapping is shared by the in-memory and on-disk index paths.

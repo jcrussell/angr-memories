@@ -157,6 +157,63 @@ func TestGCStaleEntries_removesEverythingExceptKeep(t *testing.T) {
 	}
 }
 
+// A concurrent invocation's in-progress build lives in a tmpDirPrefix
+// directory under root until its own install rename moves it out. GC must
+// never remove one of these -- doing so would yank the build's source out
+// from under its own rename, turning a harmless race into a hard failure
+// for the other process (finding from peer review of the initial version).
+func TestGCStaleEntries_neverRemovesInProgressTmpDirs(t *testing.T) {
+	root := t.TempDir()
+	inProgress := filepath.Join(root, tmpDirPrefix+"abc123")
+	if err := os.MkdirAll(inProgress, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(root, "stale-hash"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	gcStaleEntries(root, "current-hash")
+
+	if _, err := os.Stat(inProgress); err != nil {
+		t.Errorf("expected the in-progress tmp dir to survive GC, got: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(root, "stale-hash")); err == nil {
+		t.Error("expected the actually-stale entry to still be removed")
+	}
+}
+
+// buildAndInstallIndex can fail for reasons that have nothing to do with a
+// stale cache entry -- e.g. the cache root can't be created at all. That
+// must degrade to the in-memory index, not fail the whole search (finding
+// from peer review: the original version propagated this as a hard error,
+// contradicting its own "a bad cache entry is never fatal" comment).
+func TestSearchRun_cacheBuildFailureFallsBackGracefully(t *testing.T) {
+	memPath := writeMemories(t, []*memory.Memory{
+		{Key: "invariant-solver-eval-timing", Body: "solver details", FirstSeen: "2026-06-01T00:00:00Z"},
+	})
+
+	// A regular file where the cache dir should be: os.MkdirAll(root, ...)
+	// fails because a path component already exists as a non-directory.
+	cacheDirParent := t.TempDir()
+	blockedCacheDir := filepath.Join(cacheDirParent, "not-a-directory")
+	if err := os.WriteFile(blockedCacheDir, []byte("x"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	io, _, out, _ := iostreams.Test()
+	opts := &Options{
+		IO:           io,
+		CacheDir:     func() (string, error) { return blockedCacheDir, nil },
+		MemoriesPath: memPath, Query: "solver", Limit: 20,
+	}
+	if err := searchRun(opts); err != nil {
+		t.Fatalf("expected a cache build failure to fall back to in-memory, got error: %v", err)
+	}
+	if !strings.Contains(out.String(), "invariant-solver-eval-timing") {
+		t.Fatalf("expected a match despite the cache being unusable, got:\n%s", out.String())
+	}
+}
+
 func TestSearchRun_withCacheDirProducesSameResultsAsWithout(t *testing.T) {
 	memPath := writeMemories(t, []*memory.Memory{
 		{Key: "invariant-solver-eval-timing", Body: "The solver evaluates constraints lazily.", FirstSeen: "2026-06-01T00:00:00Z"},
