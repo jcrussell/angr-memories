@@ -5,9 +5,13 @@ package root
 import (
 	"github.com/spf13/cobra"
 
+	applycmd "github.com/jcrussell/angr-memories/pkg/cmd/apply"
+	chunkcmd "github.com/jcrussell/angr-memories/pkg/cmd/chunk"
 	sitecmd "github.com/jcrussell/angr-memories/pkg/cmd/site"
 	statscmd "github.com/jcrussell/angr-memories/pkg/cmd/stats"
 	synccmd "github.com/jcrussell/angr-memories/pkg/cmd/sync"
+	triagecmd "github.com/jcrussell/angr-memories/pkg/cmd/triage"
+	validatecmd "github.com/jcrussell/angr-memories/pkg/cmd/validate"
 	"github.com/jcrussell/angr-memories/pkg/cmdutil"
 )
 
@@ -30,5 +34,9 @@ func NewCmdRoot(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(sitecmd.NewCmdSite(f, nil))
 	cmd.AddCommand(statscmd.NewCmdStats(f, nil))
 	cmd.AddCommand(synccmd.NewCmdSync(f, nil))
+	cmd.AddCommand(triagecmd.NewCmdTriage(f, nil))
+	cmd.AddCommand(chunkcmd.NewCmdChunk(f, nil))
+	cmd.AddCommand(validatecmd.NewCmdValidate(f, nil))
+	cmd.AddCommand(applycmd.NewCmdApply(f, nil))
 	return cmd
 }

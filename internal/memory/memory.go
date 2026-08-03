@@ -23,6 +23,7 @@ type Memory struct {
 	Key        string `json:"key"`
 	Body       string `json:"body"`
 	FirstSeen  string `json:"first_seen"`
+	UpdatedAt  string `json:"updated_at"`
 	DecidedAt  string `json:"decided_at"`
 	Reason     string `json:"reason"`
 	MergedInto string `json:"merged_into"`
@@ -212,6 +213,7 @@ func Diff(open []*Memory, live map[string]string, at time.Time) (opened, closed,
 			closed = append(closed, m)
 		case body != m.Body:
 			m.Body = body
+			m.UpdatedAt = ts
 			edited = append(edited, m)
 		}
 	}

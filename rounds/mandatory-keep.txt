@@ -1,0 +1,20 @@
+# Mandatory-keep list for pruning rounds -- one key per line, "#" comments
+# allowed. Enforced by `angr-memories validate` and `angr-memories apply`:
+# a manifest that forgets or merges away one of these keys (other than as
+# a merge canonical) fails validation. Ported verbatim from the deleted
+# tools/bd_gen_manifest.py's DEFAULT_KEEP_LIST, which synced this to
+# CLAUDE.md's "quick keys" in the angr repo.
+
+core-goal-design-philosophy
+rust-proxy-architecture-decision
+rust-engine-claude-md-pointer
+rust-python-boundary-audit
+constraint-export-no-pre-pin
+characterization-vs-fix-pattern
+benchmark-bimodal-variance-rules
+env-venv-corruption
+bd-update-notes-overwrites
+avoid-bd-remember-without-key-flag
+9maq-bisect-method
+venv-rebuild-cargo-direct-copy
+avoid-pip-install-deps

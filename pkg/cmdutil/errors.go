@@ -4,7 +4,10 @@
 // exit codes.
 package cmdutil
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 // FlagError wraps an error reported by flag parsing or argument validation.
 // The runner maps this to exit code 2 and prints the wrapped message.
@@ -12,6 +15,14 @@ type FlagError struct{ Err error }
 
 func (e *FlagError) Error() string { return e.Err.Error() }
 func (e *FlagError) Unwrap() error { return e.Err }
+
+// FlagErrorf is the formatted-string convenience form of FlagError, for use
+// in an Options.Validate() method: return it before any side effect
+// (file/network IO) runs, so a bad flag value fails as a usage error (exit
+// code 2) instead of a generic one (exit code 1) partway through work.
+func FlagErrorf(format string, args ...any) error {
+	return &FlagError{Err: fmt.Errorf(format, args...)}
+}
 
 // ErrSilent signals "an error occurred but it has already been printed";
 // the runner exits non-zero without printing anything more.

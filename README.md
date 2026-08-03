@@ -16,13 +16,17 @@ changed.
 Everything lives in one file, `memories.jsonl` — one JSON object per line:
 
 ```json
-{"key": "invariant-solver-eval-timing", "body": "...", "first_seen": "2026-06-04T00:00:00Z", "decided_at": "", "reason": "", "merged_into": ""}
+{"key": "invariant-solver-eval-timing", "body": "...", "first_seen": "2026-06-04T00:00:00Z", "updated_at": "", "decided_at": "", "reason": "", "merged_into": ""}
 ```
 
 - `key` — the bd memory key
 - `body` — last known body text
 - `first_seen` — when this record is first known to have existed (a floor,
   not necessarily the true creation date)
+- `updated_at` — when `sync` last saw the body change; empty if it's never
+  been edited since `first_seen`. Exists so pruning rounds can scope
+  themselves to genuinely new-or-changed keys (`chunk --delta-since`)
+  instead of re-reviewing an untouched survivor set every round.
 - `decided_at` — when it was forgotten; empty while still remembered
 - `reason` — why it was forgotten, when a curated decision recorded one;
   for closures `sync` detects from a live-corpus diff, this is just
@@ -41,9 +45,14 @@ just gets a second line with a later `first_seen` — group by `key`, sort by
 ## Commands
 
 ```
-angr-memories site  --memories memories.jsonl --out _site   # render the browsable static site
-angr-memories stats --memories memories.jsonl               # remembered/forgotten counts by prefix
-angr-memories sync  --source ~/repos/angr --memories memories.jsonl  # pull the live corpus, fold in changes
+angr-memories site     --memories memories.jsonl --out _site   # render the browsable static site
+angr-memories stats    --memories memories.jsonl               # remembered/forgotten counts by prefix
+angr-memories sync     --source ~/repos/angr --memories memories.jsonl  # pull the live corpus, fold in changes
+
+angr-memories triage   [--source] [--docs-dir] --out triage.jsonl   # heuristic tags per remembered key
+angr-memories chunk    --round R5 [--delta-since <RFC3339>]         # bucket remembered keys into review batches
+angr-memories validate --round R5                                   # check every batch's manifest
+angr-memories apply    --round R5 [--apply] [--force]                # apply a round's manifests to memories.jsonl
 ```
 
 `site` groups memories by key-prefix family (`invariant`, `avoid`, `z3`,
@@ -64,6 +73,43 @@ atomic (temp file + rename), so a crash mid-write can't corrupt
 `memories.jsonl`. Wire it to a cron job or similar to keep the archive
 current.
 
+### Pruning a round
+
+`triage`/`chunk`/`validate`/`apply` port the round-by-round pruning
+workflow that shrank the corpus 1,296 → 1,000 over four rounds in June/July
+2026 (see git history — the original tooling was Python and `bd`-coupled,
+deleted when this repo was rebuilt as a JSONL-native archive) onto the new
+data model:
+
+1. `triage` (optional) tags every remembered key with heuristics —
+   status/closure shape, doc-length-and-language, stale/future dates,
+   citing another memory, a verbatim fragment match against `--docs-dir`,
+   and (with `--source`) citing a repo path `git ls-files` doesn't know
+   about or resolving only to closed beads. Use the tags to prioritize
+   which batches need careful review.
+2. `chunk --round <name>` buckets remembered keys by prefix family into
+   `rounds/<name>/batches/<batch-id>/{bodies.json,cites.json}` bundles,
+   alpha-splitting any family over `--chunk-cap` (default 70). Pass
+   `--delta-since <RFC3339>` on a round after the first to restrict to keys
+   first seen or updated since that time — reviewing an already-scrubbed
+   survivor set from scratch measures ~0.4% forget yield vs 9-26% on
+   genuinely new/changed keys, so scope later rounds to the delta.
+3. **Review** — spawn one agent per batch (or review by hand) using
+   `rounds/review-instructions.md`'s decision tree (forget/merge/promote/
+   keep, bias toward keep), writing `rounds/<name>/batches/<batch-id>/manifest.jsonl`.
+   `rounds/mandatory-keep.txt` lists keys no verdict may forget or merge away.
+4. `validate --round <name>` checks every batch's manifest: full coverage
+   of its bodies bundle, valid verdicts, the mandatory-keep list, and
+   merge-row consistency.
+5. `apply --round <name>` combines every batch's manifest, re-validates,
+   and applies forget/merge decisions to `memories.jsonl` — dry-run by
+   default, `--apply` to write. A citation orphan guard defers (doesn't
+   silently drop) any forget still cited by a surviving memory outside the
+   manifest; `--force` skips it. Promote rows are reported, never
+   auto-applied — the target is another repo's docs, so a human adds the
+   content and forgets the key in a follow-up round. `--apply` also
+   appends round/batch provenance to `rounds/<name>/decisions.jsonl`.
+
 ## Current snapshot
 
 As of the last `sync`:
@@ -80,6 +126,9 @@ As of the last `sync`:
 memories.jsonl                the canonical data
 cmd/angr-memories/main.go     entrypoint
 internal/memory/              Memory struct, JSONL load/save, prefix + chunking logic
+internal/prune/                pruning-round mechanics: triage tags, citation graph, manifest validate/apply
 internal/site/                static site generator (goldmark + Chroma, styled after byob-go-cli)
 pkg/cmd/{site,stats,sync}/    CLI subcommands
+pkg/cmd/{triage,chunk,validate,apply}/  pruning-round CLI subcommands
+rounds/                        pruning-round artifacts: mandatory-keep.txt, review-instructions.md, rounds/<name>/
 ```

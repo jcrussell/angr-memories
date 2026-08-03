@@ -140,6 +140,9 @@ func TestDiff(t *testing.T) {
 		if len(edited) != 1 || edited[0] != m || m.Body != "new" {
 			t.Fatalf("expected m.Body updated in place to %q, got %+v", "new", m)
 		}
+		if m.UpdatedAt != ts {
+			t.Errorf("UpdatedAt = %q, want %q (needed so --delta-since can find edited, not just new, keys)", m.UpdatedAt, ts)
+		}
 	})
 
 	t.Run("a previously-closed key reappearing live needs no special-casing", func(t *testing.T) {
