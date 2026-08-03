@@ -7,6 +7,7 @@ import (
 
 	applycmd "github.com/jcrussell/angr-memories/pkg/cmd/apply"
 	chunkcmd "github.com/jcrussell/angr-memories/pkg/cmd/chunk"
+	searchcmd "github.com/jcrussell/angr-memories/pkg/cmd/search"
 	sitecmd "github.com/jcrussell/angr-memories/pkg/cmd/site"
 	statscmd "github.com/jcrussell/angr-memories/pkg/cmd/stats"
 	synccmd "github.com/jcrussell/angr-memories/pkg/cmd/sync"
@@ -34,6 +35,7 @@ func NewCmdRoot(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(sitecmd.NewCmdSite(f, nil))
 	cmd.AddCommand(statscmd.NewCmdStats(f, nil))
 	cmd.AddCommand(synccmd.NewCmdSync(f, nil))
+	cmd.AddCommand(searchcmd.NewCmdSearch(f, nil))
 	cmd.AddCommand(triagecmd.NewCmdTriage(f, nil))
 	cmd.AddCommand(chunkcmd.NewCmdChunk(f, nil))
 	cmd.AddCommand(validatecmd.NewCmdValidate(f, nil))

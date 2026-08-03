@@ -48,6 +48,7 @@ just gets a second line with a later `first_seen` — group by `key`, sort by
 angr-memories site     --memories memories.jsonl --out _site   # render the browsable static site
 angr-memories stats    --memories memories.jsonl               # remembered/forgotten counts by prefix
 angr-memories sync     --source ~/repos/angr --memories memories.jsonl  # pull the live corpus, fold in changes
+angr-memories search   <query> [--prefix] [--all] [--fuzzy] [--limit 20]  # ranked search over memories.jsonl
 
 angr-memories triage   [--source] [--docs-dir] --out triage.jsonl   # heuristic tags per remembered key
 angr-memories chunk    --round R5 [--delta-since <RFC3339>]         # bucket remembered keys into review batches
@@ -64,6 +65,18 @@ survival-time histogram, and the most-cited remembered keys (a proxy for
 "load-bearing, risky to forget"), each as inline SVG generated server-side
 — the site stays zero-JavaScript, so charts are baked into the static HTML
 rather than drawn client-side.
+
+`search` builds a fresh in-memory [bleve](https://github.com/blevesearch/bleve)
+index from `memories.jsonl` on every invocation and ranks matches by
+relevance — no persisted index directory, so nothing can go stale after
+`sync`/`apply` change the archive (costs a couple of seconds on the full
+~1,300-remembered-record corpus; not sub-second, but simplicity over
+speed at this size). `<query>` is bleve's query-string syntax by default
+(phrase/boolean operators); `--fuzzy` switches to edit-distance matching
+for typo-tolerant or near-duplicate lookups — useful during a pruning
+review to check "have I already written something like this" before
+deciding to keep/forget/merge a memory. Remembered records only by
+default; `--all` includes forgotten ones.
 
 `sync` runs `bd memories --json` against a live `bd`-backed project
 (auto-discovering its `.beads/` DB) and diffs the result against the
@@ -134,7 +147,7 @@ internal/memory/              Memory struct, JSONL load/save, prefix + chunking 
 internal/prune/                pruning-round mechanics: triage tags, citation graph, manifest validate/apply
 internal/chart/                 hand-rolled inline-SVG chart primitives (bar, line) -- no charting dependency
 internal/site/                static site generator (goldmark + Chroma, styled after byob-go-cli); dashboard.go builds the /dashboard/ charts
-pkg/cmd/{site,stats,sync}/    CLI subcommands
+pkg/cmd/{site,stats,sync,search}/    CLI subcommands
 pkg/cmd/{triage,chunk,validate,apply}/  pruning-round CLI subcommands
 rounds/                        pruning-round artifacts: mandatory-keep.txt, review-instructions.md, rounds/<name>/
 ```
