@@ -44,6 +44,10 @@ func TestOptionsValidate(t *testing.T) {
 		{"zero chunk-cap rejected", func(o *Options) { o.ChunkCap = 0 }, "--chunk-cap"},
 		{"negative chunk-cap rejected", func(o *Options) { o.ChunkCap = -1 }, "--chunk-cap"},
 		{"malformed delta-since rejected", func(o *Options) { o.DeltaSince = "yesterday" }, "--delta-since"},
+		{"keys-file with delta-since rejected", func(o *Options) {
+			o.KeysFile = "keys.txt"
+			o.DeltaSince = "2026-07-01T00:00:00Z"
+		}, "--keys-file"},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
@@ -168,6 +172,38 @@ func TestChunkRun_deltaSinceRestrictsToNewOrUpdatedKeys(t *testing.T) {
 	}
 	if !seen["invariant-new"] || !seen["invariant-edited"] || seen["invariant-old"] {
 		t.Errorf("delta batch = %v, want [invariant-new, invariant-edited] only", got)
+	}
+}
+
+func TestChunkRun_keysFileRestrictsToListedKeys(t *testing.T) {
+	memPath := writeMemories(t, []*memory.Memory{
+		{Key: "invariant-alpha", Body: "in the keys file", FirstSeen: "2026-01-01T00:00:00Z"},
+		{Key: "invariant-bravo", Body: "not in the keys file", FirstSeen: "2026-01-01T00:00:00Z"},
+		{Key: "avoid-c", Body: "in the keys file but forgotten", FirstSeen: "2026-01-01T00:00:00Z",
+			DecidedAt: "2026-06-02T00:00:00Z", Reason: "r"},
+	})
+
+	keysPath := filepath.Join(t.TempDir(), "keys.txt")
+	if err := os.WriteFile(keysPath, []byte("invariant-alpha\navoid-c\n\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	roundsDir := t.TempDir()
+	io, _, _, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R6", ChunkCap: 70, KeysFile: keysPath}
+	if err := chunkRun(opts); err != nil {
+		t.Fatalf("chunkRun: %v", err)
+	}
+
+	var index map[string][]string
+	mustReadJSON(t, filepath.Join(roundsDir, "R6", "batch-index.json"), &index)
+
+	got := index["R6-INVARIANT"]
+	if len(got) != 1 || got[0] != "invariant-alpha" {
+		t.Errorf("keys-file batch = %v, want just [invariant-alpha] (bravo not listed, avoid-c forgotten)", got)
+	}
+	if _, ok := index["R6-AVOID"]; ok {
+		t.Errorf("expected no R6-AVOID batch (avoid-c is forgotten, even though listed in keys-file)")
 	}
 }
 

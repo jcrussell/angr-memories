@@ -34,6 +34,7 @@ type Options struct {
 	Round        string
 	ChunkCap     int
 	DeltaSince   string
+	KeysFile     string
 }
 
 // Validate runs before any file gets written, per the project's
@@ -51,6 +52,9 @@ func (o *Options) Validate() error {
 		if _, err := time.Parse(time.RFC3339, o.DeltaSince); err != nil {
 			return cmdutil.FlagErrorf("--delta-since must be RFC3339, got %q: %v", o.DeltaSince, err)
 		}
+	}
+	if o.KeysFile != "" && o.DeltaSince != "" {
+		return cmdutil.FlagErrorf("--keys-file and --delta-since are mutually exclusive (both scope the candidate key set)")
 	}
 	return nil
 }
@@ -70,7 +74,13 @@ func NewCmdChunk(f *cmdutil.Factory, runF func(*Options) error) *cobra.Command {
 			"re-reviewing an already-scrubbed survivor set. This operationalizes " +
 			"round 4's delta-scope pivot (measured ~0.4% forget yield re-reviewing " +
 			"untouched survivors vs 9-26% on genuinely new/changed keys) as a flag " +
-			"instead of a manual mid-round decision.",
+			"instead of a manual mid-round decision.\n\n" +
+			"--keys-file restricts the candidate key set to exactly the keys listed " +
+			"in the given newline-delimited file, instead of the whole remembered " +
+			"set or a --delta-since window -- use it for an ad-hoc audit batch " +
+			"scoped to a cross-cutting pattern (e.g. keys whose body matches a " +
+			"file:line or commit-hash regex) rather than a key-prefix family or " +
+			"time window. Mutually exclusive with --delta-since.",
 		RunE: func(c *cobra.Command, args []string) error {
 			if err := opts.Validate(); err != nil {
 				return err
@@ -87,6 +97,8 @@ func NewCmdChunk(f *cmdutil.Factory, runF func(*Options) error) *cobra.Command {
 	cmd.Flags().IntVar(&opts.ChunkCap, "chunk-cap", defaultChunkCap, "max keys per review batch")
 	cmd.Flags().StringVar(&opts.DeltaSince, "delta-since", "",
 		"RFC3339 timestamp; restrict to keys first seen or updated after this time")
+	cmd.Flags().StringVar(&opts.KeysFile, "keys-file", "",
+		"path to a newline-delimited file restricting the batch to exactly these keys (mutually exclusive with --delta-since)")
 	if err := cmd.MarkFlagRequired("round"); err != nil {
 		// Only fails if the flag name above is misspelled -- a programmer
 		// error that should fail loud at dev/test time, not silently.
@@ -116,10 +128,21 @@ func chunkRun(opts *Options) error {
 		since, _ = time.Parse(time.RFC3339, opts.DeltaSince) // already validated
 	}
 
+	var wantKeys map[string]bool
+	if opts.KeysFile != "" {
+		wantKeys, err = readKeysFile(opts.KeysFile)
+		if err != nil {
+			return err
+		}
+	}
+
 	var keys []string
 	byKey := map[string]*memory.Memory{}
 	for _, m := range records {
 		if !m.Remembered() {
+			continue
+		}
+		if wantKeys != nil && !wantKeys[m.Key] {
 			continue
 		}
 		if hasSince && !isAfterOrEqual(m.FirstSeen, since) && !isAfterOrEqual(m.UpdatedAt, since) {
@@ -213,6 +236,24 @@ func batchIDFor(round, family string, chunkIdx, nChunks int) string {
 		return round + "-" + fam
 	}
 	return fmt.Sprintf("%s-%s-%d", round, fam, chunkIdx+1)
+}
+
+// readKeysFile parses a newline-delimited key list for --keys-file, skipping
+// blank lines so the file can have trailing/interstitial whitespace.
+func readKeysFile(path string) (map[string]bool, error) {
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("reading --keys-file %s: %w", path, err)
+	}
+	want := map[string]bool{}
+	for _, line := range strings.Split(string(raw), "\n") {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		want[line] = true
+	}
+	return want, nil
 }
 
 func isAfterOrEqual(ts string, since time.Time) bool {

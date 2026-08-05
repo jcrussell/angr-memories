@@ -1,11 +1,14 @@
 package apply
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/jcrussell/angr-memories/internal/memory"
 	"github.com/jcrussell/angr-memories/internal/prune"
@@ -19,11 +22,11 @@ func TestNewCmdApply_runFOverride(t *testing.T) {
 		captured = o
 		return nil
 	})
-	cmd.SetArgs([]string{"--round", "R5", "--apply", "--force"})
+	cmd.SetArgs([]string{"--round", "R5", "-f", "--skip-guard", "--source", "/tmp/angr"})
 	if err := cmd.Execute(); err != nil {
 		t.Fatal(err)
 	}
-	if captured.Round != "R5" || !captured.Apply || !captured.Force {
+	if captured.Round != "R5" || !captured.Force || !captured.SkipGuard || captured.Source != "/tmp/angr" {
 		t.Errorf("flags not wired: %+v", captured)
 	}
 }
@@ -100,7 +103,7 @@ func TestApplyRun_orphanGuardDefersAndSkipsMutation(t *testing.T) {
 	})
 
 	io, _, out, _ := iostreams.Test()
-	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Apply: true, KeepListPath: filepath.Join(roundsDir, "no-keep.txt")}
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, KeepListPath: filepath.Join(roundsDir, "no-keep.txt")}
 	if err := applyRun(opts); err != nil {
 		t.Fatalf("applyRun: %v", err)
 	}
@@ -126,7 +129,7 @@ func TestApplyRun_appliesAndWritesDecisionsLog(t *testing.T) {
 	})
 
 	io, _, out, _ := iostreams.Test()
-	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Apply: true, KeepListPath: filepath.Join(roundsDir, "no-keep.txt")}
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, KeepListPath: filepath.Join(roundsDir, "no-keep.txt")}
 	if err := applyRun(opts); err != nil {
 		t.Fatalf("applyRun: %v", err)
 	}
@@ -173,7 +176,7 @@ func TestApplyRun_mandatoryKeepViolationFailsBeforeAnyMutation(t *testing.T) {
 	}
 
 	io, _, _, _ := iostreams.Test()
-	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Apply: true, KeepListPath: keepListPath}
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, KeepListPath: keepListPath}
 	if err := applyRun(opts); err == nil {
 		t.Fatal("expected apply to refuse a manifest that forgets a mandatory-keep key")
 	}
@@ -186,5 +189,176 @@ func TestApplyRun_mandatoryKeepViolationFailsBeforeAnyMutation(t *testing.T) {
 		if !m.Remembered() {
 			t.Error("a failed validation must not mutate memories.jsonl at all")
 		}
+	}
+}
+
+func TestApplyRun_backupOnlyWrittenOnRealApply(t *testing.T) {
+	memPath, roundsDir := setupApplyFixture(t, []prune.Row{
+		{Key: "invariant-alpha", Verdict: prune.VerdictForget, Reason: "stale"},
+		{Key: "invariant-bravo", Verdict: prune.VerdictForget, Reason: "also stale"},
+	})
+	backupPath := filepath.Join(roundsDir, "R5", "memories.pre-apply.jsonl")
+	original, err := os.ReadFile(memPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	io, _, _, _ := iostreams.Test()
+	dryRunOpts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", KeepListPath: filepath.Join(roundsDir, "no-keep.txt")}
+	if err := applyRun(dryRunOpts); err != nil {
+		t.Fatalf("applyRun (dry-run): %v", err)
+	}
+	if _, err := os.Stat(backupPath); !os.IsNotExist(err) {
+		t.Errorf("dry-run must not write a backup, but %s exists (err=%v)", backupPath, err)
+	}
+
+	forceOpts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, KeepListPath: filepath.Join(roundsDir, "no-keep.txt")}
+	if err := applyRun(forceOpts); err != nil {
+		t.Fatalf("applyRun (force): %v", err)
+	}
+	got, err := os.ReadFile(backupPath)
+	if err != nil {
+		t.Fatalf("reading backup: %v", err)
+	}
+	if string(got) != string(original) {
+		t.Errorf("backup content mismatch:\nwant %s\ngot  %s", original, got)
+	}
+}
+
+// fakeBd returns a bdRunner backed by a fixed `bd memories --json` response
+// and a per-key forget error map, plus a slice recording every call made --
+// so live-push logic is testable without ever shelling out to a real bd.
+func fakeBd(liveJSON []byte, forgetErrors map[string]error) (bdRunner, *[]string) {
+	var calls []string
+	runner := func(ctx context.Context, dir string, timeout time.Duration, name string, args ...string) ([]byte, error) {
+		calls = append(calls, strings.Join(args, " "))
+		if len(args) >= 2 && args[0] == "memories" && args[1] == "--json" {
+			return liveJSON, nil
+		}
+		if len(args) == 2 && args[0] == "forget" {
+			if err, ok := forgetErrors[args[1]]; ok {
+				return nil, err
+			}
+			return nil, nil
+		}
+		return nil, fmt.Errorf("unexpected bd call: %v", args)
+	}
+	return runner, &calls
+}
+
+func TestApplyRun_livePushOnlyWhenForceAndSourceBothSet(t *testing.T) {
+	liveJSON := []byte(`{"invariant-alpha":"solver body","invariant-bravo":"sees invariant-alpha in its own body"}`)
+
+	// Source set but not Force: dry-run preview only, no live calls, no files.
+	memPath, roundsDir := setupApplyFixture(t, []prune.Row{
+		{Key: "invariant-alpha", Verdict: prune.VerdictForget, Reason: "stale"},
+		{Key: "invariant-bravo", Verdict: prune.VerdictForget, Reason: "also stale"},
+	})
+	runBd, calls := fakeBd(liveJSON, nil)
+	io, _, out, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Source: "/fake/angr", KeepListPath: filepath.Join(roundsDir, "no-keep.txt"), runBd: runBd}
+	if err := applyRun(opts); err != nil {
+		t.Fatalf("applyRun: %v", err)
+	}
+	if len(*calls) != 0 {
+		t.Errorf("dry-run must not call bd, got calls: %v", *calls)
+	}
+	if !strings.Contains(out.String(), "live-push preview") {
+		t.Errorf("expected a live-push preview line, got:\n%s", out.String())
+	}
+	if _, err := os.Stat(filepath.Join(roundsDir, "R5", "bd-live-backup.jsonl")); !os.IsNotExist(err) {
+		t.Error("dry-run must not write bd-live-backup.jsonl")
+	}
+
+	// Force set but no Source: archive-only, no live push.
+	memPath2, roundsDir2 := setupApplyFixture(t, []prune.Row{
+		{Key: "invariant-alpha", Verdict: prune.VerdictForget, Reason: "stale"},
+		{Key: "invariant-bravo", Verdict: prune.VerdictForget, Reason: "also stale"},
+	})
+	opts2 := &Options{IO: io, MemoriesPath: memPath2, RoundsDir: roundsDir2, Round: "R5", Force: true, KeepListPath: filepath.Join(roundsDir2, "no-keep.txt")}
+	if err := applyRun(opts2); err != nil {
+		t.Fatalf("applyRun: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(roundsDir2, "R5", "bd-live-backup.jsonl")); !os.IsNotExist(err) {
+		t.Error("apply without --source must not write bd-live-backup.jsonl")
+	}
+}
+
+func TestLivePush_backsUpThenForgetsAndIsRetrySafe(t *testing.T) {
+	liveJSON := []byte(`{"invariant-alpha":"solver body","invariant-bravo":"sees invariant-alpha in its own body"}`)
+	// alpha looks already-gone live (bd reports it as not found); bravo succeeds.
+	runBd, _ := fakeBd(liveJSON, map[string]error{
+		"invariant-alpha": fmt.Errorf("exit status 1 (stderr: memory not found: invariant-alpha)"),
+	})
+
+	memPath, roundsDir := setupApplyFixture(t, []prune.Row{
+		{Key: "invariant-alpha", Verdict: prune.VerdictForget, Reason: "stale"},
+		{Key: "invariant-bravo", Verdict: prune.VerdictForget, Reason: "also stale"},
+	})
+	io, _, out, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, Source: "/fake/angr", Timeout: time.Second, KeepListPath: filepath.Join(roundsDir, "no-keep.txt"), runBd: runBd}
+	if err := applyRun(opts); err != nil {
+		t.Fatalf("applyRun: %v, output:\n%s", err, out.String())
+	}
+	if !strings.Contains(out.String(), "live-push (source=/fake/angr): forgot=2 failed=0") {
+		t.Errorf("expected both keys treated as pushed (not-found tolerated), got:\n%s", out.String())
+	}
+
+	backupRaw, err := os.ReadFile(filepath.Join(roundsDir, "R5", "bd-live-backup.jsonl"))
+	if err != nil {
+		t.Fatalf("reading bd-live-backup.jsonl: %v", err)
+	}
+	if !strings.Contains(string(backupRaw), "invariant-alpha") || !strings.Contains(string(backupRaw), "invariant-bravo") {
+		t.Errorf("expected both keys' bodies backed up before forgetting, got:\n%s", backupRaw)
+	}
+
+	logRaw, err := os.ReadFile(filepath.Join(roundsDir, "R5", "live-push.jsonl"))
+	if err != nil {
+		t.Fatalf("reading live-push.jsonl: %v", err)
+	}
+	lines := strings.Split(strings.TrimSpace(string(logRaw)), "\n")
+	if len(lines) != 2 {
+		t.Fatalf("expected 2 live-push records, got %d: %s", len(lines), logRaw)
+	}
+	for _, line := range lines {
+		var rec livePushResult
+		if err := json.Unmarshal([]byte(line), &rec); err != nil {
+			t.Fatalf("parsing live-push record: %v", err)
+		}
+		if !rec.Success {
+			t.Errorf("expected %q to be recorded as a successful push (already-gone tolerated), got: %+v", rec.Key, rec)
+		}
+	}
+}
+
+func TestLivePush_realFailureReturnsErrorButKeepsArchiveMutation(t *testing.T) {
+	liveJSON := []byte(`{"invariant-alpha":"solver body","invariant-bravo":"sees invariant-alpha in its own body"}`)
+	runBd, _ := fakeBd(liveJSON, map[string]error{
+		"invariant-alpha": fmt.Errorf("exit status 1 (stderr: dolt server unreachable)"),
+	})
+
+	memPath, roundsDir := setupApplyFixture(t, []prune.Row{
+		{Key: "invariant-alpha", Verdict: prune.VerdictForget, Reason: "stale"},
+		{Key: "invariant-bravo", Verdict: prune.VerdictForget, Reason: "also stale"},
+	})
+	io, _, _, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, Source: "/fake/angr", Timeout: time.Second, KeepListPath: filepath.Join(roundsDir, "no-keep.txt"), runBd: runBd}
+	err := applyRun(opts)
+	if err == nil {
+		t.Fatal("expected a non-nil error when a live push genuinely fails")
+	}
+
+	// The archive-side apply already completed and is not rolled back.
+	records, loadErr := memory.Load(memPath)
+	if loadErr != nil {
+		t.Fatal(loadErr)
+	}
+	for _, m := range records {
+		if m.Remembered() {
+			t.Errorf("expected %q to stay forgotten locally despite the live-push failure", m.Key)
+		}
+	}
+	if _, statErr := os.Stat(filepath.Join(roundsDir, "R5", "decisions.jsonl")); statErr != nil {
+		t.Errorf("expected decisions.jsonl to exist despite the live-push failure: %v", statErr)
 	}
 }

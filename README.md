@@ -53,7 +53,7 @@ angr-memories search   <query> [--prefix] [--all] [--fuzzy] [--no-cache] [--limi
 angr-memories triage   [--source] [--docs-dir] --out triage.jsonl   # heuristic tags per remembered key
 angr-memories chunk    --round R5 [--delta-since <RFC3339>]         # bucket remembered keys into review batches
 angr-memories validate --round R5                                   # check every batch's manifest
-angr-memories apply    --round R5 [--apply] [--force]                # apply a round's manifests to memories.jsonl
+angr-memories apply    --round R5 [-f] [--skip-guard] [--source <angr-checkout>]  # apply a round's manifests to memories.jsonl
 ```
 
 `site` groups memories by key-prefix family (`invariant`, `avoid`, `z3`,
@@ -127,12 +127,22 @@ data model:
    merge-row consistency.
 5. `apply --round <name>` combines every batch's manifest, re-validates,
    and applies forget/merge decisions to `memories.jsonl` — dry-run by
-   default, `--apply` to write. A citation orphan guard defers (doesn't
+   default, `-f`/`--force` to write (git-clean-style: refuse to mutate
+   unless explicitly forced). A citation orphan guard defers (doesn't
    silently drop) any forget still cited by a surviving memory outside the
-   manifest; `--force` skips it. Promote rows are reported, never
+   manifest; `--skip-guard` skips it. Promote rows are reported, never
    auto-applied — the target is another repo's docs, so a human adds the
-   content and forgets the key in a follow-up round. `--apply` also
-   appends round/batch provenance to `rounds/<name>/decisions.jsonl`.
+   content and forgets the key in a follow-up round. `--force` also backs
+   up `memories.jsonl` to `rounds/<name>/memories.pre-apply.jsonl` before
+   writing, and appends round/batch provenance to
+   `rounds/<name>/decisions.jsonl`. Passing `--source <angr-checkout>`
+   alongside `--force` additionally pushes `bd forget` for every
+   newly-forgotten key against that checkout's live `bd` corpus, backing up
+   each key's live body to `rounds/<name>/bd-live-backup.jsonl` first and
+   logging per-key outcomes to `rounds/<name>/live-push.jsonl` — bd has no
+   atomic multi-key forget or rollback, so a failed push warns and
+   continues rather than aborting the batch, and restoring a key is a
+   manual `bd remember "<body>" --key <key>` from the backup file.
 
 ## Current snapshot
 

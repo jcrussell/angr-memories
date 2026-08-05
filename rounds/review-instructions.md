@@ -38,7 +38,21 @@ Verdict-specific extra fields:
     "iteration N done", status snapshots, one-off run results);
 (d) a more descriptive memory in the SAME cluster supersedes it;
 (e) it describes a file, flag, script, or workflow that no longer exists
-    (verify with ls/grep before concluding, or trust `stale_file_ref`).
+    (verify with ls/grep before concluding, or trust `stale_file_ref`);
+(f) its primary value is a specific file:line, function/struct name,
+    register/opcode encoding, or other implementation-level detail that will
+    drift as the code changes, AND that detail would serve its purpose
+    better as a comment at that location than as a memory re-injected into
+    every future session regardless of topic. `bd prime` has no relevance
+    filtering — every kept memory's full body loads into every session — so
+    a memory only earns that permanent cost if it states something a reader
+    would still want in a session unrelated to the code it's about (a
+    general invariant, workflow gotcha, or design rule), not a debugging
+    narrative pinned to one line of one file. When forgetting for this
+    reason, name the file/function where the detail belongs in `reason`
+    (e.g. "relocate to native/angr/src/vex/ccall.rs near
+    arm_sym_flag_n") — `apply` won't write the comment; a human does that
+    by hand, same as `promote`.
 
 **merge** when ≥2 keys in YOUR batch describe the same invariant/rule.
 Pick the most descriptive as canonical; `merged_body` = canonical body plus
@@ -59,10 +73,17 @@ Allow-listed promote targets: every existing file matched by
 `docs/advanced-topics/*.rst` and `docs/extending-angr/*.rst` in the angr
 repo.
 
-**keep** is the residual. Bias toward keep when the memory adds operational
-detail beyond CLAUDE.md's brief mention. CLAUDE.md is short; memories are
-detailed — forget only if the memory adds nothing beyond the docs/CLAUDE.md
-coverage.
+**keep** is the residual. Bias toward keep when the memory states something
+durable and generalizable — an invariant, a cross-cutting gotcha, a
+workflow/process rule — that a reader would still want in a session
+unrelated to the code it's about. `bd prime` injects every kept memory's
+full body into every session unconditionally (no relevance filtering, no
+recency weighting), so "adds operational detail beyond CLAUDE.md's brief
+mention" is not by itself enough to keep: if that detail is really
+criterion (f) territory (pinned to one file:line/commit, better placed as a
+code comment), forget it even though it's detailed. Forget only if the
+memory adds nothing beyond the docs/CLAUDE.md coverage, or belongs in code
+per (f).
 
 ## Mandatory keep-list (verdict MUST be keep — never forget/merge these)
 
