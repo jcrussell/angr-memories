@@ -1,9 +1,11 @@
 package chart
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
+	"unicode/utf8"
 )
 
 func fmtInt(v float64) string { return strconv.Itoa(int(v)) }
@@ -76,7 +78,36 @@ func TestHorizontalBars_truncatesLongLabels(t *testing.T) {
 	long := strings.Repeat("x", maxLabelLen*2)
 	rows := []Row{{Label: long, Segments: []Segment{{Value: 1}}}}
 	got := string(HorizontalBars(rows, fmtInt))
-	if strings.Contains(got, long) {
-		t.Errorf("expected a long label to be truncated, got the full label in %q", got)
+
+	visible := regexp.MustCompile(`<text x="0"[^>]*>(.*?)<title>`).FindStringSubmatch(got)
+	if visible == nil {
+		t.Fatalf("expected a chart-label <text> element with a nested <title>, got %q", got)
+	}
+	if visible[1] == long {
+		t.Errorf("expected the visible label text to be truncated, got the full label %q", visible[1])
+	}
+	if !strings.HasSuffix(visible[1], "…") {
+		t.Errorf("expected the truncated visible label to end in an ellipsis, got %q", visible[1])
+	}
+}
+
+func TestHorizontalBars_titleCarriesFullUntruncatedLabel(t *testing.T) {
+	long := strings.Repeat("x", maxLabelLen*2)
+	rows := []Row{{Label: long, Segments: []Segment{{Value: 1}}}}
+	got := string(HorizontalBars(rows, fmtInt))
+
+	want := "<title>" + long + "</title>"
+	if !strings.Contains(got, want) {
+		t.Errorf("expected the full untruncated label in a <title> element, got %q", got)
+	}
+}
+
+func TestHorizontalBars_truncationIsRuneSafe(t *testing.T) {
+	long := strings.Repeat("é", maxLabelLen*2)
+	rows := []Row{{Label: long, Segments: []Segment{{Value: 1}}}}
+	got := string(HorizontalBars(rows, fmtInt))
+
+	if !utf8.ValidString(got) {
+		t.Errorf("expected valid UTF-8 output, truncation split a multi-byte rune")
 	}
 }

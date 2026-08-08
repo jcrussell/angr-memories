@@ -134,7 +134,7 @@ footer .container { padding: 20px 24px; color: var(--fg-subtle); font-size: 0.85
 .chart-section { margin: 32px 0; }
 .chart-section h2 { font-size: 1.15rem; margin: 0 0 4px; }
 .chart-caption { color: var(--fg-subtle); font-size: 0.85rem; margin: 0 0 12px; }
-.chart { display: block; width: 100%; height: auto; max-width: 640px; }
+.chart { display: block; width: 100%; height: auto; max-width: 710px; }
 .chart-empty { color: var(--fg-subtle); font-size: 0.9rem; font-style: italic; }
 .chart-label, .chart-value, .chart-axis-label { font-size: 11px; fill: var(--fg-muted); }
 .chart-value { font-variant-numeric: tabular-nums; }

@@ -9,7 +9,7 @@ import (
 const (
 	barRowHeight  = 22
 	barRowGap     = 6
-	barLabelWidth = 150
+	barLabelWidth = 300
 	barPlotWidth  = 340
 	barValueGap   = 10
 )
@@ -60,8 +60,8 @@ func HorizontalBars(rows []Row, valueFmt func(total float64) string) template.HT
 		y := i * (barRowHeight + barRowGap)
 		textY := y + barRowHeight/2 + 4
 
-		fmt.Fprintf(&b, `<text x="0" y="%d" class="chart-label">%s</text>`,
-			textY, template.HTMLEscapeString(truncate(r.Label, maxLabelLen)))
+		fmt.Fprintf(&b, `<text x="0" y="%d" class="chart-label">%s<title>%s</title></text>`,
+			textY, template.HTMLEscapeString(truncate(r.Label, maxLabelLen)), template.HTMLEscapeString(r.Label))
 
 		x := float64(barLabelWidth)
 		total := 0.0

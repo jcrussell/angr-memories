@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	lineWidth  = 640
+	lineWidth  = 710
 	lineHeight = 200
 	linePadL   = 44
 	linePadB   = 24
