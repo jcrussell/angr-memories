@@ -23,26 +23,19 @@ Everything lives in one file, `memories.jsonl` — one JSON object per line:
 
 - `key` — the bd memory key
 - `body` — last known body text
-- `first_seen` — when this record is first known to have existed (a floor,
-  not necessarily the true creation date)
-- `updated_at` — when `sync` last saw the body change; empty if it's never
-  been edited since `first_seen`. Exists so pruning rounds can scope
-  themselves to genuinely new-or-changed keys (`chunk --delta-since`)
-  instead of re-reviewing an untouched survivor set every round.
+- `first_seen` — when this record is first known to have existed (a
+  floor, not necessarily the true creation date)
+- `updated_at` — when `sync` last saw the body change; empty if unedited
+  since `first_seen`. Used by `chunk --delta-since` to scope a review to
+  changed keys.
 - `decided_at` — when it was forgotten; empty while still remembered
-- `reason` — why it was forgotten, when a curated decision recorded one;
-  for closures `sync` detects from a live-corpus diff, this is just
-  `"sync: absent from live snapshot"` — a breadcrumb for *how* the closure
-  was found, not a guess at *why* the key vanished, which is unknowable
-  from a live diff
+- `reason` — why it was forgotten, when recorded; sync-detected closures
+  record `"sync: absent from live snapshot"`
 - `merged_into` — canonical key this one was merged into, if applicable
 
-There's no `verdict` field (`decided_at == ""` means remembered — storing
-both would just be two fields that have to agree), no `prefix` field (it's
-`key.split("-")[0]` mapped through a small family table, computed on read),
-and no incarnation counter. A key that was forgotten and later recreated
-just gets a second line with a later `first_seen` — group by `key`, sort by
-`first_seen`, and the incarnation order falls out for free.
+A key that's forgotten and later recreated gets a second line with a
+later `first_seen`; group by `key` and sort by `first_seen` for
+incarnation order.
 
 ## Commands
 
@@ -58,59 +51,40 @@ angr-memories validate --round R5                                   # check ever
 angr-memories apply    --round R5 [-f] [--skip-guard] [--source <angr-checkout>]  # apply a round's manifests to memories.jsonl
 ```
 
-`make build`/`make test`/`make vet`/`make site`/`make clean` wrap the
-equivalent `go` invocations — see `Makefile`. Each command's `--help`
-has the full flag reference and rationale; what follows fills in only
-what `--help` doesn't already cover.
-
-`site` also renders a `/dashboard/` page — corpus size over time, prefix
-family sizes, a survival-time histogram, and the most-cited remembered
-keys (a proxy for "load-bearing, risky to forget") — each as inline SVG
-generated server-side, so the site stays zero-JavaScript. Internal links
-are page-relative by default, so `_site/index.html` works straight off
-disk via `file://`; pass `--base-url` for absolute, prefixed links when
-deploying under a URL path prefix (e.g. a project-level GitHub Pages
-site).
-
-`search`'s on-disk cache makes an unchanged archive a ~50ms hit and a
-changed one a ~0.6s rebuild. `--fuzzy` is worth remembering during a
-pruning review specifically — edit-distance matching catches "have I
-already written something like this" before you decide keep/forget/merge.
-
-`sync` refuses to run if it would close more than 20% of the
-currently-remembered records in one go (not a number `--help` states);
-`--force` overrides it.
+Run `angr-memories <cmd> --help` for the full flag reference on any of
+these. `make build`/`make test`/`make vet`/`make site`/`make clean` wrap
+the equivalent `go` invocations.
 
 ### Pruning a round
 
-`triage`/`chunk`/`validate`/`apply` implement a round-by-round review
-workflow for shrinking the remembered set without losing anything
-load-bearing — each command's `--help` has the full mechanics:
+`triage`, `chunk`, `validate`, and `apply` walk the remembered set
+through one review round, in order:
+
+```
+angr-memories triage   --source ~/repos/angr --out triage.jsonl
+angr-memories chunk    --round R7 --delta-since 2026-07-20T00:00:00Z
+#  ...review each rounds/R7/batches/<id>/, writing its manifest.jsonl...
+angr-memories validate --round R7
+angr-memories apply    --round R7 --force
+```
 
 1. `triage` (optional) tags every remembered key with heuristics, to
    prioritize which batches need careful review.
-2. `chunk --round <name>` buckets remembered keys into
-   `rounds/<name>/batches/<batch-id>/` bundles for review. Scope later
-   rounds to `--delta-since <RFC3339>` (new-or-changed keys only, instead
-   of re-reviewing an already-scrubbed survivor set) or `--keys-file
-   <path>` (an exact, cross-cutting key list for an ad-hoc audit).
-3. **Review** — spawn one agent per batch (or review by hand) using
+2. `chunk` buckets keys into batches under `rounds/<name>/batches/`.
+   `--delta-since` scopes to new-or-changed keys instead of re-reviewing
+   an already-scrubbed survivor set; `--keys-file` scopes to an exact
+   list for an ad-hoc audit.
+3. **Review** each batch — by hand, or one agent per batch — using
    `rounds/review-instructions.md`'s decision tree (forget/merge/promote/
-   keep, bias toward keep), writing `rounds/<name>/batches/<batch-id>/manifest.jsonl`.
-   `rounds/mandatory-keep.txt` lists keys no verdict may forget or merge away.
-4. `validate --round <name>` checks every batch's manifest for full
-   coverage, valid verdicts, and merge-row consistency.
-5. `apply --round <name>` combines every batch's manifest and applies
-   forget/merge decisions to `memories.jsonl` — dry-run by default,
-   `-f`/`--force` to write. Pass `--source <angr-checkout>` alongside
-   `--force` to also push forgets to the live `bd` corpus.
+   keep, bias toward keep). `rounds/mandatory-keep.txt` lists keys no
+   verdict may remove. Write the batch's `manifest.jsonl`.
+4. `validate` checks every manifest for full coverage, valid verdicts,
+   and merge-row consistency.
+5. `apply` combines every manifest and writes the decisions to
+   `memories.jsonl` — dry-run unless `-f`/`--force`; add `--source
+   <angr-checkout>` to also push forgets to the live `bd` corpus.
 
-The corpus has gone through several rounds of this since 2026-06-04 —
-four rounds shrank it 1,296 → 1,000 by 2026-07-20, and more have followed
-as `sync` pulled in new keys since (see git history for round-by-round
-provenance; the tooling behind the earliest rounds was Python and
-`bd`-coupled, deleted when this repo was rebuilt as a JSONL-native
-archive).
+`--help` on each command has the full mechanics and edge cases.
 
 ## Current snapshot
 
