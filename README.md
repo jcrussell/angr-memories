@@ -15,10 +15,19 @@ A browsable, continuously-synced archive of the `angr` project's
 
 ## Data model
 
-Everything lives in one file, `memories.jsonl` — one JSON object per line:
+Everything lives in one file, `memories.jsonl` — one JSON object per
+line (pretty-printed below for readability):
 
 ```json
-{"key": "invariant-solver-eval-timing", "body": "...", "first_seen": "2026-06-04T00:00:00Z", "updated_at": "", "decided_at": "", "reason": "", "merged_into": ""}
+{
+  "key": "invariant-solver-eval-timing",
+  "body": "...",
+  "first_seen": "2026-06-04T00:00:00Z",
+  "updated_at": "",
+  "decided_at": "",
+  "reason": "",
+  "merged_into": ""
+}
 ```
 
 - `key` — the bd memory key
