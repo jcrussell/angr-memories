@@ -64,10 +64,11 @@ a `/dashboard/` page: corpus size over time, prefix family sizes, a
 survival-time histogram, and the most-cited remembered keys (a proxy for
 "load-bearing, risky to forget"), each as inline SVG generated server-side
 — the site stays zero-JavaScript, so charts are baked into the static HTML
-rather than drawn client-side. Internal links are root-relative (`/dashboard/`,
-`/prefix/...`), so the rendered `_site/` must be served from a domain root
-(a plain static file server, or a user/org-level GitHub Pages site) — it
-won't work opened directly via `file://` or hosted under a URL path prefix.
+rather than drawn client-side. By default internal links are page-relative,
+so the rendered `_site/` works straight off disk — open `_site/index.html`
+directly via `file://` and every link and stylesheet resolves. Pass
+`--base-url` to instead emit absolute, prefixed links when deploying under a
+URL path prefix (e.g. a project-level GitHub Pages site).
 
 `search` ranks matches with a [bleve](https://github.com/blevesearch/bleve)
 index, cached on disk under the OS cache directory

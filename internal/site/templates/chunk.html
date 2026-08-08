@@ -5,7 +5,7 @@
 {{template "header" .}}
 <main class="container home">
 <article class="content">
-<p class="breadcrumb"><a href="{{url "/"}}">Home</a> / <a href="{{url .Prefix.Path}}"><code>{{.Prefix.Name}}</code></a> / {{.Chunk.Label}}</p>
+<p class="breadcrumb"><a href="{{url .Path "/"}}">Home</a> / <a href="{{url .Path .Prefix.Path}}"><code>{{.Prefix.Name}}</code></a> / <span>{{.Chunk.Label}}</span></p>
 <h1><code>{{.Prefix.Name}}</code> / {{.Chunk.Label}}</h1>
 <p class="lede">{{.Chunk.Remembered}} remembered, {{.Chunk.Forgotten}} forgotten in this chunk.</p>
 

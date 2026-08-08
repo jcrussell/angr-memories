@@ -3,18 +3,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{{.Title}}</title>
-<link rel="stylesheet" href="{{url "/static/site.css"}}">
-<link rel="stylesheet" href="{{url "/static/chroma.css"}}">
+<link rel="stylesheet" href="{{url .Path "/static/site.css"}}">
+<link rel="stylesheet" href="{{url .Path "/static/chroma.css"}}">
 </head>
 {{end}}
 
 {{define "header"}}
 <header>
   <div class="container">
-    <a href="{{url "/"}}" class="brand">angr-memories</a>
+    <a href="{{url .Path "/"}}" class="brand">angr-memories</a>
     <nav>
-      <a href="{{url "/"}}">Home</a>
-      <a href="{{url "/dashboard/"}}">Dashboard</a>
+      <a href="{{url .Path "/"}}">Home</a>
+      <a href="{{url .Path "/dashboard/"}}">Dashboard</a>
       {{if .Site.RepoURL}}<a href="{{.Site.RepoURL}}">GitHub</a>{{end}}
     </nav>
   </div>
@@ -30,23 +30,38 @@
 {{end}}
 
 {{define "groups"}}
+{{if .}}
+<div class="filter-bar" role="radiogroup" aria-label="Filter by status">
+  <input type="radio" name="status-filter" id="filter-all" class="filter-input" checked>
+  <label for="filter-all">All</label>
+  <input type="radio" name="status-filter" id="filter-remembered" class="filter-input">
+  <label for="filter-remembered">Remembered</label>
+  <input type="radio" name="status-filter" id="filter-forgotten" class="filter-input">
+  <label for="filter-forgotten">Forgotten</label>
+</div>
+{{end}}
 {{range .}}
-<section class="group{{if .Recreated}} recreated{{end}}" id="{{.Key}}">
+<section class="group{{if .Current.Remembered}} remembered{{else}} forgotten{{end}}{{if .Recreated}} recreated{{end}}" id="{{.Key}}">
   <h2><a href="#{{.Key}}"><code>{{.Key}}</code></a>
     {{if .Current.Remembered}}<span class="badge remembered">remembered</span>{{else}}<span class="badge forgotten">forgotten</span>{{end}}
     {{if .Recreated}}<span class="badge recreated">recreated</span>{{end}}
   </h2>
-  {{if .Recreated}}
-  <p class="recreated-note">
-    {{range $i, $inc := .Incarnations}}{{if $i}} — recreated {{$inc.FirstSeen}}{{if not $inc.Remembered}}, forgotten again {{$inc.DecidedAt}}{{end}}{{else}}first seen {{$inc.FirstSeen}}, forgotten {{$inc.DecidedAt}}{{end}}{{end}}
-  </p>
-  {{end}}
   {{with .Current}}
-    {{if .Remembered}}
-      <div class="body">{{.BodyHTML}}</div>
-    {{else}}
-      <p class="forgotten-summary">forgotten {{.DecidedAt}}{{if .Reason}} — {{.Reason}}{{end}}{{if .MergedInto}} (merged into <code>{{.MergedInto}}</code>){{end}}</p>
+    <div class="body">{{.BodyHTML}}</div>
+  {{end}}
+  {{if or .Recreated (not .Current.Remembered)}}
+  <footer class="group-footer">
+    {{if .Recreated}}
+    <p class="recreated-note">
+      {{range $i, $inc := .Incarnations}}{{if $i}} — recreated {{$inc.FirstSeen}}{{if not $inc.Remembered}}, forgotten again {{$inc.DecidedAt}}{{end}}{{else}}first seen {{$inc.FirstSeen}}, forgotten {{$inc.DecidedAt}}{{end}}{{end}}
+    </p>
     {{end}}
+    {{with .Current}}
+      {{if not .Remembered}}
+      <p class="forgotten-summary">forgotten {{.DecidedAt}}{{if .Reason}} — {{.Reason}}{{end}}{{if .MergedInto}} (merged into <code>{{.MergedInto}}</code>){{end}}</p>
+      {{end}}
+    {{end}}
+  </footer>
   {{end}}
 </section>
 {{end}}

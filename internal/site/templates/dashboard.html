@@ -5,7 +5,7 @@
 {{template "header" .}}
 <main class="container home">
 <article class="content">
-<p class="breadcrumb"><a href="{{url "/"}}">Home</a> / Dashboard</p>
+<p class="breadcrumb"><a href="{{url .Path "/"}}">Home</a> / <span>Dashboard</span></p>
 <h1>Dashboard</h1>
 <p class="lede">{{.Site.TotalRemembered}} remembered, {{.Site.TotalForgotten}} forgotten, across {{len .Site.Prefixes}} key-prefix families.</p>
 

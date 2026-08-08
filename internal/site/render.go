@@ -16,6 +16,7 @@ import (
 	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/util"
 )
 
 //go:embed templates/*.html
@@ -40,11 +41,14 @@ func Render(s *Site, outDir string) error {
 	}
 
 	tpl, err := template.New("").Funcs(template.FuncMap{
-		"url": func(p string) string {
-			if strings.HasPrefix(p, "http://") || strings.HasPrefix(p, "https://") {
-				return p
+		"url": func(from, target string) string {
+			if strings.HasPrefix(target, "http://") || strings.HasPrefix(target, "https://") {
+				return target
 			}
-			return s.BaseURL + p
+			if s.BaseURL != "" {
+				return s.BaseURL + target
+			}
+			return relativeURL(from, target)
 		},
 	}).ParseFS(templatesFS, "templates/*.html")
 	if err != nil {
@@ -62,26 +66,26 @@ func Render(s *Site, outDir string) error {
 	}
 
 	if err := writePage(tpl, "index.html", filepath.Join(outDir, "index.html"), pageData{
-		Site: s, Title: "angr-memories",
+		Site: s, Path: "/", Title: "angr-memories",
 	}); err != nil {
 		return err
 	}
 
 	if err := writePage(tpl, "dashboard.html", filepath.Join(outDir, "dashboard", "index.html"), pageData{
-		Site: s, Title: "Dashboard — angr-memories",
+		Site: s, Path: "/dashboard/", Title: "Dashboard — angr-memories",
 	}); err != nil {
 		return err
 	}
 
 	for _, pi := range s.Prefixes {
 		if err := writePage(tpl, "prefix.html", filepath.Join(outDir, "prefix", pi.Name, "index.html"), pageData{
-			Site: s, Prefix: pi, Title: pi.Name + " — angr-memories",
+			Site: s, Prefix: pi, Path: pi.Path, Title: pi.Name + " — angr-memories",
 		}); err != nil {
 			return err
 		}
 		for _, c := range pi.Chunks {
 			if err := writePage(tpl, "chunk.html", filepath.Join(outDir, "prefix", pi.Name, c.Label, "index.html"), pageData{
-				Site: s, Prefix: pi, Chunk: c, Title: pi.Name + " " + c.Label + " — angr-memories",
+				Site: s, Prefix: pi, Chunk: c, Path: c.Path, Title: pi.Name + " " + c.Label + " — angr-memories",
 			}); err != nil {
 				return err
 			}
@@ -105,6 +109,30 @@ func checkOutDirSafe(outDir string) error {
 		return fmt.Errorf("--out %q resolves to your home directory; refusing to delete it", outDir)
 	}
 	return nil
+}
+
+// relativeURL turns a root-relative target path into one relative to from
+// (the current page's own root-relative directory), so the rendered site
+// works when opened directly via file:// -- which, unlike an HTTP server,
+// never resolves a bare directory reference to its index.html. A target
+// that is empty or ends in "/" is treated as a directory and gets
+// "index.html" appended before being made relative. Results aren't always
+// the shortest possible path (e.g. a link between sibling pages may route
+// via the site root), but they always resolve to a real file.
+func relativeURL(from, target string) string {
+	if target == "" || strings.HasSuffix(target, "/") {
+		target += "index.html"
+	}
+	ups := strings.Repeat("../", len(pathSegments(from)))
+	return ups + strings.TrimPrefix(target, "/")
+}
+
+func pathSegments(p string) []string {
+	p = strings.Trim(p, "/")
+	if p == "" {
+		return nil
+	}
+	return strings.Split(p, "/")
 }
 
 func renderGroups(md goldmark.Markdown, groups []*Group) {
@@ -131,8 +159,28 @@ func renderGroups(md goldmark.Markdown, groups []*Group) {
 // unaffected either way; this only touches the rendered view, and the
 // alternative (escaping `<`/`>` before handing text to goldmark) would
 // double-escape genuine fenced code blocks, which is worse.
+//
+// For the same reason, the base inline-parser set below omits
+// parser.NewLinkParser() (which handles both `[text](url)` links and
+// `![alt](url)` images). Bodies are full of domain notation shaped like
+// `Extract[h1:l1](x)` -- CommonMark happily parses that as a link with
+// text "h1:l1" pointing at "x", silently swallowing the brackets/parens
+// instead of displaying them. Dropping the paragraph transformer that
+// collects `[label]: url` reference definitions too, for the same
+// reason (those lines would otherwise vanish from the visible body).
+// GFM's own bare-URL autolinking (extension.GFM's linkify) is a
+// separate parser layered on below and is unaffected.
 func newGoldmark() goldmark.Markdown {
 	return goldmark.New(
+		goldmark.WithParser(parser.NewParser(
+			parser.WithBlockParsers(parser.DefaultBlockParsers()...),
+			parser.WithInlineParsers(
+				util.Prioritized(parser.NewCodeSpanParser(), 100),
+				util.Prioritized(parser.NewAutoLinkParser(), 300),
+				util.Prioritized(parser.NewRawHTMLParser(), 400),
+				util.Prioritized(parser.NewEmphasisParser(), 500),
+			),
+		)),
 		goldmark.WithExtensions(
 			extension.GFM,
 			highlighting.NewHighlighting(
@@ -177,6 +225,7 @@ type pageData struct {
 	Site   *Site
 	Prefix *PrefixIndex
 	Chunk  *Chunk
+	Path   string // this page's own root-relative directory, e.g. "/prefix/<name>/"
 	Title  string
 }
 

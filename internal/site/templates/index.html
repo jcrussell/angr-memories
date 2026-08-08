@@ -4,22 +4,18 @@
 <body>
 {{template "header" .}}
 <main class="container home">
-<article class="content">
+<article class="content wide">
 <h1>angr-memories</h1>
 <p class="lede">{{.Site.TotalRemembered}} remembered, {{.Site.TotalForgotten}} forgotten, across {{len .Site.Prefixes}} key-prefix families.</p>
 
-<table class="prefix-table">
-<thead><tr><th>Prefix</th><th>Remembered</th><th>Forgotten</th></tr></thead>
-<tbody>
+<ul class="prefix-grid">
 {{range .Site.Prefixes}}
-<tr>
-  <td><a href="{{url .Path}}"><code>{{.Name}}</code></a>{{if .Chunked}} <span class="chunked-note">({{len .Chunks}} pages)</span>{{end}}</td>
-  <td>{{.Remembered}}</td>
-  <td>{{.Forgotten}}</td>
-</tr>
+<li>
+  <h3><a href="{{url $.Path .Path}}"><code>{{.Name}}</code></a></h3>
+  <p class="count">{{.Remembered}} remembered, {{.Forgotten}} forgotten{{if .Chunked}} · {{len .Chunks}} pages{{end}}</p>
+</li>
 {{end}}
-</tbody>
-</table>
+</ul>
 </article>
 </main>
 {{template "footer" .}}
