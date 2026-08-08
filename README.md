@@ -1,15 +1,17 @@
 # angr-memories
 
-A continuously-synced, browsable archive of the `angr` project's
-`bd`-backed memory corpus: which memories are currently remembered, which
-were forgotten (when, and why where known), and how long each one
-survived.
+A browsable, continuously-synced archive of the `angr` project's
+`bd`-backed memory corpus, plus the toolkit used to prune it.
 
-Originally built from four curated pruning rounds (2026-06-04 through
-2026-07-20, 1,296 peak memories down to 1,000 survivors — see git history
-for that provenance if you need it). Since then it's kept current via
-`angr-memories sync`, which pulls the live corpus and folds in whatever
-changed.
+- Render the corpus as a static site — prefix-grouped pages, a dashboard
+  (corpus size over time, survival histogram, most-cited keys), zero
+  JavaScript
+- Search remembered (or all) memories with ranked or fuzzy matching
+- Keep the archive in sync with the live `bd` corpus (`angr-memories
+  sync` diffs against the live snapshot and folds in new/changed/closed
+  keys — safe to run repeatedly, e.g. from a cron job)
+- Run structured pruning rounds — triage, batch, review, validate,
+  apply — against the corpus, with guardrails against runaway forgetting
 
 ## Data model
 
@@ -51,99 +53,64 @@ angr-memories sync     --source ~/repos/angr --memories memories.jsonl  # pull t
 angr-memories search   <query> [--prefix] [--all] [--fuzzy] [--no-cache] [--limit 20]  # ranked search over memories.jsonl
 
 angr-memories triage   [--source] [--docs-dir] --out triage.jsonl   # heuristic tags per remembered key
-angr-memories chunk    --round R5 [--delta-since <RFC3339>]         # bucket remembered keys into review batches
+angr-memories chunk    --round R5 [--delta-since <RFC3339> | --keys-file <path>]  # bucket remembered keys into review batches
 angr-memories validate --round R5                                   # check every batch's manifest
 angr-memories apply    --round R5 [-f] [--skip-guard] [--source <angr-checkout>]  # apply a round's manifests to memories.jsonl
 ```
 
-`site` groups memories by key-prefix family (`invariant`, `avoid`, `z3`,
-`rust`, `benchmark`, `ops`, `v5a5`, `inspect`, `syscall`, and a `catch`-all)
-and renders one page per family — split into several pages for the largest
-families so no single page balloons past a reasonable size. It also renders
-a `/dashboard/` page: corpus size over time, prefix family sizes, a
-survival-time histogram, and the most-cited remembered keys (a proxy for
-"load-bearing, risky to forget"), each as inline SVG generated server-side
-— the site stays zero-JavaScript, so charts are baked into the static HTML
-rather than drawn client-side. By default internal links are page-relative,
-so the rendered `_site/` works straight off disk — open `_site/index.html`
-directly via `file://` and every link and stylesheet resolves. Pass
-`--base-url` to instead emit absolute, prefixed links when deploying under a
-URL path prefix (e.g. a project-level GitHub Pages site).
+`make build`/`make test`/`make vet`/`make site`/`make clean` wrap the
+equivalent `go` invocations — see `Makefile`. Each command's `--help`
+has the full flag reference and rationale; what follows fills in only
+what `--help` doesn't already cover.
 
-`search` ranks matches with a [bleve](https://github.com/blevesearch/bleve)
-index, cached on disk under the OS cache directory
-(`$XDG_CACHE_HOME/angr-memories` on Linux) and keyed by a content hash of
-`memories.jsonl`: an unchanged archive is a cache hit (~50ms on the real
-corpus); any change from `sync`/`apply` produces a new hash and rebuilds
-automatically on the next search (~0.6s), garbage-collecting the old
-entry. `--no-cache` skips the cache entirely (always rebuilds in-memory) —
-useful for a one-off run against a scratch `memories.jsonl` you don't want
-polluting the cache. `<query>` is bleve's query-string syntax by default
-(phrase/boolean operators); `--fuzzy` switches to edit-distance matching
-for typo-tolerant or near-duplicate lookups — useful during a pruning
-review to check "have I already written something like this" before
-deciding to keep/forget/merge a memory. Remembered records only by
-default; `--all` includes forgotten ones.
+`site` also renders a `/dashboard/` page — corpus size over time, prefix
+family sizes, a survival-time histogram, and the most-cited remembered
+keys (a proxy for "load-bearing, risky to forget") — each as inline SVG
+generated server-side, so the site stays zero-JavaScript. Internal links
+are page-relative by default, so `_site/index.html` works straight off
+disk via `file://`; pass `--base-url` for absolute, prefixed links when
+deploying under a URL path prefix (e.g. a project-level GitHub Pages
+site).
 
-`sync` runs `bd memories --json` against a live `bd`-backed project
-(auto-discovering its `.beads/` DB) and diffs the result against the
-currently-remembered records: new keys get appended, keys that vanished get
-closed, and keys whose body changed get updated in place — all without
-needing to know anything about *why* the corpus changed. Safe to run
-repeatedly; a no-op against an unchanged corpus. Refuses to run if the live
-snapshot is empty, or would close more than 20% of the currently-remembered
-records in one go (an empty or truncated `bd` response would otherwise read
-as "everything was forgotten") — pass `--force` to override. Writes are
-atomic (temp file + rename), so a crash mid-write can't corrupt
-`memories.jsonl`. Wire it to a cron job or similar to keep the archive
-current.
+`search`'s on-disk cache makes an unchanged archive a ~50ms hit and a
+changed one a ~0.6s rebuild. `--fuzzy` is worth remembering during a
+pruning review specifically — edit-distance matching catches "have I
+already written something like this" before you decide keep/forget/merge.
+
+`sync` refuses to run if it would close more than 20% of the
+currently-remembered records in one go (not a number `--help` states);
+`--force` overrides it.
 
 ### Pruning a round
 
-`triage`/`chunk`/`validate`/`apply` port the round-by-round pruning
-workflow that shrank the corpus 1,296 → 1,000 over four rounds in June/July
-2026 (see git history — the original tooling was Python and `bd`-coupled,
-deleted when this repo was rebuilt as a JSONL-native archive) onto the new
-data model:
+`triage`/`chunk`/`validate`/`apply` implement a round-by-round review
+workflow for shrinking the remembered set without losing anything
+load-bearing — each command's `--help` has the full mechanics:
 
-1. `triage` (optional) tags every remembered key with heuristics —
-   status/closure shape, doc-length-and-language, stale/future dates,
-   citing another memory, a verbatim fragment match against `--docs-dir`,
-   and (with `--source`) citing a repo path `git ls-files` doesn't know
-   about or resolving only to closed beads. Use the tags to prioritize
-   which batches need careful review.
-2. `chunk --round <name>` buckets remembered keys by prefix family into
-   `rounds/<name>/batches/<batch-id>/{bodies.json,cites.json}` bundles,
-   alpha-splitting any family over `--chunk-cap` (default 70). Pass
-   `--delta-since <RFC3339>` on a round after the first to restrict to keys
-   first seen or updated since that time — reviewing an already-scrubbed
-   survivor set from scratch measures ~0.4% forget yield vs 9-26% on
-   genuinely new/changed keys, so scope later rounds to the delta.
+1. `triage` (optional) tags every remembered key with heuristics, to
+   prioritize which batches need careful review.
+2. `chunk --round <name>` buckets remembered keys into
+   `rounds/<name>/batches/<batch-id>/` bundles for review. Scope later
+   rounds to `--delta-since <RFC3339>` (new-or-changed keys only, instead
+   of re-reviewing an already-scrubbed survivor set) or `--keys-file
+   <path>` (an exact, cross-cutting key list for an ad-hoc audit).
 3. **Review** — spawn one agent per batch (or review by hand) using
    `rounds/review-instructions.md`'s decision tree (forget/merge/promote/
    keep, bias toward keep), writing `rounds/<name>/batches/<batch-id>/manifest.jsonl`.
    `rounds/mandatory-keep.txt` lists keys no verdict may forget or merge away.
-4. `validate --round <name>` checks every batch's manifest: full coverage
-   of its bodies bundle, valid verdicts, the mandatory-keep list, and
-   merge-row consistency.
-5. `apply --round <name>` combines every batch's manifest, re-validates,
-   and applies forget/merge decisions to `memories.jsonl` — dry-run by
-   default, `-f`/`--force` to write (git-clean-style: refuse to mutate
-   unless explicitly forced). A citation orphan guard defers (doesn't
-   silently drop) any forget still cited by a surviving memory outside the
-   manifest; `--skip-guard` skips it. Promote rows are reported, never
-   auto-applied — the target is another repo's docs, so a human adds the
-   content and forgets the key in a follow-up round. `--force` also backs
-   up `memories.jsonl` to `rounds/<name>/memories.pre-apply.jsonl` before
-   writing, and appends round/batch provenance to
-   `rounds/<name>/decisions.jsonl`. Passing `--source <angr-checkout>`
-   alongside `--force` additionally pushes `bd forget` for every
-   newly-forgotten key against that checkout's live `bd` corpus, backing up
-   each key's live body to `rounds/<name>/bd-live-backup.jsonl` first and
-   logging per-key outcomes to `rounds/<name>/live-push.jsonl` — bd has no
-   atomic multi-key forget or rollback, so a failed push warns and
-   continues rather than aborting the batch, and restoring a key is a
-   manual `bd remember "<body>" --key <key>` from the backup file.
+4. `validate --round <name>` checks every batch's manifest for full
+   coverage, valid verdicts, and merge-row consistency.
+5. `apply --round <name>` combines every batch's manifest and applies
+   forget/merge decisions to `memories.jsonl` — dry-run by default,
+   `-f`/`--force` to write. Pass `--source <angr-checkout>` alongside
+   `--force` to also push forgets to the live `bd` corpus.
+
+The corpus has gone through several rounds of this since 2026-06-04 —
+four rounds shrank it 1,296 → 1,000 by 2026-07-20, and more have followed
+as `sync` pulled in new keys since (see git history for round-by-round
+provenance; the tooling behind the earliest rounds was Python and
+`bd`-coupled, deleted when this repo was rebuilt as a JSONL-native
+archive).
 
 ## Current snapshot
 
@@ -151,20 +118,6 @@ As of the last `sync`:
 
 | | remembered | forgotten |
 |---|---:|---:|
-| total | 1,289 | 1,149 |
+| total | 918 | 1,520 |
 
 3 keys have been forgotten and later recreated at least once.
-
-## Layout
-
-```
-memories.jsonl                the canonical data
-cmd/angr-memories/main.go     entrypoint
-internal/memory/              Memory struct, JSONL load/save, prefix + chunking + aggregate logic
-internal/prune/                pruning-round mechanics: triage tags, citation graph, manifest validate/apply
-internal/chart/                 hand-rolled inline-SVG chart primitives (bar, line) -- no charting dependency
-internal/site/                static site generator (goldmark + Chroma, styled after byob-go-cli); dashboard.go builds the /dashboard/ charts
-pkg/cmd/{site,stats,sync,search}/    CLI subcommands
-pkg/cmd/{triage,chunk,validate,apply}/  pruning-round CLI subcommands
-rounds/                        pruning-round artifacts: mandatory-keep.txt, review-instructions.md, rounds/<name>/
-```
