@@ -95,6 +95,19 @@ angr-memories apply    --round R7 --force
 
 `--help` on each command has the full mechanics and edge cases.
 
+## Site
+
+The corpus renders as a browsable static site at
+**https://jcrussell.github.io/angr-memories/**. It's built by
+`.github/workflows/pages.yml` on every push to `main`; locally, `make
+site` produces a copy in `_site/`.
+
+The first time the site is enabled in a fork, the repo owner needs to
+flip Settings → Pages → "Build and deployment → Source" to `GitHub
+Actions`. After that, pushes to `main` deploy automatically. Forks that
+rename the repo should update the `--base-url` and `--repo-url` flags
+in `.github/workflows/pages.yml`.
+
 ## Current snapshot
 
 As of the last `sync`:
