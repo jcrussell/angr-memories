@@ -229,6 +229,11 @@ func TestApplyRun_backupOnlyWrittenOnRealApply(t *testing.T) {
 // and a per-key forget error map, plus a slice recording every call made --
 // so live-push logic is testable without ever shelling out to a real bd.
 func fakeBd(liveJSON []byte, forgetErrors map[string]error) (bdRunner, *[]string) {
+	return fakeBdWithRemember(liveJSON, forgetErrors, nil)
+}
+
+// fakeBdWithRemember is fakeBd plus a per-key `bd remember --key` error map.
+func fakeBdWithRemember(liveJSON []byte, forgetErrors, rememberErrors map[string]error) (bdRunner, *[]string) {
 	var calls []string
 	runner := func(ctx context.Context, dir string, timeout time.Duration, name string, args ...string) ([]byte, error) {
 		calls = append(calls, strings.Join(args, " "))
@@ -237,6 +242,12 @@ func fakeBd(liveJSON []byte, forgetErrors map[string]error) (bdRunner, *[]string
 		}
 		if len(args) == 2 && args[0] == "forget" {
 			if err, ok := forgetErrors[args[1]]; ok {
+				return nil, err
+			}
+			return nil, nil
+		}
+		if len(args) == 5 && args[0] == "remember" && args[1] == "--key" && args[3] == "--" {
+			if err, ok := rememberErrors[args[2]]; ok {
 				return nil, err
 			}
 			return nil, nil
@@ -300,7 +311,7 @@ func TestLivePush_backsUpThenForgetsAndIsRetrySafe(t *testing.T) {
 	if err := applyRun(opts); err != nil {
 		t.Fatalf("applyRun: %v, output:\n%s", err, out.String())
 	}
-	if !strings.Contains(out.String(), "live-push (source=/fake/angr): forgot=2 failed=0") {
+	if !strings.Contains(out.String(), "live-push (source=/fake/angr): rewrote=0 forgot=2 failed=0") {
 		t.Errorf("expected both keys treated as pushed (not-found tolerated), got:\n%s", out.String())
 	}
 
@@ -360,5 +371,111 @@ func TestLivePush_realFailureReturnsErrorButKeepsArchiveMutation(t *testing.T) {
 	}
 	if _, statErr := os.Stat(filepath.Join(roundsDir, "R5", "decisions.jsonl")); statErr != nil {
 		t.Errorf("expected decisions.jsonl to exist despite the live-push failure: %v", statErr)
+	}
+}
+
+// mergeRows merges invariant-bravo into invariant-alpha. bravo's body cites
+// alpha, but bravo is itself being merged away, so the orphan guard does not
+// defer anything.
+func mergeRows() []prune.Row {
+	return []prune.Row{
+		{Key: "invariant-alpha", Verdict: prune.VerdictMerge, Canonical: true, MergedBody: "solver body plus bravo's detail", Reason: "canonical"},
+		{Key: "invariant-bravo", Verdict: prune.VerdictMerge, MergedInto: "invariant-alpha", Reason: "folded into alpha"},
+	}
+}
+
+func TestLivePush_rewritesCanonicalBodyBeforeForgettingSubordinate(t *testing.T) {
+	liveJSON := []byte(`{"invariant-alpha":"solver body","invariant-bravo":"sees invariant-alpha in its own body"}`)
+	runBd, calls := fakeBd(liveJSON, nil)
+
+	memPath, roundsDir := setupApplyFixture(t, mergeRows())
+	io, _, out, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, Source: "/fake/angr", Timeout: time.Second, KeepListPath: filepath.Join(roundsDir, "no-keep.txt"), runBd: runBd}
+	if err := applyRun(opts); err != nil {
+		t.Fatalf("applyRun: %v, output:\n%s", err, out.String())
+	}
+
+	want := []string{
+		"memories --json",
+		"remember --key invariant-alpha -- solver body plus bravo's detail",
+		"forget invariant-bravo",
+	}
+	if strings.Join(*calls, "\n") != strings.Join(want, "\n") {
+		t.Errorf("bd calls:\n got %q\nwant %q", *calls, want)
+	}
+	if !strings.Contains(out.String(), "rewrote=1 forgot=1 failed=0") {
+		t.Errorf("expected rewrote=1 forgot=1, got:\n%s", out.String())
+	}
+
+	backupRaw, err := os.ReadFile(filepath.Join(roundsDir, "R5", "bd-live-backup.jsonl"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(backupRaw), `"key":"invariant-alpha","body":"solver body"`) {
+		t.Errorf("expected the canonical's pre-merge live body backed up, got:\n%s", backupRaw)
+	}
+}
+
+func TestLivePush_canonicalAlreadyCurrentIsNotRewritten(t *testing.T) {
+	liveJSON := []byte(`{"invariant-alpha":"solver body plus bravo's detail","invariant-bravo":"sees invariant-alpha in its own body"}`)
+	runBd, calls := fakeBd(liveJSON, nil)
+
+	memPath, roundsDir := setupApplyFixture(t, mergeRows())
+	io, _, _, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, Source: "/fake/angr", Timeout: time.Second, KeepListPath: filepath.Join(roundsDir, "no-keep.txt"), runBd: runBd}
+	if err := applyRun(opts); err != nil {
+		t.Fatalf("applyRun: %v", err)
+	}
+	for _, c := range *calls {
+		if strings.HasPrefix(c, "remember") {
+			t.Errorf("live body already equals merged_body; expected no remember call, got %q", c)
+		}
+	}
+}
+
+func TestLivePush_canonicalWriteFailureSkipsAllForgets(t *testing.T) {
+	liveJSON := []byte(`{"invariant-alpha":"solver body","invariant-bravo":"sees invariant-alpha in its own body"}`)
+	runBd, calls := fakeBdWithRemember(liveJSON, nil, map[string]error{
+		"invariant-alpha": fmt.Errorf("exit status 1 (stderr: dolt server unreachable)"),
+	})
+
+	memPath, roundsDir := setupApplyFixture(t, mergeRows())
+	io, _, _, _ := iostreams.Test()
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, Source: "/fake/angr", Timeout: time.Second, KeepListPath: filepath.Join(roundsDir, "no-keep.txt"), runBd: runBd}
+	err := applyRun(opts)
+	if err == nil || !strings.Contains(err.Error(), "skipped all 1 forgets") {
+		t.Fatalf("expected a canonical-write failure that skips forgets, got: %v", err)
+	}
+	for _, c := range *calls {
+		if strings.HasPrefix(c, "forget") {
+			t.Errorf("no forget may run after a canonical write fails, got %q", c)
+		}
+	}
+}
+
+func TestLivePush_rerunAppendsRatherThanTruncatingBackup(t *testing.T) {
+	memPath, roundsDir := setupApplyFixture(t, mergeRows())
+	io, _, _, _ := iostreams.Test()
+
+	first, _ := fakeBdWithRemember([]byte(`{"invariant-alpha":"solver body","invariant-bravo":"sees invariant-alpha in its own body"}`), nil,
+		map[string]error{"invariant-alpha": fmt.Errorf("exit status 1 (stderr: dolt server unreachable)")})
+	opts := &Options{IO: io, MemoriesPath: memPath, RoundsDir: roundsDir, Round: "R5", Force: true, Source: "/fake/angr", Timeout: time.Second, KeepListPath: filepath.Join(roundsDir, "no-keep.txt"), runBd: first}
+	if err := applyRun(opts); err == nil {
+		t.Fatal("expected the first run to fail")
+	}
+
+	second, _ := fakeBd([]byte(`{"invariant-alpha":"solver body","invariant-bravo":"sees invariant-alpha in its own body"}`), nil)
+	opts.runBd = second
+	if err := applyRun(opts); err != nil {
+		t.Fatalf("retry: %v", err)
+	}
+
+	logRaw, err := os.ReadFile(filepath.Join(roundsDir, "R5", "live-push.jsonl"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	// run 1: failed remember; run 2: remember + forget.
+	if n := len(strings.Split(strings.TrimSpace(string(logRaw)), "\n")); n != 3 {
+		t.Errorf("expected 3 appended live-push records across both runs, got %d:\n%s", n, logRaw)
 	}
 }

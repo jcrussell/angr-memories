@@ -2,9 +2,10 @@
 // manifests to memories.jsonl, mutating the archive directly
 // (DecidedAt/Reason/MergedInto/Body) as the round's reviewed source of
 // truth. Ported from the deleted tools/bd_prune.py. Optionally, with
-// --source, also pushes the same forgets live via `bd forget` against an
-// angr checkout's bd-backed corpus -- backing up each key's live body first,
-// since bd has no atomic multi-key forget or rollback, so this is
+// --source, also pushes the same decisions live against an angr checkout's
+// bd-backed corpus -- merge-canonical bodies via `bd remember --key`, then
+// forgets via `bd forget` -- backing up each touched key's live body first,
+// since bd has no atomic multi-key write or rollback, so this is
 // best-effort, not transactional.
 package apply
 
@@ -72,13 +73,16 @@ func NewCmdApply(f *cmdutil.Factory, runF func(*Options) error) *cobra.Command {
 			"Dry-run by default -- pass -f/--force to actually mutate memories.jsonl, " +
 			"back it up to rounds/<round>/memories.pre-apply.jsonl first, and append to " +
 			"rounds/<round>/decisions.jsonl.\n\n" +
-			"Live push: pass --source <angr-checkout> alongside --force to also " +
-			"`bd forget` every newly-forgotten key against that checkout's live bd " +
-			"corpus. Each key's live body is backed up to " +
-			"rounds/<round>/bd-live-backup.jsonl before it's forgotten, and per-key " +
-			"push outcomes are logged to rounds/<round>/live-push.jsonl. bd has no " +
-			"atomic multi-key forget or rollback, so a failed push warns and continues " +
-			"rather than aborting the batch -- restoring a key is a manual " +
+			"Live push: pass --source <angr-checkout> alongside --force to also push " +
+			"the round to that checkout's live bd corpus: first every merge " +
+			"canonical's merged_body via `bd remember --key`, then `bd forget` for " +
+			"every newly-forgotten key. Canonical bodies go first because forgetting a " +
+			"merge subordinate is only safe once its content lives in the canonical; " +
+			"if any canonical write fails, no forget is attempted. Each touched key's " +
+			"live body is appended to rounds/<round>/bd-live-backup.jsonl beforehand, " +
+			"and per-key outcomes are appended to rounds/<round>/live-push.jsonl. bd " +
+			"has no atomic multi-key write or rollback, so a failed forget warns and " +
+			"continues rather than aborting the batch -- restoring a key is a manual " +
 			"`bd remember \"<body>\" --key <key>` from the backup file. Exits non-zero " +
 			"if any push fails, even though the archive-side apply already succeeded.",
 		RunE: func(c *cobra.Command, args []string) error {
@@ -97,7 +101,7 @@ func NewCmdApply(f *cmdutil.Factory, runF func(*Options) error) *cobra.Command {
 	cmd.Flags().StringVar(&opts.KeepListPath, "keep-list", "rounds/mandatory-keep.txt", "path to the mandatory-keep list")
 	cmd.Flags().BoolVarP(&opts.Force, "force", "f", false, "actually mutate memories.jsonl (default: dry-run)")
 	cmd.Flags().BoolVar(&opts.SkipGuard, "skip-guard", false, "skip the citation orphan guard")
-	cmd.Flags().StringVar(&opts.Source, "source", "", "angr checkout to also push forgets to live bd (where bd's .beads/ lives); omit for archive-only")
+	cmd.Flags().StringVar(&opts.Source, "source", "", "angr checkout to also push merges and forgets to live bd (where bd's .beads/ lives); omit for archive-only")
 	cmd.Flags().DurationVar(&opts.Timeout, "timeout", 30*time.Second, "timeout per bd subprocess call")
 	if err := cmd.MarkFlagRequired("round"); err != nil {
 		panic(err)
@@ -184,8 +188,8 @@ func applyRun(opts *Options) error {
 	if !opts.Force {
 		fmt.Fprintln(opts.IO.Out, "\ndry-run: pass -f/--force to write these changes")
 		if opts.Source != "" {
-			if n := len(forgottenKeys(outcomes)); n > 0 {
-				fmt.Fprintf(opts.IO.Out, "live-push preview: would push forget for up to %d keys to bd at %s (fewer if some are already gone live)\n", n, opts.Source)
+			if n, r := len(forgottenKeys(outcomes)), len(rewrittenBodies(outcomes)); n > 0 || r > 0 {
+				fmt.Fprintf(opts.IO.Out, "live-push preview: would rewrite up to %d merge-canonical bodies, then forget up to %d keys, in bd at %s (fewer if some already match live)\n", r, n, opts.Source)
 			}
 		}
 		return nil
@@ -229,8 +233,8 @@ func backupMemories(memoriesPath, roundDir string) error {
 // forgottenKeys returns the keys that become forgotten by this manifest --
 // plain forgets and merge-subordinates, excluding anything the citation
 // orphan guard deferred. Mirrors internal/prune/apply.go's own
-// removed/goneOrRewritten computation; merge-canonicals are excluded since
-// their live body is already correct in bd.
+// removed/goneOrRewritten computation. Merge-canonicals are not forgotten;
+// their new body is pushed separately -- see rewrittenBodies.
 func forgottenKeys(outcomes []prune.Outcome) []string {
 	var keys []string
 	for _, o := range outcomes {
@@ -247,6 +251,21 @@ func forgottenKeys(outcomes []prune.Outcome) []string {
 	return keys
 }
 
+// rewrittenBodies returns key -> merged_body for every merge-canonical row
+// the archive-side apply rewrote. The live push must write these back with
+// `bd remember --key`: the archive copy alone is not enough, because the
+// next `sync` folds the live body back over it, and the subordinates whose
+// content was merged in are forgotten live.
+func rewrittenBodies(outcomes []prune.Outcome) map[string]string {
+	bodies := map[string]string{}
+	for _, o := range outcomes {
+		if !o.Deferred && o.Row.Verdict == prune.VerdictMerge && o.Row.Canonical {
+			bodies[o.Row.Key] = o.Row.MergedBody
+		}
+	}
+	return bodies
+}
+
 type bdBackupEntry struct {
 	Key  string `json:"key"`
 	Body string `json:"body"`
@@ -254,23 +273,31 @@ type bdBackupEntry struct {
 
 type livePushResult struct {
 	Key      string    `json:"key"`
+	Action   string    `json:"action"` // "remember" or "forget"
 	Success  bool      `json:"success"`
 	Error    string    `json:"error,omitempty"`
 	PushedAt time.Time `json:"pushed_at"`
 }
 
-// livePush backs up each newly-forgotten key's current live body (from `bd
-// memories --json`) to rounds/<round>/bd-live-backup.jsonl, then calls
-// `bd forget <key>` for each one against opts.Source, logging per-key
-// outcomes to rounds/<round>/live-push.jsonl. bd has no atomic multi-key
-// forget or rollback, so a failed forget warns and continues rather than
-// aborting the rest of the batch -- there's nothing to roll back to anyway,
-// and the archive-side apply this runs after has already succeeded.
-// Restoring a key is a manual `bd remember "<body>" --key <key>` from the
-// backup file.
+// livePush pushes the round's archive-side decisions to the live corpus at
+// opts.Source in two phases: first `bd remember --key` for every
+// merge-canonical whose live body differs from its merged_body, then
+// `bd forget` for every newly-forgotten key. Every key about to be touched
+// has its current live body (from `bd memories --json`) appended to
+// rounds/<round>/bd-live-backup.jsonl first, and per-key outcomes are
+// appended to rounds/<round>/live-push.jsonl -- appended, not truncated, so
+// a retry never overwrites the backup taken before the first attempt.
+//
+// Ordering is the safety property: a merge subordinate's content survives
+// only inside its canonical's merged_body, so if any canonical write fails
+// the forget phase is skipped entirely. Within the forget phase, bd has no
+// atomic multi-key forget or rollback, so a failed forget warns and
+// continues rather than aborting the rest of the batch. Restoring a key is a
+// manual `bd remember "<body>" --key <key>` from the backup file.
 func livePush(opts *Options, roundDir string, outcomes []prune.Outcome) error {
 	keys := forgottenKeys(outcomes)
-	if len(keys) == 0 {
+	bodies := rewrittenBodies(outcomes)
+	if len(keys) == 0 && len(bodies) == 0 {
 		return nil
 	}
 
@@ -284,61 +311,118 @@ func livePush(opts *Options, roundDir string, outcomes []prune.Outcome) error {
 		return fmt.Errorf("live-push: bd memories --json (in %s): parse: %w", opts.Source, err)
 	}
 
-	backupPath := filepath.Join(roundDir, "bd-live-backup.jsonl")
-	bf, err := os.Create(backupPath)
-	if err != nil {
-		return fmt.Errorf("creating %s: %w", backupPath, err)
+	var toRewrite []string
+	for k, body := range bodies {
+		if live[k] != body { // absent live, or stale: either way write it
+			toRewrite = append(toRewrite, k)
+		}
 	}
-	enc := json.NewEncoder(bf)
+	sort.Strings(toRewrite)
 	var toForget []string
 	for _, k := range keys {
-		body, ok := live[k]
-		if !ok {
-			continue // already gone live -- nothing to back up or forget
+		if _, ok := live[k]; ok { // already gone live -- nothing to back up or forget
+			toForget = append(toForget, k)
 		}
-		if err := enc.Encode(bdBackupEntry{Key: k, Body: body}); err != nil {
-			bf.Close()
-			return fmt.Errorf("writing %s: %w", backupPath, err)
-		}
-		toForget = append(toForget, k)
 	}
-	if err := bf.Close(); err != nil {
-		return fmt.Errorf("closing %s: %w", backupPath, err)
+
+	backupPath := filepath.Join(roundDir, "bd-live-backup.jsonl")
+	if err := appendBackups(backupPath, live, append(append([]string{}, toRewrite...), toForget...)); err != nil {
+		return err
 	}
 
 	logPath := filepath.Join(roundDir, "live-push.jsonl")
-	lf, err := os.Create(logPath)
+	lf, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
-		return fmt.Errorf("creating %s: %w", logPath, err)
+		return fmt.Errorf("opening %s: %w", logPath, err)
 	}
 	lenc := json.NewEncoder(lf)
-
-	pushed, failed := 0, 0
-	for _, k := range toForget {
-		_, pushErr := opts.runBd(ctx, opts.Source, opts.Timeout, "bd", "forget", k)
-		result := livePushResult{Key: k, PushedAt: time.Now().UTC()}
-		if pushErr != nil && !isAlreadyGone(pushErr) {
+	logResult := func(action, k string, pushErr error) error {
+		result := livePushResult{Key: k, Action: action, Success: pushErr == nil, PushedAt: time.Now().UTC()}
+		if pushErr != nil {
 			result.Error = pushErr.Error()
-			failed++
-			fmt.Fprintf(opts.IO.ErrOut, "WARN: bd forget %s: %v\n", k, pushErr)
-		} else {
-			result.Success = true
-			pushed++
+			fmt.Fprintf(opts.IO.ErrOut, "WARN: bd %s %s: %v\n", action, k, pushErr)
 		}
 		if err := lenc.Encode(result); err != nil {
-			lf.Close()
 			return fmt.Errorf("writing %s: %w", logPath, err)
+		}
+		return nil
+	}
+
+	rewrote, rewriteFailed := 0, 0
+	for _, k := range toRewrite {
+		// "--" so a body that happens to start with "-" is never parsed as a flag.
+		_, pushErr := opts.runBd(ctx, opts.Source, opts.Timeout, "bd", "remember", "--key", k, "--", bodies[k])
+		if pushErr != nil {
+			rewriteFailed++
+		} else {
+			rewrote++
+		}
+		if err := logResult("remember", k, pushErr); err != nil {
+			lf.Close()
+			return err
+		}
+	}
+
+	forgot, forgetFailed := 0, 0
+	if rewriteFailed == 0 {
+		for _, k := range toForget {
+			_, pushErr := opts.runBd(ctx, opts.Source, opts.Timeout, "bd", "forget", k)
+			if pushErr != nil && isAlreadyGone(pushErr) {
+				pushErr = nil
+			}
+			if pushErr != nil {
+				forgetFailed++
+			} else {
+				forgot++
+			}
+			if err := logResult("forget", k, pushErr); err != nil {
+				lf.Close()
+				return err
+			}
 		}
 	}
 	if err := lf.Close(); err != nil {
 		return fmt.Errorf("closing %s: %w", logPath, err)
 	}
 
-	fmt.Fprintf(opts.IO.Out, "\nlive-push (source=%s): forgot=%d failed=%d (backup: %s, log: %s)\n",
-		opts.Source, pushed, failed, backupPath, logPath)
+	fmt.Fprintf(opts.IO.Out, "\nlive-push (source=%s): rewrote=%d forgot=%d failed=%d (backup: %s, log: %s)\n",
+		opts.Source, rewrote, forgot, rewriteFailed+forgetFailed, backupPath, logPath)
 
-	if failed > 0 {
-		return fmt.Errorf("live-push: %d of %d keys failed to push to bd -- see %s", failed, len(toForget), logPath)
+	if rewriteFailed > 0 {
+		return fmt.Errorf("live-push: %d of %d merge-canonical bodies failed to write to bd; skipped all %d forgets so no merged-away content is lost -- fix and re-run, see %s",
+			rewriteFailed, len(toRewrite), len(toForget), logPath)
+	}
+	if forgetFailed > 0 {
+		return fmt.Errorf("live-push: %d of %d keys failed to forget in bd -- see %s", forgetFailed, len(toForget), logPath)
+	}
+	return nil
+}
+
+// appendBackups appends each key's current live body to path, one
+// bdBackupEntry per line. Append-only so a re-run after a partial failure
+// keeps the original pre-push bodies rather than overwriting them with
+// already-rewritten ones.
+func appendBackups(path string, live map[string]string, keys []string) error {
+	if len(keys) == 0 {
+		return nil
+	}
+	bf, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
+	if err != nil {
+		return fmt.Errorf("opening %s: %w", path, err)
+	}
+	enc := json.NewEncoder(bf)
+	for _, k := range keys {
+		body, ok := live[k]
+		if !ok {
+			continue // a canonical absent live has nothing to back up
+		}
+		if err := enc.Encode(bdBackupEntry{Key: k, Body: body}); err != nil {
+			bf.Close()
+			return fmt.Errorf("writing %s: %w", path, err)
+		}
+	}
+	if err := bf.Close(); err != nil {
+		return fmt.Errorf("closing %s: %w", path, err)
 	}
 	return nil
 }
