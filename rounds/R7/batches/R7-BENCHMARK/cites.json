@@ -1,0 +1,12 @@
+{
+  "out": {
+    "bench-pin-derive-from-gate-log-percentiles": [
+      "avoid-update-clobbering-pinned-baselines"
+    ]
+  },
+  "in": {
+    "bench-baseline-loose-rot-is-silent": [
+      "bench-baseline-loose-sweep-clean"
+    ]
+  }
+}

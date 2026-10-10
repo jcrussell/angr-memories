@@ -1,0 +1,92 @@
+{
+  "out": {
+    "invariant-address-newtype-ops-already-wrap": [
+      "invariant-address-containment-wrapping-distance",
+      "invariant-rust-concrete-arith-must-wrap"
+    ],
+    "invariant-arch-register-tables": [
+      "invariant-register-names-subset-of-canonical"
+    ],
+    "invariant-assert-not-debug-assert-in-release": [
+      "debug-assert-triage-policy",
+      "panic-abort-no-poison-invariant"
+    ],
+    "invariant-ast-cache-width-check": [
+      "claripy-bridge-thread-local-caches"
+    ],
+    "invariant-bounds-check-must-not-overflow": [
+      "invariant-address-containment-wrapping-distance",
+      "invariant-overflow-fix-refuse-not-saturate-identities"
+    ],
+    "invariant-budget-product-must-saturate": [
+      "invariant-rust-concrete-arith-must-wrap"
+    ],
+    "invariant-ccall-arch-sibling-symbolic-parity": [
+      "invariant-symflags-category-coverage"
+    ],
+    "invariant-ccall-guest-width-truncation": [
+      "invariant-ccall-flag-mask-named-constants"
+    ],
+    "invariant-concrete-bv-width128-shift-guard": [
+      "invariant-concrete-shift-clamp-before-narrow"
+    ],
+    "invariant-concrete-shift-clamp-before-narrow": [
+      "invariant-concrete-bv-u128-16-byte-limit"
+    ],
+    "invariant-concrete-width-gt-128-fast-paths": [
+      "invariant-concrete-bv-u128-16-byte-limit",
+      "invariant-concrete-shift-clamp-before-narrow"
+    ],
+    "invariant-config-broadcast-covers-pending": [
+      "invariant-find-state-mut-covers-pending"
+    ],
+    "invariant-ctype-mirror-python-not-rust-std": [
+      "invariant-native-whitespace-single-source"
+    ],
+    "invariant-dead-code-sweep-siblings": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-doc-example-copies-sweep": [
+      "refactor-memory-sweep-rule"
+    ]
+  },
+  "in": {
+    "invariant-address-containment-wrapping-distance": [
+      "invariant-address-newtype-ops-already-wrap",
+      "invariant-bounds-check-must-not-overflow"
+    ],
+    "invariant-arc-shared-soundness": [
+      "clippy-arc-non-send-helper"
+    ],
+    "invariant-assert-not-debug-assert-in-release": [
+      "debug-assert-triage-policy",
+      "invariant-external-width-bounds-at-boundary",
+      "verify-debug-asserts-with-rustflags"
+    ],
+    "invariant-ccall-flag-mask-named-constants": [
+      "invariant-ccall-guest-width-truncation"
+    ],
+    "invariant-concrete-bv-u128-16-byte-limit": [
+      "bug-class-elimination-2026-07",
+      "invariant-concrete-shift-clamp-before-narrow",
+      "invariant-concrete-width-gt-128-fast-paths",
+      "opcode-map-header-crosscheck-method",
+      "opcode-map-unmapped-allowlist-is-gated",
+      "xmllint-simprocs-cross-engine-divergence"
+    ],
+    "invariant-concrete-shift-clamp-before-narrow": [
+      "bug-class-elimination-2026-07",
+      "invariant-concrete-bv-width128-shift-guard",
+      "invariant-concrete-width-gt-128-fast-paths"
+    ],
+    "invariant-config-broadcast-covers-pending": [
+      "invariant-lineage-flag-propagation"
+    ],
+    "invariant-ctype-mirror-python-not-rust-std": [
+      "invariant-native-whitespace-single-source"
+    ],
+    "invariant-div-by-zero-total-semantics": [
+      "bug-class-elimination-2026-07"
+    ]
+  }
+}

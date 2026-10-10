@@ -1,0 +1,7 @@
+{
+  "in": {
+    "rust-module-root-split-recipe": [
+      "sibling-file-split-visibility-widening"
+    ]
+  }
+}

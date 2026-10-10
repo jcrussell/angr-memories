@@ -1,0 +1,89 @@
+{
+  "out": {
+    "invariant-epsilon-closure-cache-panic": [
+      "invariant-move-on-symbol-epsilon-result"
+    ],
+    "invariant-external-width-bounds-at-boundary": [
+      "debug-assert-triage-policy",
+      "invariant-assert-not-debug-assert-in-release",
+      "invariant-overflow-fix-refuse-not-saturate-identities",
+      "invariant-rustbv-zero-width"
+    ],
+    "invariant-file-size-split-convention": [
+      "no-default-features-test-gating"
+    ],
+    "invariant-icicle-behind-fuzzer-feature": [
+      "zeropy-gate-libvex-build-recipe"
+    ],
+    "invariant-ieee-maxnum-not-rust-f32-max": [
+      "invariant-rust-as-cast-is-rne-only"
+    ],
+    "invariant-is-ready-checks-unguarded-callbacks-only": [
+      "avoid-silent-no-op-callback-fallbacks"
+    ],
+    "invariant-lineage-flag-propagation": [
+      "invariant-config-broadcast-covers-pending"
+    ],
+    "invariant-max-active-states-two-sites": [
+      "max-active-states-test-pattern"
+    ],
+    "invariant-memory-citation-orphan-sweep": [
+      "bd-memory-citation-repair-pattern"
+    ],
+    "invariant-memory-citation-repair-arms": [
+      "invariant-memory-citation-orphan-sweep"
+    ],
+    "invariant-memory-citation-sweep-regex": [
+      "invariant-memory-citation-repair-arms"
+    ],
+    "invariant-mirror-pair-hardening-sweep": [
+      "angr-macros-call-site-invariants",
+      "debug-assert-triage-policy"
+    ],
+    "invariant-mirror-python-semantics-not-hardware": [
+      "invariant-arm64g-ccall-python-quirk"
+    ],
+    "invariant-multi-vs-symbolic-cell-states": [
+      "invariant-every-load-path-gates-multi",
+      "invariant-symbolic-byte-lane-lookup"
+    ],
+    "invariant-native-handler-err-no-rollback": [
+      "invariant-syscall-fd-check-before-count"
+    ],
+    "invariant-native-proc-return-width-extension": [
+      "invariant-wide-return-needs-python-fallback"
+    ],
+    "invariant-native-stdin-readers-use-mint-stdin-bytes": [
+      "avoid-storing-extract-asts-in-guest-buffers"
+    ]
+  },
+  "in": {
+    "invariant-end-page-inclusive-zero-size": [
+      "invariant-zero-size-page-range-overshoot"
+    ],
+    "invariant-find-state-mut-covers-pending": [
+      "invariant-config-broadcast-covers-pending"
+    ],
+    "invariant-guest-state-size-vs-archinfo": [
+      "invariant-register-names-subset-of-canonical"
+    ],
+    "invariant-max-active-states-two-sites": [
+      "invariant-active-stash-push-parallel-note"
+    ],
+    "invariant-memory-citation-orphan-sweep": [
+      "invariant-memory-citation-repair-arms"
+    ],
+    "invariant-memory-citation-repair-arms": [
+      "invariant-memory-citation-sweep-regex"
+    ],
+    "invariant-move-on-symbol-epsilon-result": [
+      "invariant-epsilon-closure-cache-panic"
+    ],
+    "invariant-multi-vs-symbolic-cell-states": [
+      "invariant-page-bitmap-authoritative"
+    ],
+    "invariant-native-stdin-readers-use-mint-stdin-bytes": [
+      "stdin-seed-binding-architecture"
+    ]
+  }
+}

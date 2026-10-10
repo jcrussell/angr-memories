@@ -1,0 +1,122 @@
+{
+  "out": {
+    "anti-migration-scheduler-delivered": [
+      "migration-count-is-the-lever",
+      "parallel-is-transport-bound",
+      "vh834-phase6-go-not-materialized"
+    ],
+    "arch-offset-parity-gate": [
+      "invariant-arch-offset-archinfo-parity"
+    ],
+    "audit-2026-09-04-symex-round7-method": [
+      "avoid-deferred-fork-base-mismatch"
+    ],
+    "audit-retrospective-cross-branch-update": [
+      "audit-retrospective-origin-reconciliation"
+    ],
+    "audit-retrospective-origin-reconciliation": [
+      "audit-retrospective-origin-confidence-correction"
+    ],
+    "bounce-reduction-low-roi-corpus": [
+      "invariant-zeropy-gate-levers-are-count-not-ns",
+      "rust-python-boundary-audit"
+    ],
+    "callbacks-unit-test-harness": [
+      "avoid-silent-no-op-callback-fallbacks"
+    ],
+    "cargo-only-rebuild-drops-libvex-ffi-tests": [
+      "venv-rebuild-cargo-direct-copy"
+    ],
+    "claripy-bridge-thread-local-caches": [
+      "invariant-expression-cache-export-key"
+    ],
+    "clippy-arc-non-send-helper": [
+      "invariant-arc-shared-soundness"
+    ],
+    "counter-doc-population-rot": [
+      "module-doc-scope-rot"
+    ],
+    "dead-counter-audit-oneliner": [
+      "counter-doc-population-rot"
+    ],
+    "debug-assert-triage-policy": [
+      "invariant-assert-not-debug-assert-in-release"
+    ],
+    "docs-citation-audit-method": [
+      "refactor-memory-sweep-rule"
+    ],
+    "emit-extract-z3-recursion-hazard": [
+      "extract-driver-unified"
+    ],
+    "extract-driver-unified": [
+      "emit-extract-z3-recursion-hazard"
+    ],
+    "fallback-cost-first-call-vs-amortized": [
+      "write-side-fileno-fallback-correct"
+    ],
+    "gate-red-triage-histogram-method": [
+      "benchmark-bimodal-variance-rules"
+    ],
+    "i386-struct-stat-and-angr-syscall-map": [
+      "mips32-struct-stat-and-omitted-mode"
+    ]
+  },
+  "in": {
+    "angr-macros-call-site-invariants": [
+      "invariant-mirror-pair-hardening-sweep",
+      "invariant-symbolic-bump-over-logged-concretization",
+      "pattern-nxn-pairing-isolation-test"
+    ],
+    "anti-migration-scheduler-delivered": [
+      "parallel-step-mode-routes-serial",
+      "vh834-phase2-minting-deferred",
+      "vh834-phase6-go-not-materialized"
+    ],
+    "arch-arm64-guest-state-tail": [
+      "arch-x86-no-fs-const"
+    ],
+    "arch-offset-parity-gate": [
+      "invariant-arch-offset-archinfo-parity"
+    ],
+    "audit-retrospective-origin-confidence-correction": [
+      "audit-retrospective-origin-reconciliation"
+    ],
+    "audit-retrospective-origin-reconciliation": [
+      "audit-retrospective-cross-branch-update"
+    ],
+    "bounce-reduction-low-roi-corpus": [
+      "invariant-zeropy-gate-levers-are-count-not-ns",
+      "parallel-cliff-was-bimodal-not-superlinear"
+    ],
+    "claripy-bridge-thread-local-caches": [
+      "invariant-ast-cache-width-check"
+    ],
+    "clippy-pedantic-audit-2026-06": [
+      "audit-retrospective-mining-2026-07-30"
+    ],
+    "counter-doc-population-rot": [
+      "dead-counter-audit-oneliner"
+    ],
+    "debug-assert-triage-policy": [
+      "invariant-assert-not-debug-assert-in-release",
+      "invariant-external-width-bounds-at-boundary",
+      "invariant-mirror-pair-hardening-sweep"
+    ],
+    "emit-extract-z3-recursion-hazard": [
+      "extract-driver-unified"
+    ],
+    "extract-driver-unified": [
+      "emit-extract-z3-recursion-hazard"
+    ],
+    "fgets-short-read-design": [
+      "avoid-symbolic-addr-store-for-concrete-readback"
+    ],
+    "filesystem-module-layout": [
+      "symlink-table-readlink-model",
+      "write-fd-position-aware"
+    ],
+    "guest-value-indexing-structural-not-panic": [
+      "indexing-slicing-audit-2026-07"
+    ]
+  }
+}

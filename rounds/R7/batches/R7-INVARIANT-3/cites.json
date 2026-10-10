@@ -1,0 +1,111 @@
+{
+  "out": {
+    "invariant-native-syscall-dispatch": [
+      "invariant-syscall-fallback-on-collision"
+    ],
+    "invariant-native-whitespace-single-source": [
+      "invariant-ctype-mirror-python-not-rust-std"
+    ],
+    "invariant-no-registration-without-arch-guard": [
+      "invariant-stat-family-arch-coverage"
+    ],
+    "invariant-no-zero-fill-symbolic-store": [
+      "invariant-symbolic-store-no-zero-bytes"
+    ],
+    "invariant-on-state-removed-bulk-replace-sites": [
+      "invariant-on-state-removed-notify-sites"
+    ],
+    "invariant-on-state-removed-notify-sites": [
+      "invariant-on-state-removed-bulk-replace-sites"
+    ],
+    "invariant-opcode-map-ground-truth-is-vendored-header": [
+      "invariant-qdmull-vex-op"
+    ],
+    "invariant-page-bitmap-authoritative": [
+      "invariant-multi-vs-symbolic-cell-states"
+    ],
+    "invariant-page-move-carries-sidecars": [
+      "invariant-page-bitmap-authoritative"
+    ],
+    "invariant-pyo3-multiple-pymethods-enabled": [
+      "invariant-pyo3-multiple-pymethods-unmasks-unreachable-pub",
+      "pyo3-pymethods-child-module-split"
+    ],
+    "invariant-pyo3-single-pymethods-impl": [
+      "invariant-pyo3-multiple-pymethods-enabled"
+    ],
+    "invariant-register-names-subset-of-canonical": [
+      "invariant-guest-state-size-vs-archinfo"
+    ],
+    "invariant-registerfile-arc-cow-makemut": [
+      "invariant-symbolic-memory-fork-fields"
+    ],
+    "invariant-regression-guard-citations-unverified": [
+      "invariant-v5ht-dismantle-child-none"
+    ],
+    "invariant-relative-growth-cap-is-not-absolute": [
+      "invariant-proc-address-arith-wrapping"
+    ],
+    "invariant-residual-sink-vs-assumed-ir": [
+      "unsat-core-on-demand-not-tracked"
+    ]
+  },
+  "in": {
+    "invariant-native-whitespace-single-source": [
+      "invariant-ctype-mirror-python-not-rust-std"
+    ],
+    "invariant-no-zero-fill-symbolic-store": [
+      "invariant-symbolic-store-no-zero-bytes"
+    ],
+    "invariant-on-state-removed-bulk-replace-sites": [
+      "invariant-on-state-removed-notify-sites"
+    ],
+    "invariant-on-state-removed-notify-sites": [
+      "invariant-on-state-removed-bulk-replace-sites"
+    ],
+    "invariant-overflow-fix-refuse-not-saturate-identities": [
+      "invariant-bounds-check-must-not-overflow",
+      "invariant-external-width-bounds-at-boundary",
+      "invariant-timing-ns-narrowing-helper"
+    ],
+    "invariant-page-bitmap-authoritative": [
+      "invariant-page-move-carries-sidecars"
+    ],
+    "invariant-parse-type-width-not-none": [
+      "invariant-single-string-opcode-parse"
+    ],
+    "invariant-proc-address-arith-wrapping": [
+      "invariant-relative-growth-cap-is-not-absolute"
+    ],
+    "invariant-pyo3-multiple-pymethods-enabled": [
+      "invariant-pyo3-single-pymethods-impl",
+      "pyo3-pymethods-child-module-split",
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-pyo3-multiple-pymethods-unmasks-unreachable-pub": [
+      "invariant-pyo3-multiple-pymethods-enabled"
+    ],
+    "invariant-pyo3-single-pymethods-impl": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-qdmull-vex-op": [
+      "invariant-opcode-map-ground-truth-is-vendored-header"
+    ],
+    "invariant-recognizer-parser-grammar-parity": [
+      "invariant-scan-window-bounds-whole-subject"
+    ],
+    "invariant-register-names-subset-of-canonical": [
+      "invariant-arch-register-tables"
+    ],
+    "invariant-residual-sink-vs-assumed-ir": [
+      "unsat-core-on-demand-not-tracked"
+    ],
+    "invariant-rust-as-cast-is-rne-only": [
+      "invariant-ieee-maxnum-not-rust-f32-max"
+    ],
+    "invariant-rust-concrete-arith-must-wrap": [
+      "invariant-address-newtype-ops-already-wrap",
+      "invariant-budget-product-must-saturate"
+    ]
+  }
+}

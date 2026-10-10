@@ -1,0 +1,44 @@
+{
+  "out": {
+    "avoid-bd-recall-outside-repo-cwd": [
+      "bd-memory-citation-repair-pattern",
+      "refactor-memory-sweep-rule"
+    ],
+    "avoid-enumerating-expect-sites-in-module-docs": [
+      "deny-sweep-function-level-allow-pattern"
+    ],
+    "avoid-fxhash-dedup-set-spike": [
+      "benchmark-memory-fxhash-stash-done",
+      "offline-loop-queue-blocker-map"
+    ],
+    "avoid-update-baseline-without-verification": [
+      "avoid-update-clobbering-pinned-baselines"
+    ]
+  },
+  "in": {
+    "avoid-cadet-phase3-sticky-eager-retry": [
+      "block-granular-step-mode"
+    ],
+    "avoid-deferred-fork-base-mismatch": [
+      "audit-2026-09-04-symex-round7-method"
+    ],
+    "avoid-fxhash-dedup-set-spike": [
+      "offline-loop-queue-blocker-map"
+    ],
+    "avoid-reset-solver-stats-in-tests": [
+      "stats-counter-test-patterns"
+    ],
+    "avoid-silent-no-op-callback-fallbacks": [
+      "callbacks-unit-test-harness",
+      "invariant-is-ready-checks-unguarded-callbacks-only",
+      "symbolic-store-prefer-full-callback"
+    ],
+    "avoid-update-baseline-without-verification": [
+      "bench-baseline-vs-regression-triage"
+    ],
+    "avoid-update-clobbering-pinned-baselines": [
+      "avoid-update-baseline-without-verification",
+      "bench-pin-derive-from-gate-log-percentiles"
+    ]
+  }
+}

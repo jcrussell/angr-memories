@@ -1,0 +1,142 @@
+{
+  "out": {
+    "miri-executed-hitmap-clean": [
+      "miri-feasibility-rust-core"
+    ],
+    "native-fileops-largefile-aliases": [
+      "native-proc-unlocked-aliases"
+    ],
+    "opcode-map-header-crosscheck-method": [
+      "invariant-concrete-bv-u128-16-byte-limit"
+    ],
+    "opcode-map-unmapped-allowlist-is-gated": [
+      "invariant-concrete-bv-u128-16-byte-limit",
+      "opcode-map-header-crosscheck-method"
+    ],
+    "pattern-nxn-pairing-isolation-test": [
+      "angr-macros-call-site-invariants"
+    ],
+    "pyo3-pymethods-child-module-split": [
+      "invariant-pyo3-multiple-pymethods-enabled"
+    ],
+    "rebuild-cargo-only-omits-libvex-ffi": [
+      "venv-rebuild-cargo-direct-copy"
+    ],
+    "refactor-memory-sweep-rule": [
+      "bd-memory-citation-repair-pattern",
+      "docs-dead-memory-key-sweep-method",
+      "invariant-error-class-taxonomy",
+      "invariant-fork-needs-python-init",
+      "invariant-pyo3-multiple-pymethods-enabled",
+      "invariant-pyo3-single-pymethods-impl"
+    ],
+    "selection-policy-seam-limits": [
+      "coverage-guided-policy-m9fpp"
+    ],
+    "sibling-file-split-visibility-widening": [
+      "rust-module-root-split-recipe"
+    ],
+    "snapshot-rustsimstate-envelope-shape": [
+      "snapshot-foreign-id-rebase"
+    ],
+    "stat-symlink-follow-semantics": [
+      "symlink-table-readlink-model"
+    ],
+    "stats-counter-test-patterns": [
+      "avoid-reset-solver-stats-in-tests"
+    ],
+    "stdio-fwrite-fputs-arbitrary-fd": [
+      "write-fd-position-aware"
+    ],
+    "symlink-table-readlink-model": [
+      "filesystem-module-layout"
+    ],
+    "verify-debug-asserts-with-rustflags": [
+      "invariant-assert-not-debug-assert-in-release"
+    ],
+    "write-fd-position-aware": [
+      "filesystem-module-layout",
+      "stdio-fwrite-fputs-arbitrary-fd"
+    ],
+    "write-side-fileno-fallback-correct": [
+      "write-stream-heavy-bench"
+    ],
+    "write-stream-heavy-bench": [
+      "write-side-fileno-fallback-correct"
+    ]
+  },
+  "in": {
+    "mips32-struct-stat-and-omitted-mode": [
+      "i386-struct-stat-and-angr-syscall-map"
+    ],
+    "miri-feasibility-rust-core": [
+      "miri-executed-hitmap-clean"
+    ],
+    "module-doc-scope-rot": [
+      "counter-doc-population-rot"
+    ],
+    "native-getopt-family-parity": [
+      "native-libc-no-parity-family"
+    ],
+    "native-strndup-parity": [
+      "native-htonl-htons-parity"
+    ],
+    "no-default-features-test-gating": [
+      "invariant-file-size-split-convention"
+    ],
+    "no-z3-build-repaired-2026-08": [
+      "invariant-steady-config-guard-mutators"
+    ],
+    "opcode-map-header-crosscheck-method": [
+      "opcode-map-unmapped-allowlist-is-gated"
+    ],
+    "proxy-writes-design-verdict": [
+      "perf-counter-fishing-exhausted"
+    ],
+    "pyo3-pymethods-child-module-split": [
+      "invariant-pyo3-multiple-pymethods-enabled"
+    ],
+    "refactor-memory-sweep-rule": [
+      "avoid-bd-recall-outside-repo-cwd",
+      "docs-citation-audit-method",
+      "invariant-3tek2-replay-ordering",
+      "invariant-dead-code-sweep-siblings",
+      "invariant-doc-example-copies-sweep",
+      "invariant-error-class-taxonomy",
+      "invariant-ite-builder-loads-match",
+      "invariant-rust-dirty-pages-pending",
+      "invariant-syscall-arg-extraction",
+      "memory-citation-rot-path-scan"
+    ],
+    "selection-policy-seam-limits": [
+      "coverage-guided-policy-m9fpp"
+    ],
+    "snapshot-rustsimstate-envelope-shape": [
+      "serde-json-byte-keyed-map-trap"
+    ],
+    "snapshot-solver-smtlib2-design": [
+      "snapshot-constraint-count-pin"
+    ],
+    "stdio-fwrite-fputs-arbitrary-fd": [
+      "write-fd-position-aware"
+    ],
+    "symlink-table-readlink-model": [
+      "stat-symlink-follow-semantics"
+    ],
+    "venv-rebuild-cargo-direct-copy": [
+      "cargo-only-rebuild-drops-libvex-ffi-tests",
+      "rebuild-cargo-only-omits-libvex-ffi",
+      "zeropy-gate-libvex-build-recipe"
+    ],
+    "write-fd-position-aware": [
+      "stdio-fwrite-fputs-arbitrary-fd"
+    ],
+    "write-side-fileno-fallback-correct": [
+      "fallback-cost-first-call-vs-amortized",
+      "write-stream-heavy-bench"
+    ],
+    "write-stream-heavy-bench": [
+      "write-side-fileno-fallback-correct"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "in": {
+    "inspect-enabled-clone-pitfall": [
+      "invariant-pycallbacks-mutable-fields"
+    ]
+  }
+}

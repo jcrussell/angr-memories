@@ -1,0 +1,1 @@
+{"key": "inspect-enabled-clone-pitfall", "verdict": "keep", "reason": "cited by invariant-pycallbacks-mutable-fields; durable PyO3 clone-by-value invariant"}

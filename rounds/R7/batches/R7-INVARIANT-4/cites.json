@@ -1,0 +1,96 @@
+{
+  "out": {
+    "invariant-rustdoc-intra-doc-links-visibility": [
+      "invariant-rustdoc-intra-doc-links"
+    ],
+    "invariant-scan-window-bounds-whole-subject": [
+      "invariant-recognizer-parser-grammar-parity"
+    ],
+    "invariant-single-string-opcode-parse": [
+      "invariant-parse-type-width-not-none"
+    ],
+    "invariant-skip-hook-stack-lifo-pop": [
+      "invariant-snapshot-load-pending-world-teardown"
+    ],
+    "invariant-solutions-truncation-undetectable": [
+      "invariant-strided-grid-completeness"
+    ],
+    "invariant-sp-bp-are-full-width": [
+      "invariant-ip-is-pc-not-r12"
+    ],
+    "invariant-steady-config-guard-mutators": [
+      "no-z3-build-repaired-2026-08"
+    ],
+    "invariant-stepping-decomposition": [
+      "avoid-early-return-on-empty-deferred-forks"
+    ],
+    "invariant-symbol-registry-gil-serialized": [
+      "avoid-id-keyed-global-symbol-cache",
+      "invariant-symbol-identity-is-by-name",
+      "invariant-symbol-registry-no-gc"
+    ],
+    "invariant-symbolic-bump-over-logged-concretization": [
+      "angr-macros-call-site-invariants"
+    ],
+    "invariant-symbolic-store-no-zero-bytes": [
+      "invariant-no-zero-fill-symbolic-store"
+    ],
+    "invariant-symcontext-push-not-cache-aware": [
+      "invariant-transaction-api-removed"
+    ],
+    "invariant-symflags-category-coverage": [
+      "ccall-fallback-perf-gap-method"
+    ],
+    "invariant-timing-ns-narrowing-helper": [
+      "invariant-overflow-fix-refuse-not-saturate-identities"
+    ],
+    "invariant-transaction-api-removed": [
+      "invariant-snapshot-quiescent-scope"
+    ],
+    "invariant-worker-teardown-clear-ast-cache": [
+      "z3-context-rc-no-uaf-on-teardown"
+    ],
+    "invariant-zero-size-page-range-overshoot": [
+      "invariant-end-page-inclusive-zero-size"
+    ]
+  },
+  "in": {
+    "invariant-rustbv-zero-width": [
+      "invariant-external-width-bounds-at-boundary"
+    ],
+    "invariant-rustdoc-intra-doc-links": [
+      "invariant-rustdoc-intra-doc-links-visibility"
+    ],
+    "invariant-snapshot-load-pending-world-teardown": [
+      "invariant-skip-hook-stack-lifo-pop"
+    ],
+    "invariant-snapshot-quiescent-scope": [
+      "invariant-transaction-api-removed"
+    ],
+    "invariant-stat-family-arch-coverage": [
+      "invariant-no-registration-without-arch-guard"
+    ],
+    "invariant-symbolic-byte-lane-lookup": [
+      "invariant-multi-vs-symbolic-cell-states"
+    ],
+    "invariant-symbolic-memory-fork-fields": [
+      "invariant-registerfile-arc-cow-makemut"
+    ],
+    "invariant-symbolic-store-no-zero-bytes": [
+      "invariant-no-zero-fill-symbolic-store"
+    ],
+    "invariant-symflags-category-coverage": [
+      "ccall-fallback-perf-gap-method",
+      "invariant-ccall-arch-sibling-symbolic-parity"
+    ],
+    "invariant-syscall-fd-check-before-count": [
+      "invariant-native-handler-err-no-rollback"
+    ],
+    "invariant-transaction-api-removed": [
+      "invariant-symcontext-push-not-cache-aware"
+    ],
+    "invariant-z3-unknown-not-unsat": [
+      "satoutcome-decided-forcing-function"
+    ]
+  }
+}

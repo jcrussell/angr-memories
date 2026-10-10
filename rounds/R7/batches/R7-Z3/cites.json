@@ -1,0 +1,10 @@
+{
+  "in": {
+    "z3-context-rc-no-uaf-on-teardown": [
+      "invariant-worker-teardown-clear-ast-cache"
+    ],
+    "z3-universality-parity-test-template": [
+      "iop-avg-vs-hadd-distinction"
+    ]
+  }
+}

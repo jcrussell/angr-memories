@@ -91,7 +91,8 @@ angr-memories apply    --round R7 --force
    and merge-row consistency.
 5. `apply` combines every manifest and writes the decisions to
    `memories.jsonl` — dry-run unless `-f`/`--force`; add `--source
-   <angr-checkout>` to also push forgets to the live `bd` corpus.
+   <angr-checkout>` to also push the round to the live `bd` corpus
+   (merged bodies first, then forgets).
 
 `--help` on each command has the full mechanics and edge cases.
 
@@ -114,6 +115,6 @@ As of the last `sync`:
 
 | | remembered | forgotten |
 |---|---:|---:|
-| total | 918 | 1,520 |
+| total | 963 | 1,639 |
 
-3 keys have been forgotten and later recreated at least once.
+6 keys have been forgotten and later recreated at least once.

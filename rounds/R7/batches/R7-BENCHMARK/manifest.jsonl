@@ -1,0 +1,3 @@
+{"key": "bench-baseline-loose-rot-is-silent", "verdict": "keep", "reason": "cited by bench-baseline-loose-sweep-clean; durable baseline-tightening rule"}
+{"key": "bench-pin-derive-from-gate-log-percentiles", "verdict": "keep", "reason": "durable method for deriving PINNED_RUST_TIMES; cites pinned-baseline memory"}
+{"key": "benchmark-regression-noise-floor", "verdict": "keep", "reason": "cited from ci.yml, run_regression.py, ralph-gate.sh; gate-red triage workflow beyond CLAUDE.md"}
