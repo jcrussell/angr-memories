@@ -1,0 +1,61 @@
+{
+  "out": {
+    "invariant-ite-builder-loads-match": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-memo-payoff-is-repeats-not-share": [
+      "expression-z3-ast-memo"
+    ],
+    "invariant-mirror-solver-constraints-not-authoritative": [
+      "constraint-export-no-pre-pin"
+    ],
+    "invariant-native-dispatch-find-avoid-gate": [
+      "avoid-fixing-only-one-native-dispatch-path"
+    ],
+    "invariant-native-stdin-readers-use-mint-stdin-bytes": [
+      "avoid-storing-extract-asts-in-guest-buffers"
+    ],
+    "invariant-native-syscall-dispatch": [
+      "invariant-syscall-fallback-on-collision"
+    ],
+    "invariant-no-return-deadend": [
+      "invariant-no-return-two-dispatch-paths"
+    ]
+  },
+  "in": {
+    "invariant-fork-metadata-arc-not-py": [
+      "fork-skip-gil-attach-empty-metadata",
+      "pattern-pyobject-fork-clone-via-attach"
+    ],
+    "invariant-fork-needs-python-init": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-mem-counter-two-paths": [
+      "invariant-load-concrete-common-unified",
+      "invariant-mem-symbolic-addr-counter-sites",
+      "invariant-symbolic-memory-load-store-wrappers-unused"
+    ],
+    "invariant-mem-ite-depth-counter": [
+      "lazy-memory-sidecar-architecture"
+    ],
+    "invariant-mem-perm-default-off": [
+      "invariant-mem-write-paths-check-perms"
+    ],
+    "invariant-memo-payoff-is-repeats-not-share": [
+      "invariant-saved-check-total-excludes-ast-memo"
+    ],
+    "invariant-mirror-solver-constraints-not-authoritative": [
+      "foreign-snapshot-zero-constraints-root-cause",
+      "invariant-solver-fallback-refresh-on-resync"
+    ],
+    "invariant-native-lift-bypasses-lift-callback": [
+      "inspect-vexlift-dual-dispatch"
+    ],
+    "invariant-native-stdin-readers-use-mint-stdin-bytes": [
+      "stdin-seed-binding-architecture"
+    ],
+    "invariant-no-return-deadend": [
+      "invariant-no-return-two-dispatch-paths"
+    ]
+  }
+}

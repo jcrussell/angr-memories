@@ -1,0 +1,48 @@
+{
+  "out": {
+    "invariant-solver-ctx-owner-thread-teardown": [
+      "pyo3-unsendable-drop-content-independent"
+    ],
+    "invariant-solver-fallback-refresh-on-resync": [
+      "invariant-mirror-solver-constraints-not-authoritative"
+    ],
+    "invariant-solver-proxy-fallback-constraints": [
+      "invariant-rust-solver-fallback-class"
+    ],
+    "invariant-sp-bp-are-full-width": [
+      "invariant-ip-is-pc-not-r12"
+    ],
+    "invariant-symbol-registry-no-gc": [
+      "avoid-id-keyed-global-symbol-cache",
+      "invariant-export-mints-with-explicit-name",
+      "invariant-symbol-identity-is-by-name",
+      "symbol-registry-memory-cost"
+    ],
+    "invariant-symbol-registry-sort-tag": [
+      "invariant-rust-z3-encoding-must-match-claripy"
+    ],
+    "invariant-symbolic-memory-load-store-wrappers-unused": [
+      "invariant-mem-counter-two-paths"
+    ],
+    "invariant-symflags-category-coverage": [
+      "ccall-fallback-perf-gap-method"
+    ],
+    "invariant-sync-arch-reg-tables": [
+      "invariant-symbolic-register-writes-sync"
+    ]
+  },
+  "in": {
+    "invariant-rust-z3-encoding-must-match-claripy": [
+      "invariant-symbol-registry-sort-tag"
+    ],
+    "invariant-symbolic-memory-load-store-wrappers-unused": [
+      "invariant-mem-symbolic-addr-counter-sites"
+    ],
+    "invariant-symflags-category-coverage": [
+      "ccall-fallback-perf-gap-method"
+    ],
+    "invariant-z3-unknown-not-unsat": [
+      "satoutcome-decided-forcing-function"
+    ]
+  }
+}

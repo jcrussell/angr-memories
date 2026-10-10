@@ -1,0 +1,16 @@
+{
+  "out": {
+    "bench-baseline-loose-sweep-clean": [
+      "bench-baseline-loose-rot-is-silent"
+    ],
+    "bench-baseline-vs-regression-triage": [
+      "avoid-update-baseline-without-verification",
+      "benchmark-bimodal-variance-rules"
+    ]
+  },
+  "in": {
+    "bench-baseline-vs-regression-triage": [
+      "bisect-run-for-bench-speedup-attribution"
+    ]
+  }
+}

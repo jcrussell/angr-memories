@@ -1,0 +1,15 @@
+{
+  "out": {
+    "rust-silent-fallback-convention": [
+      "bare-except-cat-x-convention"
+    ],
+    "rust-so-artifact-path-is-repo-root-target": [
+      "rebuild-with-libvex-ffi-recipe"
+    ]
+  },
+  "in": {
+    "rust-so-artifact-path-is-repo-root-target": [
+      "zeropy-gate-libvex-build-recipe"
+    ]
+  }
+}

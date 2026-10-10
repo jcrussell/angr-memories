@@ -1,0 +1,15 @@
+{
+  "out": {
+    "z3-mining-round2-sijyb": [
+      "avoid-z3-parallel-enable",
+      "avoid-z3-solver-set-params-for-random-seed",
+      "hackcon-z3-ast-structure",
+      "z3-upstream-wishlist"
+    ]
+  },
+  "in": {
+    "z3-upstream-wishlist": [
+      "z3-mining-round2-sijyb"
+    ]
+  }
+}

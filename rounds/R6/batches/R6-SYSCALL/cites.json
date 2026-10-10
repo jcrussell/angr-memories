@@ -1,0 +1,12 @@
+{
+  "out": {
+    "syscall-arch-number-table-staleness": [
+      "i386-struct-stat-and-angr-syscall-map"
+    ]
+  },
+  "in": {
+    "syscall-fallback-root-cause": [
+      "invariant-callback-state-no-vex-pseudoregs"
+    ]
+  }
+}

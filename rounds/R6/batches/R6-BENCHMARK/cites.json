@@ -1,0 +1,101 @@
+{
+  "out": {
+    "bench-baseline-dfs-variant-key": [
+      "bench-add-baseline-files-insertion-order"
+    ],
+    "bench-baseline-loose-rot-is-silent": [
+      "bench-baseline-dfs-variant-key"
+    ],
+    "bench-soft-timeout-harness": [
+      "benchmark-p2c-veryslow-profile"
+    ],
+    "benchmark-cadet-phase3-materialize-forks": [
+      "avoid-cadet-phase3-sticky-eager-retry"
+    ],
+    "benchmark-callable-benches-real-rust-numbers": [
+      "benchmark-mma-howtouse-cprofile-attribution"
+    ],
+    "benchmark-counter-baseline-refresh": [
+      "avoid-update-baseline-without-verification"
+    ],
+    "benchmark-findall-dispatch-balance": [
+      "findall-parallel-slower-than-serial"
+    ],
+    "benchmark-p2a-mma-per-manager-cost": [
+      "benchmark-mma-howtouse-cprofile-attribution"
+    ],
+    "benchmark-p2d-no-microbench-decision": [
+      "benchmark-p2a-mma-per-manager-cost"
+    ],
+    "benchmark-p3-synthesis-conclusion": [
+      "benchmark-p2a-mma-per-manager-cost",
+      "benchmark-p2c-veryslow-profile",
+      "benchmark-p2d-no-microbench-decision",
+      "benchmark-w4oo3-register-sync-noop",
+      "constraint-export-no-pre-pin"
+    ],
+    "benchmark-w4oo3-register-sync-noop": [
+      "benchmark-p2a-mma-per-manager-cost",
+      "benchmark-p2b-android-register-sync"
+    ],
+    "benchmark-zeropy-milestone-met": [
+      "fork-carries-model-cache"
+    ]
+  },
+  "in": {
+    "bench-add-baseline-files-insertion-order": [
+      "bench-baseline-dfs-variant-key"
+    ],
+    "bench-baseline-dfs-variant-key": [
+      "bench-baseline-loose-rot-is-silent"
+    ],
+    "bench-baseline-loose-rot-is-silent": [
+      "bench-baseline-loose-sweep-clean"
+    ],
+    "bench-syscall-fallback-zero-coverage": [
+      "perf-counter-fishing-exhausted"
+    ],
+    "benchmark-bimodal-variance-rules": [
+      "bench-baseline-vs-regression-triage",
+      "default-flip-requires-baseline-refresh",
+      "parallel-cliff-was-bimodal-not-superlinear",
+      "rust-engine-claude-md-pointer",
+      "sokohashv2-two-bugs"
+    ],
+    "benchmark-findall-dispatch-balance": [
+      "parallel-step-mode-routes-serial"
+    ],
+    "benchmark-memory-fxhash": [
+      "mimalloc-global-allocator"
+    ],
+    "benchmark-memory-fxhash-stash-done": [
+      "avoid-fxhash-dedup-set-spike",
+      "offline-loop-queue-blocker-map"
+    ],
+    "benchmark-mma-howtouse-cprofile-attribution": [
+      "benchmark-callable-benches-real-rust-numbers",
+      "benchmark-p2a-mma-per-manager-cost"
+    ],
+    "benchmark-p2a-mma-per-manager-cost": [
+      "benchmark-p2d-no-microbench-decision",
+      "benchmark-p3-synthesis-conclusion",
+      "benchmark-w4oo3-register-sync-noop"
+    ],
+    "benchmark-p2b-android-register-sync": [
+      "benchmark-w4oo3-register-sync-noop"
+    ],
+    "benchmark-p2c-veryslow-profile": [
+      "bench-soft-timeout-harness",
+      "benchmark-p3-synthesis-conclusion"
+    ],
+    "benchmark-p2d-no-microbench-decision": [
+      "benchmark-p3-synthesis-conclusion"
+    ],
+    "benchmark-vecret-gsptr-corpus-zero": [
+      "fp-simd-fixture-build"
+    ],
+    "benchmark-w4oo3-register-sync-noop": [
+      "benchmark-p3-synthesis-conclusion"
+    ]
+  }
+}

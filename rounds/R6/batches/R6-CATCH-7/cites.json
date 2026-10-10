@@ -1,0 +1,89 @@
+{
+  "out": {
+    "s10-parity-census-flip-gate-verdict": [
+      "invariant-cgc-fdwait-option-polarity"
+    ],
+    "s3-determinism-variance-attribution-verdict": [
+      "perf-campaign-p5-deferral-decision"
+    ],
+    "s5a-merge-cost-shape-divergence-proportional": [
+      "merge-cow-skip-soundness"
+    ],
+    "s5b-constraint-merge-cost-shape": [
+      "s5a-merge-cost-shape-divergence-proportional"
+    ],
+    "scheduler-selection-policy-seam": [
+      "ilq8-post-cancel-waste"
+    ],
+    "selection-policy-seam-limits": [
+      "coverage-guided-policy-m9fpp"
+    ],
+    "serde-json-byte-keyed-map-trap": [
+      "snapshot-rustsimstate-envelope-shape"
+    ],
+    "sgbn-unconstrained-sp-fastpath": [
+      "refactor-memory-sweep-rule"
+    ],
+    "showcase-checkpoint-resume-demo": [
+      "showcase-resume-target-classification"
+    ],
+    "simprocedure-bounce-service-dominates": [
+      "invariant-zeropy-gate-levers-are-count-not-ns"
+    ],
+    "snapshot-constraint-count-pin": [
+      "avoid-add-constraint-for-context-rebuild",
+      "snapshot-solver-smtlib2-design"
+    ],
+    "sokohashv2-two-bugs": [
+      "benchmark-bimodal-variance-rules"
+    ],
+    "solver-equality-contradiction-detected": [
+      "characterization-vs-fix-pattern"
+    ],
+    "stdin-seed-binding-architecture": [
+      "invariant-native-stdin-readers-use-mint-stdin-bytes"
+    ],
+    "stdio-fwrite-fputs-arbitrary-fd": [
+      "write-fd-position-aware"
+    ],
+    "strnlen-bad-integration-test-target": [
+      "strnlen-fallback-root-cause"
+    ]
+  },
+  "in": {
+    "s5a-merge-cost-shape-divergence-proportional": [
+      "s5b-constraint-merge-cost-shape"
+    ],
+    "selection-policy-seam-limits": [
+      "coverage-guided-policy-m9fpp",
+      "loop-head-policy-caplg"
+    ],
+    "showcase-resume-target-classification": [
+      "showcase-checkpoint-resume-demo"
+    ],
+    "simprocedure-bounce-service-dominates": [
+      "invariant-zeropy-gate-levers-are-count-not-ns"
+    ],
+    "snapshot-resume-spread-is-dump-side": [
+      "parallel-drain-depth-ground-truth"
+    ],
+    "snapshot-rustsimstate-envelope-shape": [
+      "serde-json-byte-keyed-map-trap"
+    ],
+    "snapshot-solver-smtlib2-design": [
+      "snapshot-constraint-count-pin"
+    ],
+    "stdio-fwrite-fputs-arbitrary-fd": [
+      "write-fd-position-aware"
+    ],
+    "step-error-size-numbers": [
+      "clippy-allow-vs-fix-rule"
+    ],
+    "strcpy-find-regression-root-cause": [
+      "invariant-rust-simgr-monkey-patch-guard"
+    ],
+    "strnlen-fallback-root-cause": [
+      "strnlen-bad-integration-test-target"
+    ]
+  }
+}

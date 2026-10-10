@@ -1,0 +1,128 @@
+{
+  "out": {
+    "native-fileops-largefile-aliases": [
+      "native-proc-unlocked-aliases"
+    ],
+    "native-fscanf-stream-variant": [
+      "invariant-libc-alias-not-duplicate-proc"
+    ],
+    "native-getopt-extern-addr-pushdown": [
+      "native-getopt-design-no-elf-resolution"
+    ],
+    "native-htonl-htons-parity": [
+      "native-strndup-parity"
+    ],
+    "native-libc-no-parity-family": [
+      "native-getopt-family-parity"
+    ],
+    "native-sleep-usleep-parity": [
+      "native-htonl-htons-parity"
+    ],
+    "native-stpcpy-mempcpy-parity": [
+      "native-stpncpy-parity"
+    ],
+    "native-stpncpy-parity": [
+      "native-stpcpy-mempcpy-parity"
+    ],
+    "native-vprintf-family-aliases": [
+      "native-vsprintf-vprintf-vfprintf-parity"
+    ],
+    "offline-loop-queue-blocker-map": [
+      "avoid-fxhash-dedup-set-spike",
+      "benchmark-memory-fxhash-stash-done"
+    ],
+    "ovqja5-qfbv-smt-route-infeasible": [
+      "per-fork-solver-share-infeasible"
+    ],
+    "panhl1-killgate-pass": [
+      "parallel-migration-model"
+    ],
+    "panhl2-killgate-pass": [
+      "panhl1-killgate-pass",
+      "parallel-go-nogo-panhl",
+      "translate-into-primitive"
+    ],
+    "parallel-cliff-was-bimodal-not-superlinear": [
+      "benchmark-bimodal-variance-rules",
+      "bounce-reduction-low-roi-corpus",
+      "parallel-per-wave-migration-dominates"
+    ],
+    "parallel-drain-depth-ground-truth": [
+      "snapshot-resume-spread-is-dump-side",
+      "warm-process-exploration-divergence"
+    ],
+    "parallel-exploration-recommendation": [
+      "avoid-z3-parallel-enable"
+    ],
+    "parallel-go-nogo-panhl": [
+      "avoid-z3-parallel-enable",
+      "beyond-parity-no-motivator-closure-pattern"
+    ]
+  },
+  "in": {
+    "native-dispatch-gate-prefer-native": [
+      "a8epx-gate-measured-defer"
+    ],
+    "native-dispatch-skipped-for-loaded-libs": [
+      "gorvf31-xmllint-all-bucket-a"
+    ],
+    "native-fileops-largefile-aliases": [
+      "native-char-io-unlocked-aliases"
+    ],
+    "native-getopt-design-no-elf-resolution": [
+      "native-getopt-extern-addr-pushdown"
+    ],
+    "native-getopt-family-parity": [
+      "native-libc-no-parity-family"
+    ],
+    "native-htonl-htons-parity": [
+      "bd-memory-path-audit-method",
+      "native-sleep-usleep-parity"
+    ],
+    "native-libc-no-parity-family": [
+      "native-asprintf-getline-getdelim-parity"
+    ],
+    "native-library-hooks-default-on": [
+      "a8epx-gate-measured-defer"
+    ],
+    "native-library-hooks-parity-cleared": [
+      "a8epx-gate-measured-defer"
+    ],
+    "native-proc-call-counts-keyed-on-hook-name": [
+      "declare-proc-aliases-arg-order"
+    ],
+    "native-proc-unlocked-aliases": [
+      "native-fileops-largefile-aliases"
+    ],
+    "native-stpcpy-mempcpy-parity": [
+      "native-stpncpy-parity"
+    ],
+    "native-stpncpy-parity": [
+      "native-stpcpy-mempcpy-parity"
+    ],
+    "native-strndup-parity": [
+      "native-htonl-htons-parity"
+    ],
+    "native-vsprintf-vprintf-vfprintf-parity": [
+      "native-vprintf-family-aliases"
+    ],
+    "offline-loop-queue-blocker-map": [
+      "avoid-fxhash-dedup-set-spike"
+    ],
+    "panhl1-killgate-pass": [
+      "panhl2-killgate-pass"
+    ],
+    "panic-abort-no-poison-invariant": [
+      "invariant-assert-not-debug-assert-in-release"
+    ],
+    "panic-reachability-audit-2026-06": [
+      "indexing-slicing-audit-2026-07"
+    ],
+    "parallel-cliff-was-bimodal-not-superlinear": [
+      "findall-parallel-slower-than-serial"
+    ],
+    "parallel-go-nogo-panhl": [
+      "panhl2-killgate-pass"
+    ]
+  }
+}

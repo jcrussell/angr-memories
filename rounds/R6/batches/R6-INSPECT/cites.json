@@ -1,0 +1,16 @@
+{
+  "out": {
+    "inspect-vexlift-dual-dispatch": [
+      "inspect-constraints-dual-dispatch",
+      "invariant-native-lift-bypasses-lift-callback"
+    ]
+  },
+  "in": {
+    "inspect-constraints-dual-dispatch": [
+      "inspect-vexlift-dual-dispatch"
+    ],
+    "inspect-enabled-clone-pitfall": [
+      "invariant-pycallbacks-mutable-fields"
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "out": {
+    "clz-ctz-symbolic-concretization-bug": [
+      "avoid-eager-symbolic-register-export"
+    ],
+    "counter-attribution-sweep-2026-07": [
+      "bounce-reduction-low-roi-corpus",
+      "per-fork-solver-share-infeasible"
+    ],
+    "coverage-guided-policy-m9fpp": [
+      "selection-policy-seam-limits"
+    ],
+    "coverage-report-found-set-not-seen-set": [
+      "findall-parallel-slower-than-serial"
+    ],
+    "csgames2018-residual-bounded-by-lineage-gating": [
+      "fork-carries-model-cache"
+    ],
+    "declare-proc-aliases-arg-order": [
+      "native-proc-call-counts-keyed-on-hook-name"
+    ],
+    "default-flip-requires-baseline-refresh": [
+      "benchmark-bimodal-variance-rules"
+    ],
+    "deterministic-seed-narrows-not-collapses": [
+      "iaol1-seed-pin-empirically-broken"
+    ],
+    "directed-policy-a32jl4": [
+      "ds-directed-search-greedy-trap"
+    ],
+    "docs-citation-audit-method": [
+      "refactor-memory-sweep-rule"
+    ],
+    "exploration-dedup-helpers-clusters-5-6-8": [
+      "invariant-chunked-concrete-memory-read"
+    ],
+    "exploration-route-and-chunked-helpers": [
+      "invariant-chunked-concrete-memory-read"
+    ]
+  },
+  "in": {
+    "clz-ctz-symbolic-concretization-bug": [
+      "avoid-eager-symbolic-register-export"
+    ],
+    "concretization-config-readback": [
+      "loopseer-native-wiring"
+    ],
+    "constraint-export-no-pre-pin": [
+      "benchmark-p3-synthesis-conclusion",
+      "flareon-5rjbq-pin-and-automap-fix",
+      "invariant-mirror-solver-constraints-not-authoritative",
+      "rust-engine-claude-md-pointer",
+      "rust-proxy-constraints-vs-exported-state"
+    ],
+    "core-goal-design-philosophy": [
+      "rust-engine-claude-md-pointer"
+    ],
+    "coverage-guided-policy-m9fpp": [
+      "loop-head-policy-caplg",
+      "selection-policy-seam-limits"
+    ],
+    "dead-code-audit-2026-06": [
+      "audit-retrospective-mining-2026-07-30"
+    ],
+    "docs-citation-audit-method": [
+      "bd-memory-path-audit-method"
+    ],
+    "docs-dead-memory-key-sweep-method": [
+      "refactor-memory-sweep-rule"
+    ],
+    "ds-directed-search-greedy-trap": [
+      "directed-policy-a32jl4"
+    ],
+    "expression-z3-ast-memo": [
+      "avoid-with-z3-context-for-stale-ctx-test",
+      "invariant-memo-payoff-is-repeats-not-share"
+    ]
+  }
+}

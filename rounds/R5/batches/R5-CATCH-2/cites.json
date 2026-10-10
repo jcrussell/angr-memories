@@ -1,0 +1,37 @@
+{
+  "out": {
+    "miri-executed-hitmap-clean": [
+      "miri-feasibility-rust-core"
+    ],
+    "no-default-features-build-broken-2026-07": [
+      "bug-class-elimination-2026-07"
+    ],
+    "parallel-step-mode-routes-serial": [
+      "anti-migration-scheduler-delivered",
+      "benchmark-findall-dispatch-balance"
+    ],
+    "satoutcome-decided-forcing-function": [
+      "invariant-z3-unknown-not-unsat"
+    ],
+    "stats-counter-test-patterns": [
+      "avoid-reset-solver-stats-in-tests"
+    ],
+    "symbolic-store-prefer-full-callback": [
+      "avoid-silent-no-op-callback-fallbacks"
+    ],
+    "verify-debug-asserts-with-rustflags": [
+      "invariant-assert-not-debug-assert-in-release"
+    ]
+  },
+  "in": {
+    "miri-feasibility-rust-core": [
+      "miri-executed-hitmap-clean"
+    ],
+    "pyo3-unsendable-drop-content-independent": [
+      "invariant-solver-ctx-owner-thread-teardown"
+    ],
+    "symbol-registry-memory-cost": [
+      "invariant-symbol-registry-no-gc"
+    ]
+  }
+}

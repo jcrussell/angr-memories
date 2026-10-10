@@ -1,0 +1,15 @@
+{
+  "out": {
+    "avoid-cargo-only-rebuild-without-libvex-ffi": [
+      "rebuild-with-libvex-ffi-recipe"
+    ]
+  },
+  "in": {
+    "avoid-early-return-on-empty-deferred-forks": [
+      "invariant-stepping-decomposition"
+    ],
+    "avoid-reset-solver-stats-in-tests": [
+      "stats-counter-test-patterns"
+    ]
+  }
+}

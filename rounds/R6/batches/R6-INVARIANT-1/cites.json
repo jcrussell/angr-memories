@@ -1,0 +1,59 @@
+{
+  "out": {
+    "invariant-3tek2-replay-ordering": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-ast-cache-width-check": [
+      "claripy-bridge-thread-local-caches"
+    ],
+    "invariant-callback-state-no-vex-pseudoregs": [
+      "syscall-fallback-root-cause"
+    ],
+    "invariant-deterministic-mode-plumbing": [
+      "avoid-z3-parallel-enable",
+      "iaol1-seed-pin-empirically-broken"
+    ],
+    "invariant-dirty-pages-survive-migration": [
+      "ype54-root-cause"
+    ],
+    "invariant-error-class-taxonomy": [
+      "refactor-memory-sweep-rule"
+    ]
+  },
+  "in": {
+    "invariant-active-stash-push": [
+      "invariant-active-stash-push-parallel-note"
+    ],
+    "invariant-callback-fd-table-adopt": [
+      "callback-bounce-roundtrip-gaps"
+    ],
+    "invariant-callback-fd-table-inbound": [
+      "callback-bounce-roundtrip-gaps"
+    ],
+    "invariant-callback-heap-plugin-lazy": [
+      "callback-bounce-roundtrip-gaps"
+    ],
+    "invariant-cgc-fdwait-option-polarity": [
+      "invariant-required-option-inverse-polarity-gate",
+      "s10-parity-census-flip-gate-verdict"
+    ],
+    "invariant-concrete-bv-u128-16-byte-limit": [
+      "bug-class-elimination-2026-07",
+      "invariant-concrete-width-gt-128-fast-paths",
+      "xmllint-simprocs-cross-engine-divergence"
+    ],
+    "invariant-dirty-pages-survive-migration": [
+      "invariant-symbolic-register-writes-sync",
+      "ype54-root-cause"
+    ],
+    "invariant-error-class-taxonomy": [
+      "refactor-memory-sweep-rule"
+    ],
+    "invariant-expression-cache-export-key": [
+      "claripy-bridge-thread-local-caches"
+    ],
+    "invariant-flush-stores-drain": [
+      "bd-memory-path-audit-method"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "out": {
+    "rust-engine-claude-md-pointer": [
+      "benchmark-bimodal-variance-rules",
+      "characterization-vs-fix-pattern",
+      "constraint-export-no-pre-pin",
+      "core-goal-design-philosophy",
+      "rust-proxy-architecture-decision",
+      "rust-python-boundary-audit"
+    ],
+    "rust-fallback-strategy-semantics": [
+      "refactor-memory-sweep-rule"
+    ],
+    "rust-page-fetch-probe-technique": [
+      "zeropy-callback-site-lever-ranking"
+    ],
+    "rust-proxy-constraints-vs-exported-state": [
+      "constraint-export-no-pre-pin"
+    ],
+    "rust-proxy-copy-design": [
+      "invariant-rust-proxy-copies-gc"
+    ]
+  },
+  "in": {
+    "rust-proc-integration-test-rax-only": [
+      "format-proc-integration-tests"
+    ],
+    "rust-proxy-architecture-decision": [
+      "rust-engine-claude-md-pointer"
+    ],
+    "rust-proxy-copy-design": [
+      "invariant-rust-proxy-copies-gc"
+    ],
+    "rust-python-boundary-audit": [
+      "bounce-reduction-low-roi-corpus",
+      "invariant-zeropy-gate-levers-are-count-not-ns",
+      "rust-engine-claude-md-pointer"
+    ]
+  }
+}

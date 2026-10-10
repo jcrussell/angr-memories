@@ -1,0 +1,100 @@
+{
+  "out": {
+    "symbolic-stream-fd-read-slice": [
+      "fread-python-boundary-unreachable-content"
+    ],
+    "symlink-table-readlink-model": [
+      "filesystem-module-layout"
+    ],
+    "unsat-core-on-demand-not-tracked": [
+      "invariant-residual-sink-vs-assumed-ir"
+    ],
+    "upstream-pr-offline-prepare-slice-pattern": [
+      "aggregation-doc-v1-partial-pattern",
+      "beyond-parity-no-motivator-closure-pattern"
+    ],
+    "vh834-phase2-minting-deferred": [
+      "anti-migration-scheduler-delivered"
+    ],
+    "vh834-phase6-go-not-materialized": [
+      "anti-migration-scheduler-delivered",
+      "vh834-phase2-minting-deferred"
+    ],
+    "warm-process-exploration-divergence": [
+      "invariant-symbol-id-process-global"
+    ],
+    "wheel-distribution-shared-libz3": [
+      "avoid-pip-install-deps"
+    ],
+    "write-fd-position-aware": [
+      "filesystem-module-layout",
+      "stdio-fwrite-fputs-arbitrary-fd"
+    ],
+    "write-side-fileno-fallback-correct": [
+      "write-stream-heavy-bench"
+    ],
+    "write-stream-heavy-bench": [
+      "write-side-fileno-fallback-correct"
+    ],
+    "xmllint-simprocs-cross-engine-divergence": [
+      "invariant-concrete-bv-u128-16-byte-limit"
+    ],
+    "ype54-root-cause": [
+      "invariant-dirty-pages-survive-migration"
+    ],
+    "zeropy-callback-site-lever-ranking": [
+      "batch-fetch-pages-discarded-eval-root-cause"
+    ],
+    "zeropy-gate-libvex-build-recipe": [
+      "rust-so-artifact-path-is-repo-root-target",
+      "venv-rebuild-cargo-direct-copy"
+    ],
+    "zeropy-memory-load-is-the-stack-canary": [
+      "invariant-servable-pages-is-not-a-load-oracle"
+    ]
+  },
+  "in": {
+    "translate-into-primitive": [
+      "panhl2-killgate-pass"
+    ],
+    "unsat-core-on-demand-not-tracked": [
+      "invariant-residual-sink-vs-assumed-ir"
+    ],
+    "upstream-pr-offline-prepare-slice-pattern": [
+      "internal-patches-offline-prepare-pattern"
+    ],
+    "venv-rebuild-cargo-direct-copy": [
+      "zeropy-gate-libvex-build-recipe"
+    ],
+    "vh834-phase2-minting-deferred": [
+      "vh834-phase6-go-not-materialized"
+    ],
+    "vh834-phase6-go-not-materialized": [
+      "anti-migration-scheduler-delivered"
+    ],
+    "warm-process-exploration-divergence": [
+      "parallel-drain-depth-ground-truth"
+    ],
+    "write-fd-position-aware": [
+      "stdio-fwrite-fputs-arbitrary-fd"
+    ],
+    "write-side-fileno-fallback-correct": [
+      "write-stream-heavy-bench"
+    ],
+    "write-stream-heavy-bench": [
+      "write-side-fileno-fallback-correct"
+    ],
+    "write-through-gate-promotion-keep-off-verdict": [
+      "proxy-gate-audit-all-default-off"
+    ],
+    "ype54-root-cause": [
+      "invariant-dirty-pages-survive-migration"
+    ],
+    "zeropy-callback-site-lever-ranking": [
+      "rust-page-fetch-probe-technique"
+    ],
+    "zeropy-gate-libvex-build-recipe": [
+      "invariant-icicle-behind-fuzzer-feature"
+    ]
+  }
+}

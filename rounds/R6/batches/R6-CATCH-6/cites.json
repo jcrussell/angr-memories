@@ -1,0 +1,84 @@
+{
+  "out": {
+    "parallel-is-transport-bound": [
+      "migration-count-is-the-lever"
+    ],
+    "parallel-numfind1-speculative-waste": [
+      "parallel-per-wave-migration-dominates"
+    ],
+    "parity-silent-option-resolution-routes": [
+      "invariant-required-option-inverse-polarity-gate"
+    ],
+    "pattern-pyobject-fork-clone-via-attach": [
+      "invariant-fork-metadata-arc-not-py"
+    ],
+    "pending-writes-scaffold-inactive-not-the-path": [
+      "lazy-memory-load-overlay-fails"
+    ],
+    "perf-counter-fishing-exhausted": [
+      "bench-syscall-fallback-zero-coverage",
+      "proxy-writes-design-verdict"
+    ],
+    "proxy-gate-audit-all-default-off": [
+      "write-through-gate-promotion-keep-off-verdict"
+    ],
+    "proxy-stale-addr-root-cause": [
+      "invariant-state-cache-mirror-id"
+    ],
+    "refactor-memory-sweep-rule": [
+      "bd-memory-citation-repair-pattern",
+      "docs-dead-memory-key-sweep-method",
+      "invariant-error-class-taxonomy",
+      "invariant-fork-needs-python-init"
+    ]
+  },
+  "in": {
+    "parallel-is-transport-bound": [
+      "anti-migration-scheduler-delivered",
+      "migration-count-is-the-lever"
+    ],
+    "parallel-migration-model": [
+      "panhl1-killgate-pass"
+    ],
+    "parallel-per-wave-migration-dominates": [
+      "parallel-cliff-was-bimodal-not-superlinear",
+      "parallel-numfind1-speculative-waste"
+    ],
+    "pdq8-counter-overhead-validated": [
+      "2j5v-counter-architecture"
+    ],
+    "per-fork-solver-share-infeasible": [
+      "counter-attribution-sweep-2026-07",
+      "ovqja5-qfbv-smt-route-infeasible"
+    ],
+    "perf-campaign-p5-deferral-decision": [
+      "s3-determinism-variance-attribution-verdict"
+    ],
+    "proxy-writes-design-verdict": [
+      "perf-counter-fishing-exhausted"
+    ],
+    "pyo3-pyclass-cycle-leak": [
+      "avoid-weakref-callbacks"
+    ],
+    "rebuild-with-libvex-ffi-recipe": [
+      "avoid-cargo-only-rebuild-without-libvex-ffi",
+      "rust-so-artifact-path-is-repo-root-target"
+    ],
+    "refactor-memory-sweep-rule": [
+      "3uye-stack-page-eager-materialization",
+      "bd-memory-path-audit-method",
+      "docs-citation-audit-method",
+      "invariant-3tek2-replay-ordering",
+      "invariant-error-class-taxonomy",
+      "invariant-ite-builder-loads-match",
+      "invariant-rust-dirty-pages-pending",
+      "invariant-syscall-arg-extraction",
+      "memory-citation-rot-path-scan",
+      "rust-fallback-strategy-semantics",
+      "sgbn-unconstrained-sp-fastpath"
+    ],
+    "register-proxy-stale-cache-root-cause": [
+      "invariant-register-proxy-cache-invalidation"
+    ]
+  }
+}

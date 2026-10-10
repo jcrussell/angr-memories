@@ -1,0 +1,55 @@
+{
+  "out": {
+    "invariant-load-concrete-common-unified": [
+      "invariant-mem-counter-two-paths"
+    ],
+    "invariant-max-active-states-two-sites": [
+      "max-active-states-test-pattern"
+    ],
+    "invariant-mem-symbolic-addr-counter-sites": [
+      "invariant-mem-counter-two-paths",
+      "invariant-symbolic-memory-load-store-wrappers-unused"
+    ],
+    "invariant-mem-write-paths-check-perms": [
+      "invariant-mem-perm-default-off"
+    ],
+    "invariant-native-whitespace-single-source": [
+      "invariant-ctype-mirror-python-not-rust-std"
+    ],
+    "invariant-no-return-two-dispatch-paths": [
+      "invariant-no-return-deadend"
+    ],
+    "invariant-no-zero-fill-symbolic-store": [
+      "invariant-symbolic-store-no-zero-bytes"
+    ],
+    "invariant-opcode-map-ground-truth-is-vendored-header": [
+      "invariant-qdmull-vex-op"
+    ]
+  },
+  "in": {
+    "invariant-ip-is-pc-not-r12": [
+      "invariant-sp-bp-are-full-width"
+    ],
+    "invariant-libc-alias-not-duplicate-proc": [
+      "native-fscanf-stream-variant"
+    ],
+    "invariant-libvex-native-lifter-arch-support": [
+      "libvex-corpus-parity-gate"
+    ],
+    "invariant-max-active-states-two-sites": [
+      "invariant-active-stash-push-parallel-note"
+    ],
+    "invariant-native-whitespace-single-source": [
+      "invariant-ctype-mirror-python-not-rust-std"
+    ],
+    "invariant-no-return-two-dispatch-paths": [
+      "invariant-no-return-deadend"
+    ],
+    "invariant-no-zero-fill-symbolic-store": [
+      "invariant-symbolic-store-no-zero-bytes"
+    ],
+    "invariant-qdmull-vex-op": [
+      "invariant-opcode-map-ground-truth-is-vendored-header"
+    ]
+  }
+}

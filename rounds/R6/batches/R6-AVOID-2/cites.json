@@ -1,0 +1,47 @@
+{
+  "out": {
+    "avoid-python-cross-process-snapshot-test": [
+      "foreign-snapshot-zero-constraints-root-cause"
+    ],
+    "avoid-symbolic-addr-store-for-concrete-readback": [
+      "fgets-short-read-design"
+    ],
+    "avoid-synthetic-loop-blob-for-rust-tests": [
+      "ccall-inc-dec-carry-preserve"
+    ],
+    "avoid-weakref-callbacks": [
+      "pyo3-pyclass-cycle-leak"
+    ],
+    "avoid-with-z3-context-for-stale-ctx-test": [
+      "expression-z3-ast-memo"
+    ],
+    "avoid-z3-solver-set-params-for-random-seed": [
+      "iaol1-seed-pin-empirically-broken"
+    ]
+  },
+  "in": {
+    "avoid-python-cross-process-snapshot-test": [
+      "foreign-snapshot-zero-constraints-root-cause"
+    ],
+    "avoid-silent-no-op-callback-fallbacks": [
+      "callbacks-unit-test-harness",
+      "symbolic-store-prefer-full-callback"
+    ],
+    "avoid-storing-extract-asts-in-guest-buffers": [
+      "invariant-native-stdin-readers-use-mint-stdin-bytes"
+    ],
+    "avoid-symbolic-addr-store-for-concrete-readback": [
+      "flareon-5rjbq-ebp-is-pinned-not-free"
+    ],
+    "avoid-update-baseline-without-verification": [
+      "bench-baseline-vs-regression-triage",
+      "benchmark-counter-baseline-refresh"
+    ],
+    "avoid-z3-parallel-enable": [
+      "iaol1-seed-pin-empirically-broken",
+      "invariant-deterministic-mode-plumbing",
+      "parallel-exploration-recommendation",
+      "parallel-go-nogo-panhl"
+    ]
+  }
+}

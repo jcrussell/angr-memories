@@ -1,0 +1,72 @@
+{
+  "out": {
+    "invariant-active-stash-push-parallel-note": [
+      "invariant-active-stash-push",
+      "invariant-max-active-states-two-sites"
+    ],
+    "invariant-arch-offset-archinfo-parity": [
+      "arch-offset-parity-gate"
+    ],
+    "invariant-assert-not-debug-assert-in-release": [
+      "debug-assert-triage-policy",
+      "panic-abort-no-poison-invariant"
+    ],
+    "invariant-concrete-bv-width128-shift-guard": [
+      "invariant-concrete-shift-clamp-before-narrow"
+    ],
+    "invariant-concrete-load-16b-chunking": [
+      "invariant-chunked-concrete-memory-read"
+    ],
+    "invariant-concrete-width-gt-128-fast-paths": [
+      "invariant-concrete-bv-u128-16-byte-limit",
+      "invariant-concrete-shift-clamp-before-narrow"
+    ],
+    "invariant-ctype-mirror-python-not-rust-std": [
+      "invariant-native-whitespace-single-source"
+    ],
+    "invariant-export-mints-with-explicit-name": [
+      "invariant-symbol-identity-is-by-name"
+    ],
+    "invariant-found-state-content-gate-by-replay": [
+      "avoid-content-fingerprint-on-found-states"
+    ],
+    "invariant-icicle-behind-fuzzer-feature": [
+      "zeropy-gate-libvex-build-recipe"
+    ]
+  },
+  "in": {
+    "invariant-arch-offset-archinfo-parity": [
+      "arch-offset-parity-gate"
+    ],
+    "invariant-assert-not-debug-assert-in-release": [
+      "debug-assert-triage-policy",
+      "verify-debug-asserts-with-rustflags"
+    ],
+    "invariant-chunked-concrete-memory-read": [
+      "exploration-dedup-helpers-clusters-5-6-8",
+      "exploration-route-and-chunked-helpers",
+      "invariant-concrete-load-16b-chunking"
+    ],
+    "invariant-clippy-deny-propagates-to-test-submodule": [
+      "deny-sweep-function-level-allow-pattern"
+    ],
+    "invariant-concrete-shift-clamp-before-narrow": [
+      "bug-class-elimination-2026-07",
+      "invariant-concrete-bv-width128-shift-guard",
+      "invariant-concrete-width-gt-128-fast-paths"
+    ],
+    "invariant-ctype-mirror-python-not-rust-std": [
+      "invariant-native-whitespace-single-source"
+    ],
+    "invariant-div-by-zero-total-semantics": [
+      "bug-class-elimination-2026-07"
+    ],
+    "invariant-export-mints-with-explicit-name": [
+      "invariant-symbol-identity-is-by-name",
+      "invariant-symbol-registry-no-gc"
+    ],
+    "invariant-fork-prior-guard-replay": [
+      "found-state-missing-branch-guards"
+    ]
+  }
+}

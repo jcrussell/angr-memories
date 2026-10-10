@@ -1,0 +1,111 @@
+{
+  "out": {
+    "i386-struct-stat-and-angr-syscall-map": [
+      "mips32-struct-stat-and-omitted-mode"
+    ],
+    "iaol1-seed-pin-empirically-broken": [
+      "avoid-z3-parallel-enable"
+    ],
+    "internal-patches-offline-prepare-pattern": [
+      "aggregation-doc-v1-partial-pattern",
+      "upstream-pr-offline-prepare-slice-pattern"
+    ],
+    "iop-avg-vs-hadd-distinction": [
+      "z3-universality-parity-test-template"
+    ],
+    "lazy-memory-sidecar-architecture": [
+      "invariant-mem-ite-depth-counter"
+    ],
+    "libvex-callee-addr-normalize": [
+      "libvex-corpus-parity-gate"
+    ],
+    "libvex-corpus-parity-gate": [
+      "invariant-libvex-native-lifter-arch-support",
+      "libvex-lift-params"
+    ],
+    "loop-head-policy-caplg": [
+      "coverage-guided-policy-m9fpp",
+      "selection-policy-seam-limits"
+    ],
+    "loopseer-native-wiring": [
+      "concretization-config-readback"
+    ],
+    "memcpy-symbolic-address-native": [
+      "memset-symbolic-address-native"
+    ],
+    "memcpy-symbolic-size-native": [
+      "memset-symbolic-size-native"
+    ],
+    "memory-citation-rot-path-scan": [
+      "refactor-memory-sweep-rule"
+    ],
+    "memset-symbolic-address-native": [
+      "memcpy-symbolic-size-native"
+    ],
+    "migration-count-is-the-lever": [
+      "parallel-is-transport-bound"
+    ],
+    "mimalloc-global-allocator": [
+      "benchmark-memory-fxhash"
+    ],
+    "native-asprintf-getline-getdelim-parity": [
+      "native-libc-no-parity-family"
+    ],
+    "native-char-io-unlocked-aliases": [
+      "native-fileops-largefile-aliases"
+    ]
+  },
+  "in": {
+    "i386-struct-stat-and-angr-syscall-map": [
+      "syscall-arch-number-table-staleness"
+    ],
+    "iaol1-seed-pin-empirically-broken": [
+      "avoid-z3-solver-set-params-for-random-seed",
+      "deterministic-seed-narrows-not-collapses",
+      "invariant-deterministic-mode-plumbing",
+      "z3-source-mining-ovqja"
+    ],
+    "ilq8-post-cancel-waste": [
+      "find-directed-policy-lnzcu",
+      "scheduler-selection-policy-seam"
+    ],
+    "lazy-memory-load-overlay-fails": [
+      "invariant-pending-writes-defer-then-flush",
+      "pending-writes-scaffold-inactive-not-the-path"
+    ],
+    "libvex-corpus-parity-gate": [
+      "libvex-callee-addr-normalize"
+    ],
+    "libvex-lift-params": [
+      "libvex-corpus-parity-gate"
+    ],
+    "load-shellcode-blob-binary-none": [
+      "invariant-shellcode-binary-regions-test"
+    ],
+    "max-active-states-test-pattern": [
+      "invariant-max-active-states-two-sites"
+    ],
+    "memcpy-symbolic-size-native": [
+      "memset-symbolic-address-native"
+    ],
+    "memreplay-bottleneck-root-cause": [
+      "gorvf19-register-acquire-once"
+    ],
+    "memset-symbolic-address-native": [
+      "memcpy-symbolic-address-native"
+    ],
+    "memset-symbolic-size-native": [
+      "memcpy-symbolic-size-native"
+    ],
+    "merge-cow-skip-soundness": [
+      "s5a-merge-cost-shape-divergence-proportional"
+    ],
+    "migration-count-is-the-lever": [
+      "anti-migration-scheduler-delivered",
+      "parallel-is-transport-bound"
+    ],
+    "mips32-struct-stat-and-omitted-mode": [
+      "i386-struct-stat-and-angr-syscall-map"
+    ]
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "out": {
+    "fgetc-eof-short-read-model": [
+      "fgets-short-read-design"
+    ],
+    "file-read-fixture-build": [
+      "fp-simd-fixture-build"
+    ],
+    "find-directed-policy-lnzcu": [
+      "ilq8-post-cancel-waste"
+    ],
+    "findall-parallel-slower-than-serial": [
+      "parallel-cliff-was-bimodal-not-superlinear"
+    ],
+    "flareon-5rjbq-ebp-is-pinned-not-free": [
+      "avoid-symbolic-addr-store-for-concrete-readback"
+    ],
+    "flareon-5rjbq-pin-and-automap-fix": [
+      "constraint-export-no-pre-pin"
+    ],
+    "foreign-snapshot-zero-constraints-root-cause": [
+      "avoid-python-cross-process-snapshot-test",
+      "invariant-mirror-solver-constraints-not-authoritative"
+    ],
+    "fork-skip-gil-attach-empty-metadata": [
+      "invariant-fork-metadata-arc-not-py"
+    ],
+    "format-parser-interpret-two-subpaths": [
+      "format-parser-three-dispatch-sites"
+    ],
+    "format-proc-integration-tests": [
+      "rust-proc-integration-test-rax-only"
+    ],
+    "format-spec-type-lowercased-and-printf-strip": [
+      "format-parser-three-dispatch-sites"
+    ],
+    "fp-simd-fixture-build": [
+      "benchmark-vecret-gsptr-corpus-zero"
+    ],
+    "gan1-memory-load-clone-not-hot": [
+      "invariant-rustbv-clone-cheap"
+    ],
+    "god-module-split-free-fns": [
+      "god-module-split-state-rs"
+    ],
+    "god-module-split-impl-across-files": [
+      "god-module-split-test-glob-imports"
+    ],
+    "god-module-split-private-mod-deadcode": [
+      "god-module-split-visibility-pitfall"
+    ],
+    "god-module-split-private-struct": [
+      "god-module-split-visibility-pitfall"
+    ],
+    "god-module-split-state-rs": [
+      "god-module-split-impl-across-files"
+    ],
+    "god-module-split-test-glob-imports": [
+      "god-module-split-private-struct",
+      "god-module-split-visibility-pitfall"
+    ],
+    "gorvf19-register-acquire-once": [
+      "memreplay-bottleneck-root-cause"
+    ],
+    "gorvf31-xmllint-all-bucket-a": [
+      "a8epx-gate-measured-defer",
+      "native-dispatch-skipped-for-loaded-libs"
+    ]
+  },
+  "in": {
+    "fgets-short-read-design": [
+      "avoid-symbolic-addr-store-for-concrete-readback",
+      "fgetc-eof-short-read-model"
+    ],
+    "filesystem-module-layout": [
+      "symlink-table-readlink-model",
+      "write-fd-position-aware"
+    ],
+    "findall-parallel-slower-than-serial": [
+      "benchmark-findall-dispatch-balance",
+      "coverage-report-found-set-not-seen-set"
+    ],
+    "foreign-snapshot-zero-constraints-root-cause": [
+      "avoid-python-cross-process-snapshot-test"
+    ],
+    "fork-carries-model-cache": [
+      "benchmark-zeropy-milestone-met",
+      "csgames2018-residual-bounded-by-lineage-gating",
+      "z3-materialize-is-solver-replay"
+    ],
+    "format-parser-three-dispatch-sites": [
+      "format-parser-interpret-two-subpaths",
+      "format-spec-type-lowercased-and-printf-strip"
+    ],
+    "fp-simd-fixture-build": [
+      "file-read-fixture-build"
+    ],
+    "fread-python-boundary-unreachable-content": [
+      "symbolic-stream-fd-read-slice"
+    ],
+    "gan1-memory-load-clone-not-hot": [
+      "invariant-rustbv-clone-cheap"
+    ],
+    "god-module-split-impl-across-files": [
+      "god-module-split-state-rs"
+    ],
+    "god-module-split-private-struct": [
+      "god-module-split-test-glob-imports"
+    ],
+    "god-module-split-state-rs": [
+      "god-module-split-free-fns"
+    ],
+    "god-module-split-test-glob-imports": [
+      "god-module-split-impl-across-files"
+    ],
+    "god-module-split-visibility-pitfall": [
+      "god-module-split-private-mod-deadcode",
+      "god-module-split-private-struct",
+      "god-module-split-test-glob-imports"
+    ],
+    "hackcon-z3-ast-structure": [
+      "z3-source-mining-ovqja"
+    ]
+  }
+}

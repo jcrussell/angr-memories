@@ -1,0 +1,86 @@
+{
+  "out": {
+    "arch-offset-parity-gate": [
+      "invariant-arch-offset-archinfo-parity"
+    ],
+    "arch-x86-no-fs-const": [
+      "arch-arm64-guest-state-tail",
+      "arch-prctl-fs-gs-register-name"
+    ],
+    "audit-2026-07-23-requality-method": [
+      "audit-2026-07-testing-gap-method"
+    ],
+    "audit-2026-07-29-symex-9th-round-method": [
+      "arch-reg-alias-macro-needs-paste"
+    ],
+    "audit-retrospective-mining-2026-07-30": [
+      "bug-class-elimination-2026-07",
+      "clippy-pedantic-audit-2026-06",
+      "dead-code-audit-2026-06"
+    ],
+    "bisect-run-for-bench-speedup-attribution": [
+      "bench-baseline-vs-regression-triage"
+    ],
+    "bug-class-elimination-2026-07": [
+      "audit-retrospective-mining-2026-07-30",
+      "invariant-concrete-bv-u128-16-byte-limit",
+      "invariant-concrete-shift-clamp-before-narrow",
+      "invariant-div-by-zero-total-semantics"
+    ],
+    "callbacks-unit-test-harness": [
+      "avoid-silent-no-op-callback-fallbacks"
+    ],
+    "ccall-fallback-perf-gap-method": [
+      "invariant-symflags-category-coverage"
+    ],
+    "debug-assert-triage-policy": [
+      "invariant-assert-not-debug-assert-in-release"
+    ],
+    "deny-sweep-function-level-allow-pattern": [
+      "invariant-clippy-deny-propagates-to-test-submodule"
+    ],
+    "emit-extract-z3-recursion-hazard": [
+      "extract-driver-unified"
+    ],
+    "extract-driver-unified": [
+      "emit-extract-z3-recursion-hazard"
+    ],
+    "found-state-missing-branch-guards": [
+      "invariant-fork-prior-guard-replay"
+    ],
+    "indexing-slicing-audit-2026-07": [
+      "guest-value-indexing-structural-not-panic",
+      "panic-reachability-audit-2026-06"
+    ]
+  },
+  "in": {
+    "arch-arm64-guest-state-tail": [
+      "arch-x86-no-fs-const"
+    ],
+    "arch-offset-parity-gate": [
+      "invariant-arch-offset-archinfo-parity"
+    ],
+    "audit-retrospective-mining-2026-07-30": [
+      "bug-class-elimination-2026-07"
+    ],
+    "bug-class-elimination-2026-07": [
+      "audit-retrospective-mining-2026-07-30",
+      "no-default-features-build-broken-2026-07"
+    ],
+    "ccall-fallback-perf-gap-method": [
+      "invariant-symflags-category-coverage"
+    ],
+    "debug-assert-triage-policy": [
+      "invariant-assert-not-debug-assert-in-release"
+    ],
+    "emit-extract-z3-recursion-hazard": [
+      "extract-driver-unified"
+    ],
+    "extract-driver-unified": [
+      "emit-extract-z3-recursion-hazard"
+    ],
+    "guest-value-indexing-structural-not-panic": [
+      "indexing-slicing-audit-2026-07"
+    ]
+  }
+}
