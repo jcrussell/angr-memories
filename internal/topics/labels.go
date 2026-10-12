@@ -261,22 +261,15 @@ func WriteLabels(path string, f *LabelsFile) error {
 	})
 }
 
-// Upsert adds l to f, replacing any existing label that describes the same
-// cluster: one whose anchors overlap memberKeys by >= MinAnchorHits, or
-// whose Text equals l.Text. When several existing labels match, the first
-// is replaced and the rest are dropped. Otherwise l is appended.
-func (f *LabelsFile) Upsert(l Label, memberKeys map[string]bool) {
+// Upsert adds l to f, replacing the label currently attached to the
+// cluster being (re)labeled -- identified by its text, replaceText, as
+// Assign reported it; "" when the cluster was unlabeled -- and any label
+// whose text equals l.Text. Everything else is left alone: a label is
+// never displaced just because some of its anchors happen to sit in this
+// cluster, so relabeling one cluster cannot silently drop another's name.
+func (f *LabelsFile) Upsert(l Label, replaceText string) {
 	matches := func(e Label) bool {
-		if e.Text == l.Text {
-			return true
-		}
-		hits := 0
-		for _, a := range uniqueStrings(e.Anchors) {
-			if memberKeys[a] {
-				hits++
-			}
-		}
-		return hits >= MinAnchorHits
+		return e.Text == l.Text || (replaceText != "" && e.Text == replaceText)
 	}
 	replaced := false
 	kept := f.Labels[:0]

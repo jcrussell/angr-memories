@@ -258,42 +258,34 @@ func TestReadLabels_Edges(t *testing.T) {
 func TestLabelsFile_Upsert(t *testing.T) {
 	f := &LabelsFile{SchemaVersion: 1, Labels: []Label{
 		{Text: "old", Anchors: []string{"a1", "a2", "a3"}},
-		{Text: "other", Anchors: []string{"b1", "b2", "b3"}},
+		{Text: "neighbour", Anchors: []string{"a2", "a3", "n1"}}, // shares anchors with old's cluster but is a different label
 	}}
-	members := map[string]bool{"a1": true, "a2": true, "a3": true, "a4": true}
-
-	// Anchor overlap >= MinAnchorHits replaces in place.
-	f.Upsert(Label{Text: "new", Anchors: []string{"a2", "a3", "a4"}}, members)
-	want := []Label{
-		{Text: "new", Anchors: []string{"a2", "a3", "a4"}},
-		{Text: "other", Anchors: []string{"b1", "b2", "b3"}},
+	// Relabeling the cluster currently named "old" replaces exactly that
+	// label, in place, and leaves the neighbour alone even though its
+	// anchors overlap.
+	f.Upsert(Label{Text: "new", Anchors: []string{"a2", "a3", "a4"}}, "old")
+	if len(f.Labels) != 2 || f.Labels[0].Text != "new" || f.Labels[1].Text != "neighbour" {
+		t.Fatalf("after replace: %+v", f.Labels)
 	}
-	if diff := cmp.Diff(want, f.Labels); diff != "" {
-		t.Errorf("replace by anchors (-want +got):\n%s", diff)
-	}
-
-	// Insufficient overlap and a different Text appends.
-	f.Upsert(Label{Text: "third", Anchors: []string{"c1", "c2", "c3"}}, map[string]bool{"c1": true, "a1": true})
+	// An unlabeled cluster ("" replaceText) appends.
+	f.Upsert(Label{Text: "third", Anchors: []string{"c1", "c2", "c3"}}, "")
 	if len(f.Labels) != 3 || f.Labels[2].Text != "third" {
-		t.Errorf("append: %+v", f.Labels)
+		t.Fatalf("after append: %+v", f.Labels)
 	}
-
-	// Same Text replaces even with no anchor overlap.
-	f.Upsert(Label{Text: "other", Anchors: []string{"q1"}}, map[string]bool{})
-	if len(f.Labels) != 3 || f.Labels[1].Anchors[0] != "q1" {
-		t.Errorf("replace by text: %+v", f.Labels)
+	// Same text as an existing label replaces it wherever it is.
+	f.Upsert(Label{Text: "third", Anchors: []string{"z1"}}, "")
+	if len(f.Labels) != 3 || f.Labels[2].Anchors[0] != "z1" {
+		t.Fatalf("after same-text replace: %+v", f.Labels)
 	}
-
-	// Two matches collapse into one.
-	f.Upsert(Label{Text: "third", Anchors: []string{"a2", "a3", "a4"}}, members)
-	if len(f.Labels) != 2 || f.Labels[0].Text != "third" || f.Labels[1].Text != "other" {
-		t.Errorf("collapse: %+v", f.Labels)
+	// Replacing by one text while colliding with another collapses both.
+	f.Upsert(Label{Text: "neighbour", Anchors: []string{"q"}}, "new")
+	if len(f.Labels) != 2 || f.Labels[0].Text != "neighbour" || f.Labels[1].Text != "third" {
+		t.Fatalf("after collapse: %+v", f.Labels)
 	}
-
 	// Upsert on an empty file appends.
 	e := &LabelsFile{SchemaVersion: 1}
-	e.Upsert(Label{Text: "x"}, nil)
+	e.Upsert(Label{Text: "x"}, "")
 	if len(e.Labels) != 1 {
-		t.Errorf("empty: %+v", e.Labels)
+		t.Fatalf("empty: %+v", e.Labels)
 	}
 }

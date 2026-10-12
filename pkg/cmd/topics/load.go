@@ -104,13 +104,14 @@ func (c *corpus) rows() []row {
 	return out
 }
 
-// memberKeys is the set Upsert uses to find a label already covering a cluster.
-func (c *corpus) memberKeys(cl topics.Cluster) map[string]bool {
-	m := make(map[string]bool, len(cl.Members))
-	for _, di := range cl.Members {
-		m[c.res.Docs[di].Key] = true
+// currentLabel is the text of the label Assign attached to cluster
+// position i, or "" when it is unlabeled. Captured before any Upsert,
+// because Upsert compacts the labels slice in place.
+func (c *corpus) currentLabel(i int) string {
+	if a := c.assigned[i]; a.Label != nil {
+		return a.Label.Text
 	}
-	return m
+	return ""
 }
 
 // clusterAt resolves a 1-based index from the CLI.

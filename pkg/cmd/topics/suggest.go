@@ -146,6 +146,10 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 	}
 	taken := c.labelTexts()
 	examples := c.exampleLabels()
+	current := make([]string, len(c.res.Clusters))
+	for i := range c.res.Clusters {
+		current[i] = c.currentLabel(i)
+	}
 	by := "llm:" + opts.ChatModel
 	drafted := 0
 	var results []row
@@ -163,7 +167,7 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 		fmt.Fprintf(opts.IO.ErrOut, "cluster %d (%d/%d): %q\n", cl.Index, n+1, len(targets), text)
 		taken[strings.ToLower(text)] = true
 		l := topics.Label{Text: text, Anchors: topics.AnchorsFor(cl, c.res.Docs), LabeledBy: by, At: opts.Now().UTC().Format(time.RFC3339)}
-		c.labels.Upsert(l, c.memberKeys(cl))
+		c.labels.Upsert(l, current[i])
 		drafted++
 		r := c.rows()[i]
 		r.Label, r.Unlabeled, r.LabeledBy, r.LabeledAt = text, false, by, l.At

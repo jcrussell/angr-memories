@@ -104,7 +104,7 @@ func labelRun(_ context.Context, opts *LabelOptions) error {
 		LabeledBy: opts.By,
 		At:        opts.Now().UTC().Format(time.RFC3339),
 	}
-	c.labels.Upsert(l, c.memberKeys(cl))
+	c.labels.Upsert(l, c.currentLabel(opts.Index-1))
 	if err := topics.WriteLabels(opts.LabelsPath, c.labels); err != nil {
 		return err
 	}
