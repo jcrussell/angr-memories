@@ -53,7 +53,7 @@ func load(io *iostreams.IOStreams, memPath, embPath, labelsPath string, k int) (
 		return nil, err
 	}
 	assigned, orphaned := topics.Assign(labels.Labels, res)
-	return &corpus{records: records, latest: embeddings.Latest(records), labels: labels, res: res,
+	return &corpus{records: records, latest: memory.Latest(records), labels: labels, res: res,
 		assigned: assigned, orphaned: orphaned, model: f.Header.Model}, nil
 }
 
@@ -88,28 +88,26 @@ func (c *corpus) rows() []row {
 // row builds the view of the cluster at position i.
 func (c *corpus) row(i int) row {
 	cl := c.res.Clusters[i]
-	{
-		r := row{Index: cl.Index, Size: len(cl.Members), Remembered: cl.Remembered, Forgotten: cl.Forgotten}
-		if r.Size > 0 {
-			r.Kept = int(float64(cl.Remembered)/float64(r.Size)*100 + 0.5)
-		}
-		for _, p := range cl.Prefixes {
-			r.Prefixes = append(r.Prefixes, fmt.Sprintf("%s %d", p.Prefix, p.Count))
-		}
-		for _, di := range cl.Exemplars {
-			r.Exemplars = append(r.Exemplars, c.res.Docs[di].Key)
-		}
-		for _, di := range cl.Members {
-			r.Members = append(r.Members, c.res.Docs[di].Key)
-		}
-		if a := c.assigned[i]; a.Label != nil {
-			r.Label, r.LabeledBy, r.LabeledAt = a.Label.Text, a.Label.LabeledBy, a.Label.At
-		} else {
-			r.Unlabeled = true
-			r.Label = "(unlabeled)"
-		}
-		return r
+	r := row{Index: cl.Index, Size: len(cl.Members), Remembered: cl.Remembered, Forgotten: cl.Forgotten}
+	if r.Size > 0 {
+		r.Kept = int(float64(cl.Remembered)/float64(r.Size)*100 + 0.5)
 	}
+	for _, p := range cl.Prefixes {
+		r.Prefixes = append(r.Prefixes, fmt.Sprintf("%s %d", p.Prefix, p.Count))
+	}
+	for _, di := range cl.Exemplars {
+		r.Exemplars = append(r.Exemplars, c.res.Docs[di].Key)
+	}
+	for _, di := range cl.Members {
+		r.Members = append(r.Members, c.res.Docs[di].Key)
+	}
+	if a := c.assigned[i]; a.Label != nil {
+		r.Label, r.LabeledBy, r.LabeledAt = a.Label.Text, a.Label.LabeledBy, a.Label.At
+	} else {
+		r.Unlabeled = true
+		r.Label = "(unlabeled)"
+	}
+	return r
 }
 
 // currentLabel is the text of the label Assign attached to cluster

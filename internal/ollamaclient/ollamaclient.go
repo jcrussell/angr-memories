@@ -16,8 +16,10 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"syscall"
 
 	"github.com/ollama/ollama/api"
+	"github.com/ollama/ollama/envconfig"
 
 	"github.com/jcrussell/angr-memories/internal/embeddings"
 	"github.com/jcrussell/angr-memories/pkg/cmdutil"
@@ -27,17 +29,14 @@ import (
 // otherwise.
 const DefaultEndpoint = "http://127.0.0.1:11434"
 
-// EndpointFromEnv returns $OLLAMA_HOST normalized to a URL (the Ollama CLI
-// accepts bare host:port there), or DefaultEndpoint when unset.
+// EndpointFromEnv returns $OLLAMA_HOST as the Ollama CLI itself would read
+// it (bare host, host:port, scheme optional, default port 11434; the SDK's
+// envconfig.Host owns those rules), or DefaultEndpoint when unset.
 func EndpointFromEnv() string {
-	h := strings.TrimSpace(os.Getenv("OLLAMA_HOST"))
-	if h == "" {
+	if strings.TrimSpace(os.Getenv("OLLAMA_HOST")) == "" {
 		return DefaultEndpoint
 	}
-	if !strings.Contains(h, "://") {
-		h = "http://" + h
-	}
-	return h
+	return envconfig.Host().String()
 }
 
 // ParseEndpoint validates an endpoint flag value.
@@ -269,10 +268,11 @@ func wrap(err error, model, endpoint string) error {
 		return cmdutil.WithHint(fmt.Errorf("ollama: model %q not found", model), fmt.Sprintf("run `ollama pull %s`", model))
 	}
 	// Only a failure to connect (dial, DNS) means the server is not there;
-	// an HTTP status or a timeout mid-request is reported as what it is.
+	// an HTTP status, a read timeout or a reset mid-request is reported as
+	// what it is.
 	var opErr *net.OpError
 	var dnsErr *net.DNSError
-	if errors.As(err, &opErr) || errors.As(err, &dnsErr) || strings.Contains(err.Error(), "connection refused") {
+	if (errors.As(err, &opErr) && opErr.Op == "dial") || errors.As(err, &dnsErr) || errors.Is(err, syscall.ECONNREFUSED) {
 		return cmdutil.WithHint(fmt.Errorf("ollama: cannot reach %s: %w", endpoint, err), "is Ollama running? start it with `ollama serve` (or set OLLAMA_HOST / --endpoint)")
 	}
 	if se, ok := errors.AsType[api.StatusError](err); ok {

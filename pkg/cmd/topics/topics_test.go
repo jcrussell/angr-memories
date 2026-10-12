@@ -401,7 +401,7 @@ func TestSuggestRun_OnlyAcceptsTheClustersOwnCurrentLabel(t *testing.T) {
 	}
 	s := &scriptedSuggester{answers: []string{"Z3 solver discipline"}}
 	opts, _, errOut := suggestOpts(p, s)
-	opts.Only = idx
+	opts.Only, opts.Relabel = idx, true // a person's label needs --relabel to be redone
 	if err := suggestRun(context.Background(), opts); err != nil {
 		t.Fatal(err)
 	}
@@ -423,5 +423,49 @@ func TestSuggestRun_OnlyAcceptsTheClustersOwnCurrentLabel(t *testing.T) {
 	}
 	if n != 1 {
 		t.Errorf("expected exactly one Z3 label, got %d", n)
+	}
+}
+
+func TestSuggestRun_OnlyRefusesToOverwriteHumanLabelWithoutRelabel(t *testing.T) {
+	p := fixture(t)
+	io, _, _ := newIO()
+	c, err := load(io, p.mem, p.emb, p.labels, 3)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var idx int
+	for _, r := range c.rows() {
+		if r.Label == "Z3 solver discipline" {
+			idx = r.Index
+		}
+	}
+	s := &scriptedSuggester{answers: []string{"Something else"}}
+	opts, _, _ := suggestOpts(p, s)
+	opts.Only = idx
+	err = suggestRun(context.Background(), opts)
+	var h *cmdutil.ErrHint
+	if !errors.As(err, &h) || len(s.briefs) != 0 {
+		t.Fatalf("expected a hinted refusal before any model call, got err=%v calls=%d", err, len(s.briefs))
+	}
+	opts.Relabel = true
+	if err := suggestRun(context.Background(), opts); err != nil {
+		t.Fatal(err)
+	}
+	lf, _ := topics.LoadLabels(p.labels)
+	for _, l := range lf.Labels {
+		if l.Text == "Z3 solver discipline" {
+			t.Error("--only --relabel should have replaced the human label")
+		}
+	}
+}
+
+func TestLabelRun_RefusesClusterTooSmallToAnchor(t *testing.T) {
+	p := fixture(t)
+	io, _, _ := newIO()
+	// K equal to the corpus size makes every cluster a single memory.
+	opts := &LabelOptions{IO: io, Now: time.Now, MemoriesPath: p.mem, EmbeddingsPath: p.emb, LabelsPath: p.labels, K: 9, Index: 1, Text: "x", By: "human"}
+	err := labelRun(context.Background(), opts)
+	if err == nil || !strings.Contains(err.Error(), "anchor") {
+		t.Fatalf("got %v, want a too-few-anchors error", err)
 	}
 }

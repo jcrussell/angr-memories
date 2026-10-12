@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"github.com/jcrussell/angr-memories/internal/atomicfile"
 	"os"
 	"path/filepath"
 	"time"
@@ -112,8 +113,8 @@ func buildAndInstallIndex(root, target string, byKey map[string]*memory.Memory) 
 	if err != nil {
 		return nil, fmt.Errorf("create search cache temp dir: %w", err)
 	}
-	memory.TrackPending(tmp)
-	defer memory.UntrackPending(tmp)
+	atomicfile.TrackPending(tmp)
+	defer atomicfile.UntrackPending(tmp)
 	// os.MkdirTemp creates the dir; bleve.New refuses to create an index at
 	// a path that already exists, so remove it and let bleve create it
 	// fresh at the same name.

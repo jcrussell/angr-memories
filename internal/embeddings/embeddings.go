@@ -228,7 +228,7 @@ func (s Status) Clean() bool { return len(s.Missing) == 0 && len(s.Stale) == 0 }
 // Check compares every key's latest incarnation against f. Slices are
 // sorted so output is stable.
 func Check(records []*memory.Memory, f *File) Status {
-	latest := Latest(records)
+	latest := memory.Latest(records)
 	var st Status
 	for key, m := range latest {
 		row, ok := f.Rows[key]
@@ -252,15 +252,11 @@ func Check(records []*memory.Memory, f *File) Status {
 	return st
 }
 
-// Latest is memory.Latest, kept here as the name callers in this package's
-// orbit use.
-func Latest(records []*memory.Memory) map[string]*memory.Memory { return memory.Latest(records) }
-
 // Vectors returns key -> unit vector for every current row of f, ready for
 // clustering. Stale rows are excluded only when skipStale is set, which is
 // what `site --allow-stale-embeddings` does.
 func Vectors(records []*memory.Memory, f *File, skipStale bool) map[string][]float32 {
-	latest := Latest(records)
+	latest := memory.Latest(records)
 	out := make(map[string][]float32, len(latest))
 	for key, m := range latest {
 		row, ok := f.Rows[key]

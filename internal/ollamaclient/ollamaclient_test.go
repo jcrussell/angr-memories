@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"math"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -133,9 +134,16 @@ func TestEndpointParsing(t *testing.T) {
 	if EndpointFromEnv() != DefaultEndpoint {
 		t.Errorf("default = %q", EndpointFromEnv())
 	}
-	t.Setenv("OLLAMA_HOST", "gpu-box:11434")
-	if EndpointFromEnv() != "http://gpu-box:11434" {
-		t.Errorf("bare host = %q", EndpointFromEnv())
+	for env, want := range map[string]string{
+		"gpu-box:11434":        "http://gpu-box:11434",
+		"0.0.0.0":              "http://0.0.0.0:11434",
+		"https://gpu-box":      "https://gpu-box:443",
+		"http://gpu-box:12345": "http://gpu-box:12345",
+	} {
+		t.Setenv("OLLAMA_HOST", env)
+		if got := EndpointFromEnv(); got != want {
+			t.Errorf("OLLAMA_HOST=%q -> %q, want %q", env, got, want)
+		}
 	}
 	for _, bad := range []string{"", "11434", "ftp://x", "localhost:11434"} {
 		if _, err := ParseEndpoint(bad); err == nil {
@@ -207,5 +215,18 @@ func TestEmbedder_ServerErrorIsNotReportedAsUnreachable(t *testing.T) {
 	var h *cmdutil.ErrHint
 	if errors.As(err, &h) {
 		t.Errorf("a 500 from a running server must not carry the 'is Ollama running?' hint: %v", h.Hint)
+	}
+}
+
+func TestWrap_ReadTimeoutIsNotUnreachable(t *testing.T) {
+	timeout := &net.OpError{Op: "read", Net: "tcp", Err: errors.New("i/o timeout")}
+	err := wrap(timeout, "m", "http://x:1")
+	var h *cmdutil.ErrHint
+	if errors.As(err, &h) {
+		t.Errorf("a read timeout must not be reported as the server being down: %v", err)
+	}
+	dial := &net.OpError{Op: "dial", Net: "tcp", Err: errors.New("connect: connection refused")}
+	if err := wrap(dial, "m", "http://x:1"); !errors.As(err, &h) {
+		t.Errorf("a dial failure should carry the hint: %v", err)
 	}
 }

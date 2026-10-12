@@ -109,7 +109,8 @@ func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Lab
 		}
 		labelUsed[p.li] = true
 		clusterUsed[p.ci] = true
-		byCluster[p.ci] = Assignment{Label: &labels[p.li], Hits: p.hits}
+		l := labels[p.li] // a copy: callers may edit the labels file afterwards
+		byCluster[p.ci] = Assignment{Label: &l, Hits: p.hits}
 	}
 	for li := range labels {
 		if !labelUsed[li] {
@@ -284,7 +285,7 @@ func (f *LabelsFile) Upsert(l Label, replaceText string) {
 		return e.Text == l.Text || (replaceText != "" && e.Text == replaceText)
 	}
 	replaced := false
-	kept := f.Labels[:0]
+	kept := make([]Label, 0, len(f.Labels)+1)
 	for _, e := range f.Labels {
 		if !matches(e) {
 			kept = append(kept, e)
@@ -297,10 +298,6 @@ func (f *LabelsFile) Upsert(l Label, replaceText string) {
 	}
 	if !replaced {
 		kept = append(kept, l)
-	}
-	// Clear any tail slots so dropped labels don't linger in the backing array.
-	for i := len(kept); i < len(f.Labels); i++ {
-		f.Labels[i] = Label{}
 	}
 	f.Labels = kept
 }

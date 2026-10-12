@@ -166,7 +166,7 @@ func embedRun(ctx context.Context, opts *Options) error {
 		return nil
 	}
 
-	latest := embeddings.Latest(records)
+	latest := memory.Latest(records)
 	embedded := 0
 	var runErr error
 	if len(todo) > 0 {
@@ -206,7 +206,6 @@ func embedRun(ctx context.Context, opts *Options) error {
 			embedded += len(keys)
 			prog.update(embedded)
 		}
-		prog.done()
 	}
 	for _, k := range st.Orphan {
 		delete(f.Rows, k)
@@ -248,5 +247,3 @@ func (p *progress) update(n int) {
 		p.last = t
 	}
 }
-
-func (p *progress) done() {}

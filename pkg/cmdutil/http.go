@@ -1,6 +1,7 @@
 package cmdutil
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"math/rand/v2"
@@ -25,7 +26,7 @@ func NewHTTPClient() *http.Client {
 	base.ResponseHeaderTimeout = 5 * time.Minute
 	return &http.Client{
 		Timeout:   10 * time.Minute,
-		Transport: &retryTransport{next: &userAgentTransport{next: base}, maxAttempts: 3, baseDelay: 200 * time.Millisecond, sleep: time.Sleep},
+		Transport: &retryTransport{next: &userAgentTransport{next: base}, maxAttempts: 3, baseDelay: 200 * time.Millisecond},
 	}
 }
 
@@ -37,17 +38,31 @@ func (t *userAgentTransport) RoundTrip(req *http.Request) (*http.Response, error
 	return t.next.RoundTrip(req)
 }
 
-// retryTransport retries connection failures and 5xx/429 responses with
-// bounded exponential backoff plus jitter, honoring Retry-After. Only
-// requests whose body can be replayed (GetBody set, which http.NewRequest
-// does for bytes/strings readers) or that have no body are retried; the
-// embedding and chat calls are stateless on the server, so replaying a
-// POST is safe here.
+// retryTransport retries connection failures and transient statuses (429,
+// 502, 503, 504) with bounded exponential backoff plus jitter, honoring a
+// capped Retry-After. A 500 is not retried: it usually means the request
+// itself failed (runner crash, bad input) and replaying a multi-minute
+// generation would only delay the message. Only requests whose body can be
+// replayed (GetBody set, which http.NewRequest does for bytes/strings
+// readers) or that have no body are retried; the embedding and chat calls
+// are stateless on the server, so replaying a POST is safe here. Sleeps
+// end early when the request's context is cancelled.
 type retryTransport struct {
 	next        http.RoundTripper
 	maxAttempts int
 	baseDelay   time.Duration
-	sleep       func(time.Duration)
+	sleep       func(context.Context, time.Duration) // nil = sleepCtx
+}
+
+const maxRetryDelay = 30 * time.Second
+
+func sleepCtx(ctx context.Context, d time.Duration) {
+	t := time.NewTimer(d)
+	defer t.Stop()
+	select {
+	case <-ctx.Done():
+	case <-t.C:
+	}
 }
 
 func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -67,31 +82,26 @@ func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		}
 		resp, err := t.next.RoundTrip(r)
 		retryable, delay := t.shouldRetry(resp, err, attempt)
+		// The final response is handed back as-is so the caller sees the
+		// real status and error body instead of a synthetic error.
 		if !retryable || (resp != nil && attempt >= t.maxAttempts) {
 			return resp, err
 		}
 		if resp != nil {
 			resp.Body.Close()
 		}
-		if err != nil {
-			lastErr = err
-		} else {
-			lastErr = fmt.Errorf("%s %s: server returned %s", req.Method, req.URL.Path, resp.Status)
-		}
+		lastErr = err
 		if attempt >= t.maxAttempts {
-			if resp != nil {
-				// Hand the final response back as-is so the caller sees the
-				// real status and error body instead of a synthetic error.
-				return resp, nil
-			}
 			return nil, fmt.Errorf("after %d attempts: %w", attempt, lastErr)
 		}
-		select {
-		case <-req.Context().Done():
-			return nil, req.Context().Err()
-		default:
+		if t.sleep != nil {
+			t.sleep(req.Context(), delay)
+		} else {
+			sleepCtx(req.Context(), delay)
 		}
-		t.sleep(delay)
+		if err := req.Context().Err(); err != nil {
+			return nil, err
+		}
 	}
 }
 
@@ -100,17 +110,13 @@ func (t *retryTransport) shouldRetry(resp *http.Response, err error, attempt int
 	backoff += time.Duration(rand.Int64N(int64(t.baseDelay))) // jitter
 	if err != nil {
 		var ne net.Error
-		if errors.As(err, &ne) || errors.Is(err, net.ErrClosed) {
-			return true, backoff
-		}
-		var opErr *net.OpError
-		return errors.As(err, &opErr), backoff
+		return errors.As(err, &ne) || errors.Is(err, net.ErrClosed), backoff
 	}
-	switch {
-	case resp.StatusCode == http.StatusTooManyRequests, resp.StatusCode >= 500:
+	switch resp.StatusCode {
+	case http.StatusTooManyRequests, http.StatusBadGateway, http.StatusServiceUnavailable, http.StatusGatewayTimeout:
 		if ra := resp.Header.Get("Retry-After"); ra != "" {
 			if secs, perr := strconv.Atoi(ra); perr == nil && secs >= 0 {
-				return true, time.Duration(secs) * time.Second
+				return true, min(time.Duration(secs)*time.Second, maxRetryDelay)
 			}
 		}
 		return true, backoff

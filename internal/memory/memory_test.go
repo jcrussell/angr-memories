@@ -389,9 +389,9 @@ func TestCleanupPending(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		TrackPending(a)
-		TrackPending(b)
-		CleanupPending()
+		atomicfile.TrackPending(a)
+		atomicfile.TrackPending(b)
+		atomicfile.CleanupPending()
 
 		if _, err := os.Stat(a); !os.IsNotExist(err) {
 			t.Errorf("expected %s to be removed, stat err: %v", a, err)
@@ -408,7 +408,7 @@ func TestCleanupPending(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		CleanupPending() // nothing tracked -- must be a no-op
+		atomicfile.CleanupPending() // nothing tracked -- must be a no-op
 
 		if _, err := os.Stat(untracked); err != nil {
 			t.Errorf("expected untracked file to survive, got: %v", err)
@@ -422,9 +422,9 @@ func TestCleanupPending(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		TrackPending(path)
-		UntrackPending(path)
-		CleanupPending()
+		atomicfile.TrackPending(path)
+		atomicfile.UntrackPending(path)
+		atomicfile.CleanupPending()
 
 		if _, err := os.Stat(path); err != nil {
 			t.Errorf("expected untracked-before-cleanup file to survive, got: %v", err)

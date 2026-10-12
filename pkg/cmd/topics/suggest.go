@@ -78,7 +78,7 @@ at the result, commit.`,
 	cmd.Flags().StringVar(&opts.Endpoint, "endpoint", ollamaclient.EndpointFromEnv(), "Ollama server URL")
 	cmd.Flags().StringVar(&opts.ChatModel, "chat-model", DefaultChatModel, "chat model name (as `ollama pull` knows it)")
 	cmd.Flags().IntVar(&opts.Only, "only", 0, "suggest for this cluster index only")
-	cmd.Flags().BoolVar(&opts.Relabel, "relabel", false, "also redo clusters whose label was written by a model")
+	cmd.Flags().BoolVar(&opts.Relabel, "relabel", false, "also redo clusters whose label was written by a model (with --only: allow replacing a person's label)")
 	cmd.Flags().BoolVar(&opts.DryRun, "dry-run", false, "print suggestions without writing the labels file")
 	return cmd
 }
@@ -94,7 +94,7 @@ func (o *SuggestOptions) Validate() error {
 		return cmdutil.FlagErrorf("--chat-model must not be empty")
 	}
 	if o.Only < 0 {
-		return cmdutil.FlagErrorf("--only must be >= 1, got %d", o.Only)
+		return cmdutil.FlagErrorf("--only must be a cluster index >= 1 (0 = every unlabeled cluster), got %d", o.Only)
 	}
 	return nil
 }
@@ -126,6 +126,11 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 		if _, err := c.clusterAt(opts.Only); err != nil {
 			return err
 		}
+		if a := c.assigned[opts.Only-1]; a.Label != nil && !strings.HasPrefix(a.Label.LabeledBy, "llm:") && !opts.Relabel {
+			return cmdutil.WithHint(
+				fmt.Errorf("cluster %d already has a label written by %s: %q", opts.Only, a.Label.LabeledBy, a.Label.Text),
+				"a person's label is not replaced by a draft; pass --relabel as well to overwrite it, or --dry-run to only see the suggestion")
+		}
 		targets = []int{opts.Only - 1}
 	} else {
 		for i := range c.res.Clusters {
@@ -155,8 +160,13 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 	var results []row
 	for n, i := range targets {
 		cl := c.res.Clusters[i]
+		anchors := topics.AnchorsFor(cl, c.res.Docs)
+		if len(anchors) < topics.MinAnchorHits {
+			fmt.Fprintf(opts.IO.ErrOut, "cluster %d: skipped (only %d member(s); a label needs %d anchors)\n", cl.Index, len(anchors), topics.MinAnchorHits)
+			continue
+		}
 		brief := c.brief(cl, examples)
-		r := c.row(i)                              // before Upsert compacts the labels slice under c.assigned
+		r := c.row(i)
 		delete(taken, strings.ToLower(current[i])) // re-proposing the cluster's own label is not a clash
 		text, err := suggestOne(ctx, s, brief, taken)
 		if err != nil {
@@ -171,7 +181,7 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 		}
 		fmt.Fprintf(opts.IO.ErrOut, "cluster %d (%d/%d): %q\n", cl.Index, n+1, len(targets), text)
 		taken[strings.ToLower(text)] = true
-		l := topics.Label{Text: text, Anchors: topics.AnchorsFor(cl, c.res.Docs), LabeledBy: by, At: opts.Now().UTC().Format(time.RFC3339)}
+		l := topics.Label{Text: text, Anchors: anchors, LabeledBy: by, At: opts.Now().UTC().Format(time.RFC3339)}
 		c.labels.Upsert(l, current[i])
 		drafted++
 		r.Label, r.Unlabeled, r.LabeledBy, r.LabeledAt = text, false, by, l.At

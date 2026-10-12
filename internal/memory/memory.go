@@ -136,15 +136,6 @@ func Save(path string, records []*Memory) (err error) {
 	})
 }
 
-// TrackPending, UntrackPending and CleanupPending live in
-// internal/atomicfile (which owns the temp-file recipe); these aliases keep
-// existing call sites compiling.
-var (
-	TrackPending   = atomicfile.TrackPending
-	UntrackPending = atomicfile.UntrackPending
-	CleanupPending = atomicfile.CleanupPending
-)
-
 // families is the key-prefix grouping validated by the historical
 // tools/bd_chunk_for_review.py -- ported verbatim.
 var families = map[string]string{

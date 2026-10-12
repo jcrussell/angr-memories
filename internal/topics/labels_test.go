@@ -53,9 +53,12 @@ func TestAssign_PluralityAndThreshold(t *testing.T) {
 	if diff := cmp.Diff(wantOrphans, orphaned); diff != "" {
 		t.Errorf("orphaned (-want +got):\n%s", diff)
 	}
-	// Returned pointers alias the input slice.
-	if by[0].Label != &labels[0] {
-		t.Errorf("cluster 0 label pointer does not alias input")
+	// Returned labels are copies, so later edits to the file cannot shift them.
+	if by[0].Label == &labels[0] {
+		t.Errorf("cluster 0 label pointer must not alias the input slice")
+	}
+	if diff := cmp.Diff(labels[0], *by[0].Label); diff != "" {
+		t.Errorf("cluster 0 label (-want +got):\n%s", diff)
 	}
 }
 
@@ -305,5 +308,16 @@ func TestAssign_TieBreakPrefersHumanThenNewer(t *testing.T) {
 	by, _ = Assign([]Label{older, newer}, res)
 	if by[0].Label.Text != "Newer" {
 		t.Errorf("newer human label should win: %+v", by[0])
+	}
+}
+
+func TestAssign_ResultsSurviveLaterFileEdits(t *testing.T) {
+	docs := []Doc{{Key: "a"}, {Key: "b"}, {Key: "c"}}
+	res := &Result{Docs: docs, Clusters: []Cluster{{Index: 1, Members: []int{0, 1, 2}}}}
+	f := &LabelsFile{SchemaVersion: 1, Labels: []Label{{Text: "first", Anchors: []string{"a", "b", "c"}}}}
+	by, _ := Assign(f.Labels, res)
+	f.Upsert(Label{Text: "second", Anchors: []string{"a", "b", "c"}}, "first")
+	if by[0].Label.Text != "first" {
+		t.Errorf("assignment must not change under a later Upsert, got %q", by[0].Label.Text)
 	}
 }
