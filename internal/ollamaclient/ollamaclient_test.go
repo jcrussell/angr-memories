@@ -38,6 +38,9 @@ func TestEmbedder_SendsRequestAndNormalizes(t *testing.T) {
 	if got["model"] != "m" || got["truncate"] != false || got["dimensions"] != float64(2) {
 		t.Errorf("request = %v", got)
 	}
+	if opts, _ := got["options"].(map[string]any); opts["num_ctx"] != float64(DefaultNumCtx) {
+		t.Errorf("options = %v, want num_ctx %d", got["options"], DefaultNumCtx)
+	}
 	if math.Abs(float64(vecs[0][0])-0.6) > 1e-6 || math.Abs(float64(vecs[1][1])-1) > 1e-6 {
 		t.Errorf("not normalized: %v", vecs)
 	}
@@ -138,5 +141,54 @@ func TestEndpointParsing(t *testing.T) {
 		if _, err := ParseEndpoint(bad); err == nil {
 			t.Errorf("ParseEndpoint(%q) should fail", bad)
 		}
+	}
+}
+
+func TestEmbedder_SplitsLongTextsAndAveragesPieces(t *testing.T) {
+	var inputs []string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var req map[string]any
+		body, _ := io.ReadAll(r.Body)
+		json.Unmarshal(body, &req)
+		for _, in := range req["input"].([]any) {
+			inputs = append(inputs, in.(string))
+		}
+		// one vector per input: pieces of the long text point along x and y,
+		// the short text along y.
+		io.WriteString(w, `{"model":"m","embeddings":[[1,0],[0,1],[0,1]]}`)
+	}))
+	defer srv.Close()
+	c, _ := New(srv.URL, srv.Client())
+	e := &Embedder{Client: c, Model: "m", MaxChars: 10}
+	long := "aaaaaaaa\nbbbbbbbb" // 17 runes -> two pieces, split after the newline
+	vecs, err := e.Embed(context.Background(), []string{long, "short"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(inputs) != 3 || inputs[0] != "aaaaaaaa\n" || inputs[1] != "bbbbbbbb" || inputs[2] != "short" {
+		t.Fatalf("inputs = %q", inputs)
+	}
+	if len(vecs) != 2 {
+		t.Fatalf("got %d vectors, want 2", len(vecs))
+	}
+	if math.Abs(float64(vecs[0][0])-math.Sqrt(0.5)) > 1e-6 || math.Abs(float64(vecs[0][1])-math.Sqrt(0.5)) > 1e-6 {
+		t.Errorf("long text should be the normalized mean of its pieces, got %v", vecs[0])
+	}
+	if vecs[1][1] != 1 {
+		t.Errorf("short text vector = %v", vecs[1])
+	}
+}
+
+func TestSplitText(t *testing.T) {
+	if got := splitText("abc", 10); len(got) != 1 || got[0] != "abc" {
+		t.Errorf("short: %q", got)
+	}
+	got := splitText(strings.Repeat("x", 25), 10)
+	if len(got) != 3 || got[0] != strings.Repeat("x", 10) || got[2] != strings.Repeat("x", 5) {
+		t.Errorf("no newlines: %q", got)
+	}
+	got = splitText("12345678\n12345678\n1", 10)
+	if len(got) != 2 || got[0] != "12345678\n" || got[1] != "12345678\n1" {
+		t.Errorf("newline preference: %q", got)
 	}
 }

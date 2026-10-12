@@ -73,17 +73,52 @@ type Embedder struct {
 	Model    string
 	Dims     int // 0 = model native
 	Endpoint string
+	// NumCtx is the context window requested from the server. The runner
+	// clamps it to the model's trained context (2048 tokens for the
+	// nomic-embed-text GGUF Ollama ships, whatever the model card says), so
+	// the real guard against "input length exceeds the context length" is
+	// MaxChars below.
+	NumCtx int
+	// MaxChars splits a text longer than this into pieces that are embedded
+	// separately and averaged, so a body longer than the window still gets
+	// a vector instead of an error. 0 = DefaultMaxChars.
+	MaxChars int
 }
 
+const (
+	DefaultNumCtx = 8192
+	// DefaultMaxChars keeps a piece under ~1,700 tokens at the ~3 chars per
+	// token this code-heavy English tokenizes to, inside a 2,048 window.
+	// Only a handful of memory bodies exceed it.
+	DefaultMaxChars = 5000
+)
+
 // Embed returns one vector per text, L2-normalized, all with the same
-// length (Dims when set). Truncation is disabled so an over-long body is a
-// loud error rather than a silently partial embedding.
+// length (Dims when set). Truncation is disabled so an over-long piece is a
+// loud error rather than a silently partial embedding; pieces are kept
+// short by MaxChars instead.
 func (e *Embedder) Embed(ctx context.Context, texts []string) ([][]float32, error) {
 	if len(texts) == 0 {
 		return nil, nil
 	}
+	maxChars := e.MaxChars
+	if maxChars <= 0 {
+		maxChars = DefaultMaxChars
+	}
+	numCtx := e.NumCtx
+	if numCtx <= 0 {
+		numCtx = DefaultNumCtx
+	}
+	var inputs []string
+	var owner []int // inputs[i] belongs to texts[owner[i]]
+	for ti, t := range texts {
+		for _, piece := range splitText(t, maxChars) {
+			inputs = append(inputs, piece)
+			owner = append(owner, ti)
+		}
+	}
 	f := false
-	req := &api.EmbedRequest{Model: e.Model, Input: texts, Truncate: &f}
+	req := &api.EmbedRequest{Model: e.Model, Input: inputs, Truncate: &f, Options: map[string]any{"num_ctx": numCtx}}
 	if e.Dims > 0 {
 		req.Dimensions = e.Dims
 	}
@@ -91,10 +126,11 @@ func (e *Embedder) Embed(ctx context.Context, texts []string) ([][]float32, erro
 	if err != nil {
 		return nil, wrap(err, e.Model, e.Endpoint)
 	}
-	if len(resp.Embeddings) != len(texts) {
-		return nil, fmt.Errorf("ollama returned %d embeddings for %d inputs", len(resp.Embeddings), len(texts))
+	if len(resp.Embeddings) != len(inputs) {
+		return nil, fmt.Errorf("ollama returned %d embeddings for %d inputs", len(resp.Embeddings), len(inputs))
 	}
 	want := e.Dims
+	out := make([][]float32, len(texts))
 	for i, v := range resp.Embeddings {
 		if want == 0 {
 			want = len(v)
@@ -103,8 +139,43 @@ func (e *Embedder) Embed(ctx context.Context, texts []string) ([][]float32, erro
 			return nil, fmt.Errorf("ollama returned a %d-dim vector for input %d, want %d", len(v), i, want)
 		}
 		embeddings.Normalize(v)
+		o := owner[i]
+		if out[o] == nil {
+			out[o] = make([]float32, want)
+		}
+		for j := range v {
+			out[o][j] += v[j] // mean of unit vectors; renormalized below
+		}
 	}
-	return resp.Embeddings, nil
+	for _, v := range out {
+		embeddings.Normalize(v)
+	}
+	return out, nil
+}
+
+// splitText cuts s into pieces of at most maxChars runes, preferring to
+// break at a newline in the last fifth of a piece so paragraphs stay whole.
+func splitText(s string, maxChars int) []string {
+	r := []rune(s)
+	if len(r) <= maxChars {
+		return []string{s}
+	}
+	var out []string
+	for len(r) > maxChars {
+		cut := maxChars
+		for i := maxChars - 1; i >= maxChars*4/5; i-- {
+			if r[i] == '\n' {
+				cut = i + 1
+				break
+			}
+		}
+		out = append(out, string(r[:cut]))
+		r = r[cut:]
+	}
+	if len(r) > 0 {
+		out = append(out, string(r))
+	}
+	return out
 }
 
 // ClusterBrief is what the chat model sees about one cluster.
