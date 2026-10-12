@@ -160,3 +160,33 @@ func TestHTTPClient_SleepStopsOnCancel(t *testing.T) {
 		t.Fatalf("cancel should end the retry sleep promptly: err=%v after %v", err, time.Since(start))
 	}
 }
+
+// errReader is a body with no GetBody: it can be sent once and never replayed.
+type onceBody struct{ r io.Reader }
+
+func (o onceBody) Read(p []byte) (int, error) { return o.r.Read(p) }
+func (o onceBody) Close() error               { return nil }
+
+func TestHTTPClient_NonReplayableBodyGetsOneAttemptAndTheRealResponse(t *testing.T) {
+	var calls atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusServiceUnavailable)
+		io.WriteString(w, "busy")
+	}))
+	defer srv.Close()
+	c, _ := newTestClient(http.DefaultTransport)
+	req, _ := http.NewRequestWithContext(context.Background(), http.MethodPost, srv.URL, nil)
+	req.Body = onceBody{strings.NewReader("stream")}
+	req.GetBody = nil
+	req.ContentLength = -1
+	resp, err := c.Do(req)
+	if err != nil {
+		t.Fatalf("must not fail with a nil response/nil error pair: %v", err)
+	}
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode != 503 || string(body) != "busy" || calls.Load() != 1 {
+		t.Errorf("status=%d body=%q calls=%d; want the single real 503", resp.StatusCode, body, calls.Load())
+	}
+}

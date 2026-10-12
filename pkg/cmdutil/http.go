@@ -66,13 +66,13 @@ func sleepCtx(ctx context.Context, d time.Duration) {
 }
 
 func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	// A body that cannot be replayed means a single attempt: the first
+	// response (or error) is final.
+	replayable := req.Body == nil || req.Body == http.NoBody || req.GetBody != nil
 	var lastErr error
 	for attempt := 1; ; attempt++ {
 		r := req
-		if attempt > 1 && req.Body != nil && req.Body != http.NoBody {
-			if req.GetBody == nil {
-				return nil, lastErr
-			}
+		if attempt > 1 && req.GetBody != nil {
 			body, err := req.GetBody()
 			if err != nil {
 				return nil, err
@@ -84,7 +84,7 @@ func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		retryable, delay := t.shouldRetry(resp, err, attempt)
 		// The final response is handed back as-is so the caller sees the
 		// real status and error body instead of a synthetic error.
-		if !retryable || (resp != nil && attempt >= t.maxAttempts) {
+		if !retryable || !replayable || (resp != nil && attempt >= t.maxAttempts) {
 			return resp, err
 		}
 		if resp != nil {

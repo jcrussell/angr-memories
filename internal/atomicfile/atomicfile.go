@@ -17,7 +17,8 @@ import (
 	"runtime"
 )
 
-// WriteFile writes data to path atomically with the given permissions.
+// WriteFile writes data to path atomically. perm applies to a new file; an
+// existing file keeps its mode (a group-writable checkout stays so).
 func WriteFile(path string, data []byte, perm os.FileMode) error {
 	return WriteFunc(path, perm, func(w io.Writer) error {
 		_, err := w.Write(data)
@@ -29,6 +30,9 @@ func WriteFile(path string, data []byte, perm os.FileMode) error {
 // the full content to w; the file is only renamed into place if fn and
 // every subsequent fsync/close succeed.
 func WriteFunc(path string, perm os.FileMode, fn func(w io.Writer) error) (err error) {
+	if fi, statErr := os.Stat(path); statErr == nil && fi.Mode().IsRegular() {
+		perm = fi.Mode().Perm()
+	}
 	dir := filepath.Dir(path)
 	tmp, err := os.CreateTemp(dir, "."+filepath.Base(path)+".tmp-*")
 	if err != nil {
@@ -64,16 +68,14 @@ func WriteFunc(path string, perm os.FileMode, fn func(w io.Writer) error) (err e
 		return err
 	}
 	// fsync the parent directory so the rename itself is durable across a
-	// kernel crash. POSIX-only: a directory-handle Sync is not the same
-	// barrier on Windows and some filesystems reject it there.
+	// kernel crash. Best effort: the file is already fully in place, and
+	// some filesystems (FUSE, 9p, network mounts) refuse directory syncs,
+	// which must not turn a successful write into a reported failure.
+	// POSIX-only: a directory-handle Sync is not the same barrier on Windows.
 	if runtime.GOOS != "windows" {
-		d, derr := os.Open(dir)
-		if derr != nil {
-			return derr
-		}
-		defer d.Close()
-		if derr := d.Sync(); derr != nil {
-			return derr
+		if d, derr := os.Open(dir); derr == nil {
+			_ = d.Sync()
+			d.Close()
 		}
 	}
 	return nil

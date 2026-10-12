@@ -99,10 +99,6 @@ func labelRun(_ context.Context, opts *LabelOptions) error {
 		return err
 	}
 	anchors := topics.AnchorsFor(cl, c.res.Docs)
-	if len(anchors) < topics.MinAnchorHits {
-		return fmt.Errorf("cluster %d has only %d member(s); a label needs at least %d anchor keys to stay attached across re-clustering",
-			opts.Index, len(anchors), topics.MinAnchorHits)
-	}
 	l := topics.Label{
 		Text:      strings.TrimSpace(opts.Text),
 		Anchors:   anchors,

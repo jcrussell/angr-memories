@@ -10,10 +10,10 @@ import (
 	"fmt"
 	"io"
 	"strings"
-	"unicode/utf8"
 
 	"github.com/spf13/cobra"
 
+	"github.com/jcrussell/angr-memories/internal/chart"
 	"github.com/jcrussell/angr-memories/internal/topics"
 	"github.com/jcrussell/angr-memories/pkg/cmdutil"
 	"github.com/jcrussell/angr-memories/pkg/iostreams"
@@ -204,10 +204,4 @@ func printTable(w io.Writer, rows []row) {
 	}
 }
 
-func clip(s string, n int) string {
-	if utf8.RuneCountInString(s) <= n {
-		return s
-	}
-	r := []rune(s)
-	return string(r[:n-1]) + "…"
-}
+func clip(s string, n int) string { return chart.Truncate(s, n) }

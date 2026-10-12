@@ -64,3 +64,17 @@ func TestWriteFile_CreatesWhenAbsent(t *testing.T) {
 		t.Errorf("perm = %v, want 0600", info.Mode().Perm())
 	}
 }
+
+func TestWriteFile_KeepsExistingMode(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "shared.jsonl")
+	if err := os.WriteFile(path, []byte("old"), 0o664); err != nil {
+		t.Fatal(err)
+	}
+	if err := WriteFile(path, []byte("new"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	info, _ := os.Stat(path)
+	if info.Mode().Perm() != 0o664 {
+		t.Errorf("mode = %v, want the existing 0664 kept", info.Mode().Perm())
+	}
+}

@@ -321,3 +321,12 @@ func TestAssign_ResultsSurviveLaterFileEdits(t *testing.T) {
 		t.Errorf("assignment must not change under a later Upsert, got %q", by[0].Label.Text)
 	}
 }
+
+func TestAssign_ThresholdScalesWithTinyLabels(t *testing.T) {
+	docs := []Doc{{Key: "a"}, {Key: "b"}, {Key: "c"}}
+	res := &Result{Docs: docs, Clusters: []Cluster{{Index: 1, Members: []int{0}}, {Index: 2, Members: []int{1, 2}}}}
+	by, orphaned := Assign([]Label{{Text: "single", Anchors: []string{"a"}}, {Text: "pair", Anchors: []string{"b", "c"}}}, res)
+	if by[0].Label == nil || by[0].Label.Text != "single" || by[1].Label == nil || by[1].Label.Text != "pair" || len(orphaned) != 0 {
+		t.Errorf("labels with fewer than %d anchors must attach when all of them hit: %+v orphaned=%v", MinAnchorHits, by, orphaned)
+	}
+}

@@ -41,8 +41,6 @@ type Assignment struct {
 // the cluster are still free. It returns one Assignment per cluster (nil
 // Label when unlabeled) and the labels that attached nowhere, in input
 // order.
-func isHuman(l Label) bool { return !strings.HasPrefix(l.LabeledBy, "llm:") }
-
 func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Label) {
 	byCluster = make([]Assignment, len(res.Clusters))
 
@@ -73,7 +71,7 @@ func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Lab
 					hits++
 				}
 			}
-			if hits >= MinAnchorHits {
+			if hits >= min(MinAnchorHits, len(anchors)) {
 				pairs = append(pairs, pair{li, ci, hits, float64(hits) / float64(len(anchors))})
 			}
 		}
@@ -122,6 +120,8 @@ func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Lab
 
 // maxAnchors caps the anchors recorded when a cluster is labeled.
 const maxAnchors = 10
+
+func isHuman(l Label) bool { return !strings.HasPrefix(l.LabeledBy, "llm:") }
 
 // AnchorsFor derives the anchor keys recorded when cluster c is labeled: its
 // exemplar keys, then remembered members not already present, up to

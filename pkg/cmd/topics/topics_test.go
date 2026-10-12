@@ -459,13 +459,23 @@ func TestSuggestRun_OnlyRefusesToOverwriteHumanLabelWithoutRelabel(t *testing.T)
 	}
 }
 
-func TestLabelRun_RefusesClusterTooSmallToAnchor(t *testing.T) {
+func TestLabelRun_TinyClusterStaysLabeled(t *testing.T) {
 	p := fixture(t)
-	io, _, _ := newIO()
-	// K equal to the corpus size makes every cluster a single memory.
-	opts := &LabelOptions{IO: io, Now: time.Now, MemoriesPath: p.mem, EmbeddingsPath: p.emb, LabelsPath: p.labels, K: 9, Index: 1, Text: "x", By: "human"}
-	err := labelRun(context.Background(), opts)
-	if err == nil || !strings.Contains(err.Error(), "anchor") {
-		t.Fatalf("got %v, want a too-few-anchors error", err)
+	io, out, _ := newIO()
+	// K equal to the corpus size makes every cluster a single memory; a
+	// one-anchor label must still attach on the next run.
+	opts := &LabelOptions{IO: io, Now: time.Now, MemoriesPath: p.mem, EmbeddingsPath: p.emb, LabelsPath: p.labels, K: 9, Index: 1, Text: "Lone memory", By: "human"}
+	if err := labelRun(context.Background(), opts); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out.String(), "(1 anchors)") {
+		t.Errorf("stdout = %q", out.String())
+	}
+	io2, out2, _ := newIO()
+	if err := topicsRun(context.Background(), &Options{IO: io2, MemoriesPath: p.mem, EmbeddingsPath: p.emb, LabelsPath: p.labels, K: 9}); err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(out2.String(), "Lone memory") {
+		t.Errorf("one-anchor label did not attach:\n%s", out2.String())
 	}
 }

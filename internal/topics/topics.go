@@ -15,6 +15,7 @@ package topics
 import (
 	"errors"
 	"fmt"
+	"math"
 	"sort"
 	"strings"
 )
@@ -59,6 +60,15 @@ type Node struct {
 
 // PrefixCount is the number of cluster members whose key starts with Prefix
 // (the raw first key segment: the text before the first '-').
+// KeptPercent is the rounded remembered share used everywhere a cluster's
+// retention is shown (table, pages, dendrogram).
+func KeptPercent(remembered, total int) int {
+	if total <= 0 {
+		return 0
+	}
+	return int(math.Round(100 * float64(remembered) / float64(total)))
+}
+
 type PrefixCount struct {
 	Prefix string
 	Count  int

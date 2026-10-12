@@ -40,6 +40,7 @@ type Options struct {
 	Model          string
 	Dims           int
 	Batch          int
+	MaxChars       int
 	DryRun         bool
 }
 
@@ -90,6 +91,7 @@ http://127.0.0.1:11434. No credentials are involved.`,
 	cmd.Flags().StringVar(&opts.Model, "model", DefaultModel, "embedding model name (as `ollama pull` knows it)")
 	cmd.Flags().IntVar(&opts.Dims, "dims", 0, "truncate vectors to this many dimensions (0 = model native)")
 	cmd.Flags().IntVar(&opts.Batch, "batch", 32, "texts per request")
+	cmd.Flags().IntVar(&opts.MaxChars, "max-chars", ollamaclient.DefaultMaxChars, "split a memory longer than this many characters into pieces that are embedded separately and averaged (lower it if the model reports its context length exceeded)")
 	cmd.Flags().BoolVar(&opts.DryRun, "dry-run", false, "list what would be embedded and exit without contacting the server")
 	return cmd
 }
@@ -111,18 +113,18 @@ func (o *Options) Validate() error {
 	if o.Batch < 1 || o.Batch > maxBatch {
 		return cmdutil.FlagErrorf("--batch must be 1-%d, got %d", maxBatch, o.Batch)
 	}
+	if o.MaxChars < 200 {
+		return cmdutil.FlagErrorf("--max-chars must be >= 200, got %d", o.MaxChars)
+	}
 	return nil
 }
 
 func connectOllama(ctx context.Context, opts *Options) (Embedder, error) {
-	c, err := ollamaclient.New(opts.Endpoint, opts.HTTPClient())
+	c, err := ollamaclient.Connect(ctx, opts.Endpoint, opts.HTTPClient())
 	if err != nil {
 		return nil, err
 	}
-	if err := ollamaclient.Heartbeat(ctx, c, opts.Endpoint); err != nil {
-		return nil, err
-	}
-	return &ollamaclient.Embedder{Client: c, Model: opts.Model, Dims: opts.Dims, Endpoint: opts.Endpoint}, nil
+	return &ollamaclient.Embedder{Client: c, Model: opts.Model, Dims: opts.Dims, Endpoint: opts.Endpoint, MaxChars: opts.MaxChars}, nil
 }
 
 func embedRun(ctx context.Context, opts *Options) error {

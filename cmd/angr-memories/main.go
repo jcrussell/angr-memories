@@ -13,28 +13,39 @@ import (
 	"github.com/jcrussell/angr-memories/pkg/cmdutil"
 )
 
-// shutdownGrace bounds how long a command may keep running after SIGINT
-// before the process is cut off. Long enough for an interrupted embed to
-// fsync a ~10 MB embeddings.jsonl.
-const shutdownGrace = 20 * time.Second
+// shutdownGrace bounds how long a command may keep running after the first
+// SIGINT before the process is cut off: long enough for an interrupted
+// embed to fsync a ~10 MB embeddings.jsonl, short enough that a command
+// which never looks at ctx does not feel stuck (a second Ctrl-C ends it
+// immediately anyway).
+const shutdownGrace = 10 * time.Second
 
 func main() {
 	f := cmdutil.New()
 
-	// SIGINT/SIGTERM cancel the context every command sees as
+	// The first SIGINT/SIGTERM cancels the context every command sees as
 	// cmd.Context() (byob-lifecycle.2), so network-bound commands (embed,
 	// topics suggest) stop cleanly -- including the atomic write that saves
-	// their progress, which is why the grace period below is generous.
-	// A command that ignores ctx is cut off when the grace runs out, after
-	// pending temp files are removed (Go runs no deferred cleanup on an
-	// unhandled signal). A second signal terminates immediately.
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	// their progress, which is why there is a grace period. A command that
+	// ignores ctx is cut off when the grace runs out; a second signal cuts
+	// it off at once. Both exits remove pending temp files first, since Go
+	// runs no deferred cleanup on the way out.
+	ctx, cancel := context.WithCancel(context.Background())
+	sigs := make(chan os.Signal, 2)
+	signal.Notify(sigs, os.Interrupt, syscall.SIGTERM)
 	done := make(chan struct{})
 	go func() {
-		<-ctx.Done()
-		stop()
 		select {
+		case <-sigs:
 		case <-done:
+			return
+		}
+		cancel() // first signal: ask the command to stop
+		select {
+		case <-done: // it finished (and saved its progress) in time
+		case <-sigs: // second signal: the user wants out now
+			atomicfile.CleanupPending()
+			os.Exit(130)
 		case <-time.After(shutdownGrace):
 			atomicfile.CleanupPending()
 			os.Exit(130)

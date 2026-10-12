@@ -67,7 +67,7 @@ func testOpts(t *testing.T, fe *fakeEmbedder) (*Options, *iostreams.IOStreams, f
 	}
 	connects := 0
 	opts := &Options{
-		IO: io, MemoriesPath: mem, EmbeddingsPath: emb, Endpoint: "http://127.0.0.1:11434", Model: "m", Batch: 1,
+		IO: io, MemoriesPath: mem, EmbeddingsPath: emb, Endpoint: "http://127.0.0.1:11434", Model: "m", Batch: 1, MaxChars: 5000,
 		Connect: func(context.Context, *Options) (Embedder, error) { connects++; return fe, nil },
 	}
 	return opts, io, func() (string, string) { return out.String(), errOut.String() }
@@ -91,7 +91,7 @@ func TestNewCmdEmbed_runFCapturesFlags(t *testing.T) {
 }
 
 func TestValidate(t *testing.T) {
-	ok := Options{MemoriesPath: "m", EmbeddingsPath: "e", Endpoint: "http://x:1", Model: "m", Batch: 1}
+	ok := Options{MemoriesPath: "m", EmbeddingsPath: "e", Endpoint: "http://x:1", Model: "m", Batch: 1, MaxChars: 5000}
 	cases := map[string]func(*Options){
 		"empty model":  func(o *Options) { o.Model = "" },
 		"bad endpoint": func(o *Options) { o.Endpoint = "x:1" },
@@ -99,6 +99,7 @@ func TestValidate(t *testing.T) {
 		"batch 0":      func(o *Options) { o.Batch = 0 },
 		"batch huge":   func(o *Options) { o.Batch = 1000 },
 		"no path":      func(o *Options) { o.EmbeddingsPath = "" },
+		"tiny pieces":  func(o *Options) { o.MaxChars = 10 },
 	}
 	if err := ok.Validate(); err != nil {
 		t.Fatalf("valid options rejected: %v", err)

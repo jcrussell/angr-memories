@@ -58,6 +58,19 @@ func New(endpoint string, hc *http.Client) (*api.Client, error) {
 	return api.NewClient(u, hc), nil
 }
 
+// Connect builds a client for endpoint over hc and checks the server
+// answers, so a command fails fast with a hint before doing any work.
+func Connect(ctx context.Context, endpoint string, hc *http.Client) (*api.Client, error) {
+	c, err := New(endpoint, hc)
+	if err != nil {
+		return nil, err
+	}
+	if err := Heartbeat(ctx, c, endpoint); err != nil {
+		return nil, err
+	}
+	return c, nil
+}
+
 // Heartbeat checks the server is up, with a hint when it is not.
 func Heartbeat(ctx context.Context, c *api.Client, endpoint string) error {
 	if err := c.Heartbeat(ctx); err != nil {
@@ -276,6 +289,9 @@ func wrap(err error, model, endpoint string) error {
 		return cmdutil.WithHint(fmt.Errorf("ollama: cannot reach %s: %w", endpoint, err), "is Ollama running? start it with `ollama serve` (or set OLLAMA_HOST / --endpoint)")
 	}
 	if se, ok := errors.AsType[api.StatusError](err); ok {
+		if strings.Contains(se.ErrorMessage, "context length") {
+			return cmdutil.WithHint(fmt.Errorf("ollama: %s", se.Error()), "one memory is too long for the model's window even after splitting; re-run with a smaller --max-chars")
+		}
 		return fmt.Errorf("ollama: %s", se.Error())
 	}
 	return fmt.Errorf("ollama: %w", err)

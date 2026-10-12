@@ -50,12 +50,7 @@ type TopicMember struct {
 }
 
 // KeptPercent is the remembered share, rounded.
-func (t *Topic) KeptPercent() int {
-	if t.Size == 0 {
-		return 0
-	}
-	return int(float64(t.Remembered)/float64(t.Size)*100 + 0.5)
-}
+func (t *Topic) KeptPercent() int { return topics.KeptPercent(t.Remembered, t.Size) }
 
 // PrefixMix renders Prefixes as "invariant 12 · z3 4".
 func (t *Topic) PrefixMix() string {
@@ -140,11 +135,7 @@ func rowLabel(tp *Topic) string {
 	if !tp.Unlabeled {
 		return tp.Label
 	}
-	r := []rune(tp.Label)
-	if len(r) <= unlabeledMax {
-		return tp.Label
-	}
-	return string(r[:unlabeledMax-1]) + "…"
+	return chart.Truncate(tp.Label, unlabeledMax)
 }
 
 // renderDendrogram turns the clustering tree into the page's SVG. hrefFor

@@ -159,11 +159,14 @@ var families = map[string]string{
 }
 
 // Latest picks the most recent incarnation of every key: the record whose
-// body the site shows and whose vector the clustering uses.
+// body the site shows and whose vector the clustering uses. Incarnations
+// are ordered by FirstSeen, then by position in records, so equal
+// timestamps resolve the same way as site.Group.Current (a stable sort,
+// last wins).
 func Latest(records []*Memory) map[string]*Memory {
 	latest := map[string]*Memory{}
 	for _, m := range records {
-		if cur, ok := latest[m.Key]; !ok || m.FirstSeen > cur.FirstSeen {
+		if cur, ok := latest[m.Key]; !ok || m.FirstSeen >= cur.FirstSeen {
 			latest[m.Key] = m
 		}
 	}

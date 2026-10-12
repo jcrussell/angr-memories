@@ -88,10 +88,8 @@ func (c *corpus) rows() []row {
 // row builds the view of the cluster at position i.
 func (c *corpus) row(i int) row {
 	cl := c.res.Clusters[i]
-	r := row{Index: cl.Index, Size: len(cl.Members), Remembered: cl.Remembered, Forgotten: cl.Forgotten}
-	if r.Size > 0 {
-		r.Kept = int(float64(cl.Remembered)/float64(r.Size)*100 + 0.5)
-	}
+	r := row{Index: cl.Index, Size: len(cl.Members), Remembered: cl.Remembered, Forgotten: cl.Forgotten,
+		Kept: topics.KeptPercent(cl.Remembered, len(cl.Members))}
 	for _, p := range cl.Prefixes {
 		r.Prefixes = append(r.Prefixes, fmt.Sprintf("%s %d", p.Prefix, p.Count))
 	}
@@ -128,12 +126,19 @@ func (c *corpus) clusterAt(index int) (topics.Cluster, error) {
 	return c.res.Clusters[index-1], nil
 }
 
-// labelTexts returns every label text currently in the file, lower-cased,
-// for duplicate detection.
-func (c *corpus) labelTexts() map[string]bool {
+// normLabel is the key used for duplicate detection.
+func normLabel(s string) string { return strings.ToLower(strings.TrimSpace(s)) }
+
+// takenLabels returns the texts of the labels currently attached to a
+// cluster. Orphaned labels are deliberately not included: a model that
+// re-proposes an orphaned name for the cluster it now fits simply
+// re-anchors it (Upsert replaces the same-text row).
+func (c *corpus) takenLabels() map[string]bool {
 	m := map[string]bool{}
-	for _, l := range c.labels.Labels {
-		m[strings.ToLower(strings.TrimSpace(l.Text))] = true
+	for _, a := range c.assigned {
+		if a.Label != nil {
+			m[normLabel(a.Label.Text)] = true
+		}
 	}
 	return m
 }

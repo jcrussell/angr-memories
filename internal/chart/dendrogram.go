@@ -7,8 +7,12 @@ import (
 	"strings"
 )
 
-// Geometry constants, ported from analysis/render.py. Distances are in SVG
-// user units; the viewBox scales the whole thing to the container width.
+// Geometry constants, in SVG user units; the viewBox scales the whole
+// drawing to the container width. 24 px rows keep 48 labels at 13 px
+// readable; the tree gets 300 px so merge distances stay distinguishable,
+// labels 290 px (about 48 characters), bars 260 px, and the trailing 110 px
+// holds the "N · P% kept" value. These match the prototype this page
+// replaced, so the published tree looks like the one people reviewed.
 const (
 	dendroRow    = 24                      // height of one leaf row
 	dendroTop    = 16                      // top padding above the first row
@@ -219,7 +223,7 @@ func Dendrogram(root *DendroNode, rows []DendroRow, xAxisLabel string) template.
 		}
 
 		n := int(math.Round(r.Remembered + r.Forgotten))
-		pct := 0
+		pct := 0 // same rounding as topics.KeptPercent; chart must not import topics
 		if n > 0 {
 			pct = int(math.Round(100 * r.Remembered / float64(n)))
 		}

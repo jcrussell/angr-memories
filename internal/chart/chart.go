@@ -9,10 +9,15 @@ package chart
 
 const maxLabelLen = 48
 
-func truncate(s string, n int) string {
+// Truncate clips s to at most n runes, ending in an ellipsis when it had
+// to cut. Shared by the SVG labels, the topics pages and the CLI tables so
+// every surface clips the same way.
+func Truncate(s string, n int) string {
 	r := []rune(s)
 	if len(r) <= n {
 		return s
 	}
 	return string(r[:n-1]) + "…"
 }
+
+func truncate(s string, n int) string { return Truncate(s, n) }

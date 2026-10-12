@@ -55,7 +55,7 @@ func WalkRecords(records []*memory.Memory, opts Options) (*Site, error) {
 	byPrefix := map[string][]*Group{}
 	s := &Site{}
 	for key, incarnations := range byKey {
-		sort.Slice(incarnations, func(i, j int) bool {
+		sort.SliceStable(incarnations, func(i, j int) bool {
 			return incarnations[i].FirstSeen < incarnations[j].FirstSeen
 		})
 		g := &Group{Key: key}
