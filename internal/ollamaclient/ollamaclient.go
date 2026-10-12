@@ -135,6 +135,11 @@ func (l *Labeler) Suggest(ctx context.Context, b ClusterBrief) (string, error) {
 		Model:  l.Model,
 		Stream: &stream,
 		Format: labelSchema,
+		// Reasoning models (qwen3, gemma3, deepseek-r1, …) would otherwise
+		// think for minutes per cluster; a six-word label does not need it,
+		// and structured output is more reliable without it. Models that
+		// cannot think ignore the field.
+		Think: &api.ThinkValue{Value: false},
 		Options: map[string]any{
 			"temperature": 0,
 		},

@@ -101,7 +101,7 @@ func TestLabeler_StructuredOutput(t *testing.T) {
 	if label != "Z3 solver context discipline" {
 		t.Errorf("label = %q", label)
 	}
-	if got["stream"] != false || got["format"] == nil || got["model"] != "c" {
+	if got["stream"] != false || got["format"] == nil || got["model"] != "c" || got["think"] != false {
 		t.Errorf("request = %v", got)
 	}
 	msgs := got["messages"].([]any)
