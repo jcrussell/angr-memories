@@ -188,11 +188,20 @@ func embedRun(ctx context.Context, opts *Options) error {
 				runErr = err
 				break
 			}
+			if f.Header.Dims == 0 && len(vecs) > 0 {
+				f.Header.Dims = len(vecs[0])
+			}
 			for i, k := range keys {
-				f.Rows[k] = embeddings.Row{Key: k, BodyHash: embeddings.BodyHash(latest[k].Body), Vec: vecs[i]}
-				if f.Header.Dims == 0 {
-					f.Header.Dims = len(vecs[i])
+				if len(vecs[i]) != f.Header.Dims {
+					runErr = cmdutil.WithHint(
+						fmt.Errorf("model returned %d-dim vectors but %s holds %d-dim vectors", len(vecs[i]), opts.EmbeddingsPath, f.Header.Dims),
+						fmt.Sprintf("pass --dims %d to match the file, or delete it to re-embed everything at the model's size", f.Header.Dims))
+					break
 				}
+				f.Rows[k] = embeddings.Row{Key: k, BodyHash: embeddings.BodyHash(latest[k].Body), Vec: vecs[i]}
+			}
+			if runErr != nil {
+				break
 			}
 			embedded += len(keys)
 			prog.update(embedded)

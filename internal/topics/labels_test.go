@@ -289,3 +289,21 @@ func TestLabelsFile_Upsert(t *testing.T) {
 		t.Fatalf("empty: %+v", e.Labels)
 	}
 }
+
+func TestAssign_TieBreakPrefersHumanThenNewer(t *testing.T) {
+	docs := []Doc{{Key: "a"}, {Key: "b"}, {Key: "c"}, {Key: "d"}}
+	res := &Result{Docs: docs, Clusters: []Cluster{{Index: 1, Members: []int{0, 1, 2, 3}}}}
+	anchors := []string{"a", "b", "c"}
+	llm := Label{Text: "Alpha draft", Anchors: anchors, LabeledBy: "llm:x", At: "2026-10-12T00:00:00Z"}
+	human := Label{Text: "Zulu by hand", Anchors: anchors, LabeledBy: "human", At: "2026-10-01T00:00:00Z"}
+	by, orphaned := Assign([]Label{llm, human}, res)
+	if by[0].Label == nil || by[0].Label.Text != "Zulu by hand" || len(orphaned) != 1 {
+		t.Errorf("human label should win the tie regardless of order/spelling: %+v orphaned=%v", by[0], orphaned)
+	}
+	older := Label{Text: "Older", Anchors: anchors, LabeledBy: "human", At: "2026-09-01T00:00:00Z"}
+	newer := Label{Text: "Newer", Anchors: anchors, LabeledBy: "human", At: "2026-10-01T00:00:00Z"}
+	by, _ = Assign([]Label{older, newer}, res)
+	if by[0].Label.Text != "Newer" {
+		t.Errorf("newer human label should win: %+v", by[0])
+	}
+}

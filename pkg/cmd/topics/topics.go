@@ -77,15 +77,15 @@ func addCorpusFlags(cmd *cobra.Command, mem, emb, labels *string, k *int) {
 	cmd.Flags().StringVar(mem, "memories", "memories.jsonl", "path to memories.jsonl")
 	cmd.Flags().StringVar(emb, "embeddings", "embeddings.jsonl", "path to the committed embedding vectors")
 	cmd.Flags().StringVar(labels, "topic-labels", "topic-labels.jsonl", "path to the topic labels file")
-	cmd.Flags().IntVar(k, "topics", topics.DefaultK, "number of clusters (must match the site build)")
+	cmd.Flags().IntVar(k, "topics", topics.DefaultK, "number of clusters (must match the site build; 0 = default)")
 }
 
 func validateCorpusFlags(mem, emb, labels string, k int) error {
 	if mem == "" || emb == "" || labels == "" {
 		return cmdutil.FlagErrorf("--memories, --embeddings and --topic-labels must not be empty")
 	}
-	if k < 1 {
-		return cmdutil.FlagErrorf("--topics must be >= 1, got %d", k)
+	if k < 0 {
+		return cmdutil.FlagErrorf("--topics must be >= 0 (0 = default %d), got %d", topics.DefaultK, k)
 	}
 	return nil
 }

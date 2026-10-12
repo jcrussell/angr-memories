@@ -167,6 +167,18 @@ var families = map[string]string{
 	"syscall":   "syscall",
 }
 
+// Latest picks the most recent incarnation of every key: the record whose
+// body the site shows and whose vector the clustering uses.
+func Latest(records []*Memory) map[string]*Memory {
+	latest := map[string]*Memory{}
+	for _, m := range records {
+		if cur, ok := latest[m.Key]; !ok || m.FirstSeen > cur.FirstSeen {
+			latest[m.Key] = m
+		}
+	}
+	return latest
+}
+
 // PrefixOf derives a memory's family bucket from its key. Never stored --
 // always computed on read, so it can't drift from key.
 func PrefixOf(key string) string {

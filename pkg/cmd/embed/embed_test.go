@@ -232,3 +232,34 @@ func (c *cancelAfterFirst) Embed(ctx context.Context, texts []string) ([][]float
 	}
 	return v, err
 }
+
+// fixedDimEmbedder returns vectors of a chosen size regardless of input.
+type fixedDimEmbedder struct{ dims int }
+
+func (f fixedDimEmbedder) Embed(ctx context.Context, texts []string) ([][]float32, error) {
+	out := make([][]float32, len(texts))
+	for i := range out {
+		out[i] = make([]float32, f.dims)
+		out[i][0] = 1
+	}
+	return out, nil
+}
+
+func TestEmbedRun_RefusesVectorsThatDoNotMatchTheFileDims(t *testing.T) {
+	opts, _, _ := testOpts(t, &fakeEmbedder{})
+	opts.Connect = func(context.Context, *Options) (Embedder, error) { return fixedDimEmbedder{dims: 3}, nil } // file holds 2-dim rows
+	err := embedRun(context.Background(), opts)
+	var h *cmdutil.ErrHint
+	if !errors.As(err, &h) || !strings.Contains(err.Error(), "3-dim") || !strings.Contains(h.Hint, "--dims 2") {
+		t.Fatalf("got %v, want a hinted dims-mismatch error", err)
+	}
+	f, err := embeddings.Load(opts.EmbeddingsPath)
+	if err != nil {
+		t.Fatalf("file must still be readable: %v", err)
+	}
+	for k, r := range f.Rows {
+		if len(r.Vec) != 2 {
+			t.Errorf("row %s has %d dims; mixed sizes were written", k, len(r.Vec))
+		}
+	}
+}

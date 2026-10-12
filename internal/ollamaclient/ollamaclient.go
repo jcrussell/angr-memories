@@ -268,10 +268,15 @@ func wrap(err error, model, endpoint string) error {
 	if errors.As(err, &se) && se.StatusCode == http.StatusNotFound && model != "" {
 		return cmdutil.WithHint(fmt.Errorf("ollama: model %q not found", model), fmt.Sprintf("run `ollama pull %s`", model))
 	}
-	var ne net.Error
+	// Only a failure to connect (dial, DNS) means the server is not there;
+	// an HTTP status or a timeout mid-request is reported as what it is.
 	var opErr *net.OpError
-	if errors.As(err, &opErr) || errors.As(err, &ne) || strings.Contains(err.Error(), "connection refused") {
+	var dnsErr *net.DNSError
+	if errors.As(err, &opErr) || errors.As(err, &dnsErr) || strings.Contains(err.Error(), "connection refused") {
 		return cmdutil.WithHint(fmt.Errorf("ollama: cannot reach %s: %w", endpoint, err), "is Ollama running? start it with `ollama serve` (or set OLLAMA_HOST / --endpoint)")
+	}
+	if se, ok := errors.AsType[api.StatusError](err); ok {
+		return fmt.Errorf("ollama: %s", se.Error())
 	}
 	return fmt.Errorf("ollama: %w", err)
 }

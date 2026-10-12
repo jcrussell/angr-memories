@@ -135,3 +135,16 @@ func TestText(t *testing.T) {
 		t.Errorf("Text = %q", got)
 	}
 }
+
+func TestRead_HeaderMayFollowBlankLines(t *testing.T) {
+	f, err := Read(strings.NewReader("\n\n" + `{"schema_version":1,"model":"m","dims":1}` + "\n" + `{"key":"k","body_sha256":"x","vec":"AACAPw=="}` + "\n"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if f.Header.Dims != 1 || len(f.Rows) != 1 || f.Rows["k"].Vec[0] != 1 {
+		t.Errorf("file = %+v", f)
+	}
+	if _, ok := f.Rows[""]; ok {
+		t.Error("header was parsed as a row")
+	}
+}

@@ -55,15 +55,23 @@ func TestHTTPClient_SetsUserAgentAndRetries5xxWithBodyReplay(t *testing.T) {
 	}
 }
 
-func TestHTTPClient_GivesUpAfterMaxAttempts(t *testing.T) {
+func TestHTTPClient_ReturnsLastResponseAfterMaxAttempts(t *testing.T) {
+	var calls atomic.Int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls.Add(1)
 		w.WriteHeader(http.StatusInternalServerError)
+		io.WriteString(w, `{"error":"model crashed"}`)
 	}))
 	defer srv.Close()
-	c, _ := newTestClient(http.DefaultTransport)
-	_, err := c.Get(srv.URL)
-	if err == nil || !strings.Contains(err.Error(), "after 3 attempts") {
-		t.Fatalf("expected give-up error, got %v", err)
+	c, slept := newTestClient(http.DefaultTransport)
+	resp, err := c.Get(srv.URL)
+	if err != nil {
+		t.Fatalf("the final 5xx must be returned, not turned into an error: %v", err)
+	}
+	defer resp.Body.Close()
+	body, _ := io.ReadAll(resp.Body)
+	if resp.StatusCode != 500 || string(body) != `{"error":"model crashed"}` || calls.Load() != 3 || len(*slept) != 2 {
+		t.Errorf("status=%d body=%q calls=%d sleeps=%d", resp.StatusCode, body, calls.Load(), len(*slept))
 	}
 }
 

@@ -159,3 +159,17 @@ func TestRender_TopicsEmptyStateWhenNil(t *testing.T) {
 		t.Error("expected empty state")
 	}
 }
+
+func TestWalkWith_ClusteringErrorFailsTheBuild(t *testing.T) {
+	path, opts := topicsFixture(t)
+	opts.Vectors["z3-c"] = []float32{1, 0} // wrong size: a real error, not "too small"
+	if _, err := WalkWith(path, opts); err == nil {
+		t.Fatal("a vector-size mismatch must fail the build, not render the empty state")
+	}
+	// Fewer than two docs with vectors is the legitimate empty state.
+	opts.Vectors = map[string][]float32{"z3-c": {0, 1, 0}}
+	s, err := WalkWith(path, opts)
+	if err != nil || s.Topics != nil {
+		t.Errorf("single doc: err=%v topics=%v, want nil/nil", err, s.Topics)
+	}
+}

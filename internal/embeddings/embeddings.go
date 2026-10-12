@@ -79,18 +79,20 @@ func Read(r io.Reader) (*File, error) {
 	sc.Buffer(make([]byte, 0, 64*1024), 64*1024*1024)
 	f := &File{Rows: map[string]Row{}}
 	line := 0
+	sawHeader := false
 	for sc.Scan() {
 		line++
 		raw := bytes.TrimSpace(sc.Bytes())
 		if len(raw) == 0 {
 			continue
 		}
-		if line == 1 {
+		if !sawHeader {
+			sawHeader = true
 			if err := json.Unmarshal(raw, &f.Header); err != nil {
-				return nil, fmt.Errorf("embeddings line 1: parsing header: %w", err)
+				return nil, fmt.Errorf("embeddings line %d: parsing header: %w", line, err)
 			}
 			if f.Header.SchemaVersion == 0 {
-				return nil, errors.New("embeddings line 1: missing schema_version header")
+				return nil, fmt.Errorf("embeddings line %d: missing schema_version header", line)
 			}
 			if f.Header.SchemaVersion > SchemaVersion {
 				return nil, fmt.Errorf("%w (file v%d, tool v%d); upgrade angr-memories", ErrSchemaTooNew, f.Header.SchemaVersion, SchemaVersion)
@@ -113,7 +115,7 @@ func Read(r io.Reader) (*File, error) {
 	if err := sc.Err(); err != nil {
 		return nil, err
 	}
-	if line == 0 {
+	if !sawHeader {
 		f.Header.SchemaVersion = SchemaVersion
 	}
 	return f, nil
@@ -250,17 +252,9 @@ func Check(records []*memory.Memory, f *File) Status {
 	return st
 }
 
-// Latest picks the most recent incarnation of every key (the one whose
-// body the site shows and whose vector the clustering should use).
-func Latest(records []*memory.Memory) map[string]*memory.Memory {
-	latest := map[string]*memory.Memory{}
-	for _, m := range records {
-		if cur, ok := latest[m.Key]; !ok || m.FirstSeen > cur.FirstSeen {
-			latest[m.Key] = m
-		}
-	}
-	return latest
-}
+// Latest is memory.Latest, kept here as the name callers in this package's
+// orbit use.
+func Latest(records []*memory.Memory) map[string]*memory.Memory { return memory.Latest(records) }
 
 // Vectors returns key -> unit vector for every current row of f, ready for
 // clustering. Stale rows are excluded only when skipStale is set, which is

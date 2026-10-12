@@ -192,3 +192,20 @@ func TestSplitText(t *testing.T) {
 		t.Errorf("newline preference: %q", got)
 	}
 }
+
+func TestEmbedder_ServerErrorIsNotReportedAsUnreachable(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		io.WriteString(w, `{"error":"runner crashed"}`)
+	}))
+	defer srv.Close()
+	c, _ := New(srv.URL, srv.Client())
+	_, err := (&Embedder{Client: c, Model: "m", Endpoint: srv.URL}).Embed(context.Background(), []string{"a"})
+	if err == nil || !strings.Contains(err.Error(), "runner crashed") {
+		t.Fatalf("expected the server's message, got %v", err)
+	}
+	var h *cmdutil.ErrHint
+	if errors.As(err, &h) {
+		t.Errorf("a 500 from a running server must not carry the 'is Ollama running?' hint: %v", h.Hint)
+	}
+}

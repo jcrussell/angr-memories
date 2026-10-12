@@ -77,7 +77,7 @@ func (o *Options) Validate() error {
 		return cmdutil.FlagErrorf("--memories and --out must not be empty")
 	}
 	if o.TopicK < 0 {
-		return cmdutil.FlagErrorf("--topics must be >= 1, got %d", o.TopicK)
+		return cmdutil.FlagErrorf("--topics must be >= 0 (0 = default %d), got %d", topics.DefaultK, o.TopicK)
 	}
 	return nil
 }
@@ -86,21 +86,23 @@ func siteRun(opts *Options) error {
 	if err := opts.Validate(); err != nil {
 		return err
 	}
-	s, err := sitepkg.Walk(opts.MemoriesPath)
+	records, err := memory.Load(opts.MemoriesPath)
 	if err != nil {
 		return err
 	}
+	var wo sitepkg.Options
 	if opts.EmbeddingsPath != "" {
-		wo, err := topicOptions(opts)
+		o, err := topicOptions(opts, records)
 		if err != nil {
 			return err
 		}
-		if wo != nil {
-			s, err = sitepkg.WalkWith(opts.MemoriesPath, *wo)
-			if err != nil {
-				return err
-			}
+		if o != nil {
+			wo = *o
 		}
+	}
+	s, err := sitepkg.WalkRecords(records, wo)
+	if err != nil {
+		return err
 	}
 	s.BaseURL = opts.BaseURL
 	s.RepoURL = opts.RepoURL
@@ -109,16 +111,12 @@ func siteRun(opts *Options) error {
 
 // topicOptions loads the embeddings and labels and applies the staleness
 // gate. A nil result (no error) means "no topics section".
-func topicOptions(opts *Options) (*sitepkg.Options, error) {
+func topicOptions(opts *Options, records []*memory.Memory) (*sitepkg.Options, error) {
 	f, err := embeddings.Load(opts.EmbeddingsPath)
 	if errors.Is(err, os.ErrNotExist) {
 		fmt.Fprintf(opts.IO.ErrOut, "note: %s not found; the topics page will be empty (run `angr-memories embed` to create it)\n", opts.EmbeddingsPath)
 		return nil, nil
 	}
-	if err != nil {
-		return nil, err
-	}
-	records, err := memory.Load(opts.MemoriesPath)
 	if err != nil {
 		return nil, err
 	}

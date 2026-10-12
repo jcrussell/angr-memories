@@ -156,8 +156,13 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 	for n, i := range targets {
 		cl := c.res.Clusters[i]
 		brief := c.brief(cl, examples)
+		r := c.row(i)                              // before Upsert compacts the labels slice under c.assigned
+		delete(taken, strings.ToLower(current[i])) // re-proposing the cluster's own label is not a clash
 		text, err := suggestOne(ctx, s, brief, taken)
 		if err != nil {
+			if current[i] != "" {
+				taken[strings.ToLower(current[i])] = true
+			}
 			if ctx.Err() != nil {
 				break
 			}
@@ -169,7 +174,6 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 		l := topics.Label{Text: text, Anchors: topics.AnchorsFor(cl, c.res.Docs), LabeledBy: by, At: opts.Now().UTC().Format(time.RFC3339)}
 		c.labels.Upsert(l, current[i])
 		drafted++
-		r := c.rows()[i]
 		r.Label, r.Unlabeled, r.LabeledBy, r.LabeledAt = text, false, by, l.At
 		results = append(results, r)
 	}

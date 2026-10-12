@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"sort"
+	"strings"
 
 	"github.com/jcrussell/angr-memories/internal/atomicfile"
 )
@@ -40,6 +41,8 @@ type Assignment struct {
 // the cluster are still free. It returns one Assignment per cluster (nil
 // Label when unlabeled) and the labels that attached nowhere, in input
 // order.
+func isHuman(l Label) bool { return !strings.HasPrefix(l.LabeledBy, "llm:") }
+
 func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Label) {
 	byCluster = make([]Assignment, len(res.Clusters))
 
@@ -82,6 +85,15 @@ func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Lab
 		}
 		if a.frac != b.frac {
 			return a.frac > b.frac
+		}
+		// Same evidence: a person's label beats a model draft, then the
+		// more recently written one wins, then file order -- never the
+		// alphabetical accident of WriteLabels' sort.
+		if ah, bh := isHuman(labels[a.li]), isHuman(labels[b.li]); ah != bh {
+			return ah
+		}
+		if labels[a.li].At != labels[b.li].At {
+			return labels[a.li].At > labels[b.li].At
 		}
 		if a.li != b.li {
 			return a.li < b.li

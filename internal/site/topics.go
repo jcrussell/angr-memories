@@ -1,6 +1,7 @@
 package site
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"sort"
@@ -71,17 +72,21 @@ func (t *Topic) LabelCommand() string {
 }
 
 // buildTopics clusters the keys that have vectors and attaches labels.
-// Returns nil when there is nothing to cluster (no vectors, or fewer than
-// two docs), which the topics page renders as an empty state.
-func buildTopics(records []*memory.Memory, keyPage map[string]string, opts Options) *Topics {
+// Returns nil, nil when there is nothing to cluster (fewer than two docs
+// with vectors), which the topics page renders as an empty state; any other
+// clustering failure is a real error and fails the build.
+func buildTopics(records []*memory.Memory, keyPage map[string]string, opts Options) (*Topics, error) {
 	docs := topics.DocsFrom(records, opts.Vectors)
 	k := opts.TopicK
 	if k <= 0 {
 		k = topics.DefaultK
 	}
 	res, err := topics.Run(docs, topics.Options{K: k})
+	if errors.Is(err, topics.ErrTooSmall) {
+		return nil, nil
+	}
 	if err != nil {
-		return nil
+		return nil, fmt.Errorf("clustering topics: %w", err)
 	}
 	assigned, orphaned := topics.Assign(opts.Labels, res)
 
@@ -115,7 +120,7 @@ func buildTopics(records []*memory.Memory, keyPage map[string]string, opts Optio
 		t.Orphaned = append(t.Orphaned, l.Text)
 	}
 	sort.Strings(t.Orphaned)
-	return t
+	return t, nil
 }
 
 // autoLabel stands in for a missing label: the first three exemplar keys.

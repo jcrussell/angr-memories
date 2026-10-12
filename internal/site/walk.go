@@ -39,6 +39,13 @@ func WalkWith(memoriesPath string, opts Options) (*Site, error) {
 	if err != nil {
 		return nil, err
 	}
+	return WalkRecords(records, opts)
+}
+
+// WalkRecords is WalkWith over records a caller has already loaded (the
+// site command reads memories.jsonl once for the embeddings gate and the
+// walk).
+func WalkRecords(records []*memory.Memory, opts Options) (*Site, error) {
 
 	byKey := map[string][]*memory.Memory{}
 	for _, m := range records {
@@ -124,7 +131,11 @@ func WalkWith(memoriesPath string, opts Options) (*Site, error) {
 
 	s.Dashboard = buildDashboard(records)
 	if len(opts.Vectors) > 0 {
-		s.Topics = buildTopics(records, keyPage, opts)
+		t, err := buildTopics(records, keyPage, opts)
+		if err != nil {
+			return nil, err
+		}
+		s.Topics = t
 	}
 
 	return s, nil

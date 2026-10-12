@@ -350,7 +350,7 @@ func TestSuggestOptions_Validate(t *testing.T) {
 		"bad endpoint": func(o *SuggestOptions) { o.Endpoint = "x" },
 		"no model":     func(o *SuggestOptions) { o.ChatModel = " " },
 		"neg only":     func(o *SuggestOptions) { o.Only = -1 },
-		"k 0":          func(o *SuggestOptions) { o.K = 0 },
+		"k negative":   func(o *SuggestOptions) { o.K = -1 },
 	} {
 		o := ok
 		mut(&o)
@@ -382,4 +382,46 @@ func sorted(s []string) []string {
 		}
 	}
 	return out
+}
+
+func TestSuggestRun_OnlyAcceptsTheClustersOwnCurrentLabel(t *testing.T) {
+	p := fixture(t)
+	// Find the z3 cluster (labeled "Z3 solver discipline") and ask the model
+	// again; answering with the same label must be accepted, not retried.
+	io, _, _ := newIO()
+	c, err := load(io, p.mem, p.emb, p.labels, 3)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var idx int
+	for _, r := range c.rows() {
+		if r.Label == "Z3 solver discipline" {
+			idx = r.Index
+		}
+	}
+	s := &scriptedSuggester{answers: []string{"Z3 solver discipline"}}
+	opts, _, errOut := suggestOpts(p, s)
+	opts.Only = idx
+	if err := suggestRun(context.Background(), opts); err != nil {
+		t.Fatal(err)
+	}
+	if len(s.briefs) != 1 || len(s.briefs[0].Avoid) != 0 {
+		t.Errorf("same-label answer should be accepted on the first try, got %d calls, avoid=%v", len(s.briefs), s.briefs[0].Avoid)
+	}
+	if strings.Contains(errOut.String(), "skipped") {
+		t.Errorf("stderr = %q", errOut.String())
+	}
+	lf, _ := topics.LoadLabels(p.labels)
+	n := 0
+	for _, l := range lf.Labels {
+		if l.Text == "Z3 solver discipline" {
+			n++
+			if l.LabeledBy != "llm:fakechat" {
+				t.Errorf("relabel should record the model, got %q", l.LabeledBy)
+			}
+		}
+	}
+	if n != 1 {
+		t.Errorf("expected exactly one Z3 label, got %d", n)
+	}
 }

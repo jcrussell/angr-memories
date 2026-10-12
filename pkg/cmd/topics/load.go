@@ -79,7 +79,16 @@ var jsonFields = []string{"index", "label", "unlabeled", "labeled_by", "labeled_
 
 func (c *corpus) rows() []row {
 	out := make([]row, len(c.res.Clusters))
-	for i, cl := range c.res.Clusters {
+	for i := range c.res.Clusters {
+		out[i] = c.row(i)
+	}
+	return out
+}
+
+// row builds the view of the cluster at position i.
+func (c *corpus) row(i int) row {
+	cl := c.res.Clusters[i]
+	{
 		r := row{Index: cl.Index, Size: len(cl.Members), Remembered: cl.Remembered, Forgotten: cl.Forgotten}
 		if r.Size > 0 {
 			r.Kept = int(float64(cl.Remembered)/float64(r.Size)*100 + 0.5)
@@ -99,9 +108,8 @@ func (c *corpus) rows() []row {
 			r.Unlabeled = true
 			r.Label = "(unlabeled)"
 		}
-		out[i] = r
+		return r
 	}
-	return out
 }
 
 // currentLabel is the text of the label Assign attached to cluster

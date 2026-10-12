@@ -67,7 +67,7 @@ func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		}
 		resp, err := t.next.RoundTrip(r)
 		retryable, delay := t.shouldRetry(resp, err, attempt)
-		if !retryable {
+		if !retryable || (resp != nil && attempt >= t.maxAttempts) {
 			return resp, err
 		}
 		if resp != nil {
@@ -79,6 +79,11 @@ func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 			lastErr = fmt.Errorf("%s %s: server returned %s", req.Method, req.URL.Path, resp.Status)
 		}
 		if attempt >= t.maxAttempts {
+			if resp != nil {
+				// Hand the final response back as-is so the caller sees the
+				// real status and error body instead of a synthetic error.
+				return resp, nil
+			}
 			return nil, fmt.Errorf("after %d attempts: %w", attempt, lastErr)
 		}
 		select {
