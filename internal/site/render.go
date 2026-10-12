@@ -8,6 +8,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
@@ -40,17 +41,20 @@ func Render(s *Site, outDir string) error {
 		}
 	}
 
-	tpl, err := template.New("").Funcs(template.FuncMap{
-		"url": func(from, target string) string {
-			if strings.HasPrefix(target, "http://") || strings.HasPrefix(target, "https://") {
-				return target
-			}
-			if s.BaseURL != "" {
-				return s.BaseURL + target
-			}
-			return relativeURL(from, target)
-		},
-	}).ParseFS(templatesFS, "templates/*.html")
+	urlFor := func(from, target string) string {
+		if strings.HasPrefix(target, "http://") || strings.HasPrefix(target, "https://") {
+			return target
+		}
+		if s.BaseURL != "" {
+			return s.BaseURL + target
+		}
+		return relativeURL(from, target)
+	}
+	if s.Topics != nil {
+		s.Topics.Dendrogram = s.Topics.renderDendrogram(func(target string) string { return urlFor("/topics/", target) })
+	}
+
+	tpl, err := template.New("").Funcs(template.FuncMap{"url": urlFor}).ParseFS(templatesFS, "templates/*.html")
 	if err != nil {
 		return fmt.Errorf("parse templates: %w", err)
 	}
@@ -75,6 +79,21 @@ func Render(s *Site, outDir string) error {
 		Site: s, Path: "/dashboard/", Title: "Dashboard — angr-memories",
 	}); err != nil {
 		return err
+	}
+
+	if err := writePage(tpl, "topics.html", filepath.Join(outDir, "topics", "index.html"), pageData{
+		Site: s, Path: "/topics/", Title: "Topics — angr-memories",
+	}); err != nil {
+		return err
+	}
+	if s.Topics != nil {
+		for _, t := range s.Topics.Clusters {
+			if err := writePage(tpl, "topic.html", filepath.Join(outDir, "topics", strconv.Itoa(t.Index), "index.html"), pageData{
+				Site: s, Topic: t, Path: t.Path, Title: t.Label + " — Topics — angr-memories",
+			}); err != nil {
+				return err
+			}
+		}
 	}
 
 	for _, pi := range s.Prefixes {
@@ -225,6 +244,7 @@ type pageData struct {
 	Site   *Site
 	Prefix *PrefixIndex
 	Chunk  *Chunk
+	Topic  *Topic
 	Path   string // this page's own root-relative directory, e.g. "/prefix/<name>/"
 	Title  string
 }

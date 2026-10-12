@@ -20,6 +20,7 @@ type Site struct {
 	TotalForgotten  int
 
 	Dashboard *Dashboard // pre-rendered charts for /dashboard/
+	Topics    *Topics    // embedding clusters for /topics/; nil when no vectors were supplied
 
 	BaseURL string // e.g. "" for local preview
 	RepoURL string

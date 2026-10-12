@@ -3,6 +3,7 @@
 package angrcmd
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -13,29 +14,37 @@ import (
 	"github.com/jcrussell/angr-memories/pkg/iostreams"
 )
 
-// Run executes root with args and maps the resulting error to an exit
-// code. Commands return errors, never call os.Exit.
-func Run(root *cobra.Command, args []string, ios *iostreams.IOStreams) int {
+// Run executes root with args under ctx and maps the resulting error to an
+// exit code. Commands return errors, never call os.Exit. ctx is the
+// process-level context main wires to SIGINT/SIGTERM (byob-lifecycle.1/.2);
+// cobra hands it to every RunE as c.Context().
+func Run(ctx context.Context, root *cobra.Command, args []string, ios *iostreams.IOStreams) int {
 	root.SetArgs(args)
 	root.SetIn(ios.In)
 	root.SetOut(ios.Out)
 	root.SetErr(ios.ErrOut)
 
-	err := classify(root.Execute())
+	err := classify(root.ExecuteContext(ctx))
+	var code int
 	switch {
 	case err == nil:
 		return 0
-	case errors.Is(err, cmdutil.ErrCancel):
+	case errors.Is(err, cmdutil.ErrCancel), errors.Is(err, context.Canceled):
 		return 2
 	case errors.Is(err, cmdutil.ErrSilent):
 		return 1
 	case errors.As(err, new(*cmdutil.FlagError)):
 		fmt.Fprintln(ios.ErrOut, "error:", err)
-		return 2
+		code = 2
 	default:
 		fmt.Fprintln(ios.ErrOut, "error:", err)
-		return 1
+		code = 1
 	}
+	var h *cmdutil.ErrHint
+	if errors.As(err, &h) && h.Hint != "" {
+		fmt.Fprintln(ios.ErrOut, "hint:", h.Hint)
+	}
+	return code
 }
 
 // classify wraps cobra-emitted "unknown command", "required flag(s) ...",

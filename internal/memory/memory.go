@@ -7,12 +7,11 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/jcrussell/angr-memories/internal/atomicfile"
 	"io"
 	"os"
-	"path/filepath"
 	"sort"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -124,79 +123,27 @@ func Save(path string, records []*Memory) (err error) {
 		return sorted[i].FirstSeen < sorted[j].FirstSeen
 	})
 
-	dir := filepath.Dir(path)
-	tmp, err := os.CreateTemp(dir, filepath.Base(path)+".tmp-*")
-	if err != nil {
-		return err
-	}
-	tmpPath := tmp.Name()
-	TrackPending(tmpPath)
-	defer func() {
-		UntrackPending(tmpPath)
-		if err != nil {
-			os.Remove(tmpPath)
+	return atomicfile.WriteFunc(path, 0o644, func(w io.Writer) error {
+		bw := bufio.NewWriter(w)
+		enc := json.NewEncoder(bw)
+		enc.SetEscapeHTML(false)
+		for _, m := range sorted {
+			if err := enc.Encode(m); err != nil {
+				return err
+			}
 		}
-	}()
-
-	w := bufio.NewWriter(tmp)
-	enc := json.NewEncoder(w)
-	enc.SetEscapeHTML(false)
-	for _, m := range sorted {
-		if err = enc.Encode(m); err != nil {
-			tmp.Close()
-			return err
-		}
-	}
-	if err = w.Flush(); err != nil {
-		tmp.Close()
-		return err
-	}
-	if err = tmp.Sync(); err != nil {
-		tmp.Close()
-		return err
-	}
-	if err = tmp.Close(); err != nil {
-		return err
-	}
-	return os.Rename(tmpPath, path)
+		return bw.Flush()
+	})
 }
 
+// TrackPending, UntrackPending and CleanupPending live in
+// internal/atomicfile (which owns the temp-file recipe); these aliases keep
+// existing call sites compiling.
 var (
-	pendingMu    sync.Mutex
-	pendingPaths = map[string]bool{}
+	TrackPending   = atomicfile.TrackPending
+	UntrackPending = atomicfile.UntrackPending
+	CleanupPending = atomicfile.CleanupPending
 )
-
-// TrackPending registers a temp file or directory that must be removed if
-// the process is killed before it can clean up after itself normally.
-// Go doesn't run deferred cleanup (like Save's own os.Remove(tmpPath)) on
-// an unhandled SIGINT/SIGTERM, so a long write killed mid-flight would
-// otherwise leave the temp file behind forever. Call UntrackPending once
-// path is either renamed into place or removed through the caller's own
-// normal cleanup path.
-func TrackPending(path string) {
-	pendingMu.Lock()
-	pendingPaths[path] = true
-	pendingMu.Unlock()
-}
-
-// UntrackPending reverses TrackPending.
-func UntrackPending(path string) {
-	pendingMu.Lock()
-	delete(pendingPaths, path)
-	pendingMu.Unlock()
-}
-
-// CleanupPending removes every currently-tracked pending path and clears
-// the registry. Meant to be called from a signal handler right before the
-// process exits.
-func CleanupPending() {
-	pendingMu.Lock()
-	defer pendingMu.Unlock()
-	for p := range pendingPaths {
-		os.RemoveAll(p)
-		delete(pendingPaths, p)
-	}
-}
 
 // families is the key-prefix grouping validated by the historical
 // tools/bd_chunk_for_review.py -- ported verbatim.

@@ -4,8 +4,8 @@ A browsable, continuously-synced archive of the `angr` project's
 `bd`-backed memory corpus, plus the toolkit used to prune it.
 
 - Render the corpus as a static site — prefix-grouped pages, a dashboard
-  (corpus size over time, survival histogram, most-cited keys), zero
-  JavaScript
+  (corpus size over time, survival histogram, most-cited keys), a topic
+  dendrogram of the whole corpus, zero JavaScript
 - Search remembered (or all) memories with ranked or fuzzy matching
 - Keep the archive in sync with the live `bd` corpus (`angr-memories
   sync` diffs against the live snapshot and folds in new/changed/closed
@@ -53,6 +53,11 @@ angr-memories site     --memories memories.jsonl --out _site   # render the brow
 angr-memories stats    --memories memories.jsonl               # remembered/forgotten counts by prefix
 angr-memories sync     --source ~/repos/angr --memories memories.jsonl  # pull the live corpus, fold in changes
 angr-memories search   <query> [--prefix] [--all] [--fuzzy] [--no-cache] [--limit 20]  # ranked search over memories.jsonl
+
+angr-memories embed    [--model nomic-embed-text] [--dry-run]      # refresh embeddings.jsonl via local Ollama
+angr-memories topics   [--unlabeled] [--json index,label,members]  # list the topic clusters and their labels
+angr-memories topics label <index> "<text>"                        # name one cluster (writes topic-labels.jsonl)
+angr-memories topics suggest [--only N] [--relabel] [--dry-run]    # let a local chat model draft labels
 
 angr-memories triage   [--source] [--docs-dir] --out triage.jsonl   # heuristic tags per remembered key
 angr-memories chunk    --round R5 [--delta-since <RFC3339> | --keys-file <path>]  # bucket remembered keys into review batches
@@ -108,6 +113,27 @@ flip Settings → Pages → "Build and deployment → Source" to `GitHub
 Actions`. After that, pushes to `main` deploy automatically. Forks that
 rename the repo should update the `--base-url` and `--repo-url` flags
 in `.github/workflows/pages.yml`.
+
+### Topics
+
+`/topics/` on the site is a dendrogram of every memory ever recorded,
+clustered by meaning. Three committed files feed it:
+
+- `memories.jsonl` — the text.
+- `embeddings.jsonl` — one vector per key, produced by `angr-memories
+  embed` with an embedding model served by a local [Ollama](https://ollama.com)
+  (`nomic-embed-text` by default). Rows carry a hash of the body they were
+  computed from; the site build refuses to run while any key is missing or
+  stale, so after a `sync` run `embed` and commit the result. Only new or
+  edited keys are embedded.
+- `topic-labels.jsonl` — the cluster names, written by a person
+  (`angr-memories topics label`) or drafted by a local chat model
+  (`angr-memories topics suggest`, then review). Each label is anchored to
+  the memories it described, so it follows them when the tree is
+  recomputed; clusters nobody has named yet show their nearest-centre keys
+  and are listed by `angr-memories topics --unlabeled`.
+
+The build itself is offline and pure Go: CI never talks to a model.
 
 ## Current snapshot
 

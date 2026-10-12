@@ -1,6 +1,7 @@
 package angrcmd
 
 import (
+	"context"
 	"errors"
 	"strings"
 	"testing"
@@ -69,7 +70,7 @@ func TestRun_exitCodes(t *testing.T) {
 
 	t.Run("success exits 0", func(t *testing.T) {
 		io, _, _, _ := iostreams.Test()
-		code := Run(newCmd(func(*cobra.Command, []string) error { return nil }), nil, io)
+		code := Run(context.Background(), newCmd(func(*cobra.Command, []string) error { return nil }), nil, io)
 		if code != 0 {
 			t.Errorf("exit code = %d, want 0", code)
 		}
@@ -77,7 +78,7 @@ func TestRun_exitCodes(t *testing.T) {
 
 	t.Run("a generic error exits 1 and prints it", func(t *testing.T) {
 		io, _, _, errOut := iostreams.Test()
-		code := Run(newCmd(func(*cobra.Command, []string) error { return errors.New("boom") }), nil, io)
+		code := Run(context.Background(), newCmd(func(*cobra.Command, []string) error { return errors.New("boom") }), nil, io)
 		if code != 1 {
 			t.Errorf("exit code = %d, want 1", code)
 		}
@@ -88,7 +89,7 @@ func TestRun_exitCodes(t *testing.T) {
 
 	t.Run("a FlagError exits 2", func(t *testing.T) {
 		io, _, _, _ := iostreams.Test()
-		code := Run(newCmd(func(*cobra.Command, []string) error {
+		code := Run(context.Background(), newCmd(func(*cobra.Command, []string) error {
 			return cmdutil.FlagErrorf("bad flag")
 		}), nil, io)
 		if code != 2 {
@@ -98,7 +99,7 @@ func TestRun_exitCodes(t *testing.T) {
 
 	t.Run("ErrCancel exits 2", func(t *testing.T) {
 		io, _, _, _ := iostreams.Test()
-		code := Run(newCmd(func(*cobra.Command, []string) error { return cmdutil.ErrCancel }), nil, io)
+		code := Run(context.Background(), newCmd(func(*cobra.Command, []string) error { return cmdutil.ErrCancel }), nil, io)
 		if code != 2 {
 			t.Errorf("exit code = %d, want 2", code)
 		}
@@ -106,7 +107,7 @@ func TestRun_exitCodes(t *testing.T) {
 
 	t.Run("ErrSilent exits 1 without printing anything new", func(t *testing.T) {
 		io, _, _, errOut := iostreams.Test()
-		code := Run(newCmd(func(*cobra.Command, []string) error { return cmdutil.ErrSilent }), nil, io)
+		code := Run(context.Background(), newCmd(func(*cobra.Command, []string) error { return cmdutil.ErrSilent }), nil, io)
 		if code != 1 {
 			t.Errorf("exit code = %d, want 1", code)
 		}
@@ -119,9 +120,35 @@ func TestRun_exitCodes(t *testing.T) {
 		io, _, _, _ := iostreams.Test()
 		cmd := newCmd(func(*cobra.Command, []string) error { return nil })
 		cmd.Args = cobra.ExactArgs(1)
-		code := Run(cmd, nil, io)
+		code := Run(context.Background(), cmd, nil, io)
 		if code != 2 {
 			t.Errorf("exit code = %d, want 2", code)
 		}
 	})
+}
+
+func TestRun_printsHintAfterError(t *testing.T) {
+	io, _, _, errOut := iostreams.Test()
+	cmd := &cobra.Command{Use: "x", SilenceErrors: true, SilenceUsage: true,
+		RunE: func(*cobra.Command, []string) error {
+			return cmdutil.WithHint(errors.New("embeddings are stale"), "run `angr-memories embed`")
+		}}
+	if code := Run(context.Background(), cmd, nil, io); code != 1 {
+		t.Errorf("exit code = %d, want 1", code)
+	}
+	got := errOut.String()
+	if !strings.Contains(got, "error: embeddings are stale") || !strings.Contains(got, "hint: run `angr-memories embed`") {
+		t.Errorf("stderr = %q, want error line followed by hint line", got)
+	}
+}
+
+func TestRun_contextCanceledExits2(t *testing.T) {
+	io, _, _, errOut := iostreams.Test()
+	cmd := &cobra.Command{Use: "x", SilenceErrors: true, SilenceUsage: true,
+		RunE: func(c *cobra.Command, _ []string) error { return c.Context().Err() }}
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if code := Run(ctx, cmd, nil, io); code != 2 {
+		t.Errorf("exit code = %d, want 2; stderr=%q", code, errOut.String())
+	}
 }

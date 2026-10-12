@@ -29,6 +29,8 @@ jobs:
         run: |
           go run ./cmd/angr-memories site \
             --memories memories.jsonl \
+            --embeddings embeddings.jsonl \
+            --topic-labels topic-labels.jsonl \
             --out _site \
             --base-url /angr-memories \
             --repo-url https://github.com/jcrussell/angr-memories

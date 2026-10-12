@@ -7,10 +7,12 @@ import (
 
 	applycmd "github.com/jcrussell/angr-memories/pkg/cmd/apply"
 	chunkcmd "github.com/jcrussell/angr-memories/pkg/cmd/chunk"
+	embedcmd "github.com/jcrussell/angr-memories/pkg/cmd/embed"
 	searchcmd "github.com/jcrussell/angr-memories/pkg/cmd/search"
 	sitecmd "github.com/jcrussell/angr-memories/pkg/cmd/site"
 	statscmd "github.com/jcrussell/angr-memories/pkg/cmd/stats"
 	synccmd "github.com/jcrussell/angr-memories/pkg/cmd/sync"
+	topicscmd "github.com/jcrussell/angr-memories/pkg/cmd/topics"
 	triagecmd "github.com/jcrussell/angr-memories/pkg/cmd/triage"
 	validatecmd "github.com/jcrussell/angr-memories/pkg/cmd/validate"
 	"github.com/jcrussell/angr-memories/pkg/cmdutil"
@@ -40,5 +42,7 @@ func NewCmdRoot(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(chunkcmd.NewCmdChunk(f, nil))
 	cmd.AddCommand(validatecmd.NewCmdValidate(f, nil))
 	cmd.AddCommand(applycmd.NewCmdApply(f, nil))
+	cmd.AddCommand(embedcmd.NewCmdEmbed(f, nil))
+	cmd.AddCommand(topicscmd.NewCmdTopics(f, nil))
 	return cmd
 }

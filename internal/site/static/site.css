@@ -151,3 +151,40 @@ footer .container { padding: 20px 24px; color: var(--fg-subtle); font-size: 0.85
   main.container { padding-top: 24px; }
   .prefix-grid { grid-template-columns: 1fr; }
 }
+
+/* Topic dendrogram (internal/chart/dendrogram.go) */
+.dendro-scroll { overflow-x: auto; margin: 16px 0; }
+.dendro { display: block; width: 100%; min-width: 760px; max-width: 980px; height: auto; }
+.dendro-grid { stroke: var(--border); stroke-width: 1; }
+.dendro-axis { fill: var(--fg-subtle); font-size: 11px; }
+.dendro-link { fill: none; stroke: var(--fg-muted); stroke-width: 1.5; }
+.dendro-node { fill: transparent; }
+.dendro-node:hover { fill: var(--border); }
+.dendro-hit { fill: transparent; }
+.dendro-row:hover .dendro-hit { fill: var(--bg-elevated); }
+.dendro-row:hover .dendro-label { fill: var(--accent); text-decoration: underline; }
+.dendro-label { fill: var(--fg); font-size: 13px; }
+.dendro-label.unlabeled { fill: var(--fg-muted); font-style: italic; }
+.dendro-value { fill: var(--fg-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* Topics pages */
+.legend { color: var(--fg-muted); font-size: 0.9rem; margin: 12px 0 0; }
+.legend-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin: 0 6px 0 14px; vertical-align: -1px; }
+.legend-swatch:first-child { margin-left: 0; }
+.legend-swatch.remembered { background: var(--remembered-fg); }
+.legend-swatch.forgotten { background: var(--forgotten-fg); }
+.topics-table { margin: 16px 0; }
+.topics-table summary { cursor: pointer; color: var(--fg-muted); }
+.topics-table table { border-collapse: collapse; font-size: 0.9rem; margin-top: 10px; }
+.topics-table td, .topics-table th { border-bottom: 1px solid var(--border); padding: 4px 8px; text-align: left; vertical-align: top; }
+.topics-table .num { text-align: right; font-variant-numeric: tabular-nums; }
+.unlabeled { font-style: italic; color: var(--fg-muted); }
+a.unlabeled { color: var(--fg-muted); }
+.badge.unlabeled { background: var(--recreated-bg); color: var(--recreated-fg); }
+.orphaned-note { color: var(--fg-muted); font-size: 0.9rem; }
+.topic-meta { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 16px 0; font-size: 0.95rem; }
+.topic-meta dt { color: var(--fg-subtle); }
+.topic-meta dd { margin: 0; }
+.member-list { columns: 3 260px; list-style: none; padding: 0; margin: 0; font-size: 0.9rem; }
+.member-list li { margin: 2px 0; break-inside: avoid; }
+.member-list li.forgotten a { color: var(--fg-subtle); }

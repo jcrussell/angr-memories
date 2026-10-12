@@ -1,0 +1,36 @@
+{{define "topic.html"}}<!DOCTYPE html>
+<html lang="en">
+{{template "head" .}}
+<body>
+{{template "header" .}}
+<main class="container home">
+<article class="content">
+<p class="breadcrumb"><a href="{{url .Path "/"}}">Home</a> / <a href="{{url .Path "/topics/"}}">Topics</a> / <span>{{.Topic.Index}}</span></p>
+{{with .Topic}}
+<h1>{{if .Unlabeled}}<span class="unlabeled">{{.Label}}</span>{{else}}{{.Label}}{{end}}
+  {{if .Unlabeled}}<span class="badge unlabeled">unlabeled</span>{{end}}
+</h1>
+<p class="lede">{{.Size}} memories · {{.Remembered}} remembered, {{.Forgotten}} forgotten ({{.KeptPercent}}% kept).</p>
+<dl class="topic-meta">
+{{if .Unlabeled}}
+<dt>Label</dt><dd>Not yet labeled. Name it with <code>{{.LabelCommand}}</code>, or let the local model draft one with <code>angr-memories topics suggest --only {{.Index}}</code>.</dd>
+{{else}}
+<dt>Label</dt><dd>Written by {{.LabeledBy}}{{if .LabeledAt}} on {{.LabeledAt}}{{end}}. Change it with <code>{{.LabelCommand}}</code>.</dd>
+{{end}}
+{{if .Prefixes}}<dt>Key prefixes</dt><dd>{{.PrefixMix}}</dd>{{end}}
+{{if .Exemplars}}<dt>Nearest the centre</dt><dd>{{range $i, $k := .Exemplars}}{{if $i}}, {{end}}<code>{{$k}}</code>{{end}}</dd>{{end}}
+</dl>
+
+<h2>Members</h2>
+<ul class="member-list">
+{{range .Members}}
+<li class="{{if .Remembered}}remembered{{else}}forgotten{{end}}"><a href="{{url $.Path .Page}}#{{.Key}}"><code>{{.Key}}</code></a></li>
+{{end}}
+</ul>
+{{end}}
+</article>
+</main>
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

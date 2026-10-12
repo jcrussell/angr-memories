@@ -32,3 +32,23 @@ var ErrSilent = errors.New("silent")
 // The runner exits with a distinct code so scripts can tell the difference
 // between failure and cancellation.
 var ErrCancel = errors.New("cancel")
+
+// ErrHint wraps an error with a short, specific remediation ("run
+// `angr-memories embed`", "start Ollama"). The runner prints the error and
+// then the hint on its own line (byob-errors.2). Attach one only when the
+// fix is concrete; avoid hint spam.
+type ErrHint struct {
+	Err  error
+	Hint string
+}
+
+func (e *ErrHint) Error() string { return e.Err.Error() }
+func (e *ErrHint) Unwrap() error { return e.Err }
+
+// WithHint attaches hint to err. A nil err stays nil.
+func WithHint(err error, hint string) error {
+	if err == nil {
+		return nil
+	}
+	return &ErrHint{Err: err, Hint: hint}
+}

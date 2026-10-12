@@ -1,6 +1,7 @@
 package cmdutil
 
 import (
+	"net/http"
 	"os"
 	"path/filepath"
 	"sync"
@@ -21,6 +22,11 @@ type Factory struct {
 	// and repeat callers within one invocation get the same resolved path.
 	// Not created here -- MkdirAll happens at the first actual write.
 	CacheDir func() (string, error)
+
+	// HTTPClient is the shared net/http client for network-bound commands
+	// (embed, topics suggest): lazy, so offline commands never build a
+	// transport. See NewHTTPClient for its timeouts and retry policy.
+	HTTPClient func() *http.Client
 }
 
 func New() *Factory {
@@ -34,5 +40,6 @@ func New() *Factory {
 			}
 			return filepath.Join(dir, "angr-memories"), nil
 		}),
+		HTTPClient: sync.OnceValue(NewHTTPClient),
 	}
 }

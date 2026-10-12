@@ -1,0 +1,38 @@
+{{define "topics.html"}}<!DOCTYPE html>
+<html lang="en">
+{{template "head" .}}
+<body>
+{{template "header" .}}
+<main class="container home">
+<article class="content wide">
+<p class="breadcrumb"><a href="{{url .Path "/"}}">Home</a> / <span>Topics</span></p>
+<h1>Topics</h1>
+{{with .Site.Topics}}
+<p class="lede">{{.Docs}} memories (remembered and forgotten) clustered by meaning: each memory's key and body is embedded with <code>{{.Model}}</code>, the vectors are joined by Ward linkage, and the tree is cut at {{.K}} clusters. Labels are written by a person or a local language model and stay attached to the memories they describe when the tree is recomputed.{{if .Unlabeled}} {{.Unlabeled}} of {{.K}} clusters are unlabeled and show their nearest-centre keys instead.{{end}} Hover a row for its make-up; click it for every member.</p>
+
+<p class="legend"><span class="legend-swatch remembered"></span>Remembered <span class="legend-swatch forgotten"></span>Forgotten</p>
+<div class="dendro-scroll">{{.Dendrogram}}</div>
+
+<details class="topics-table">
+<summary>Table</summary>
+<table>
+<thead><tr><th>Cluster</th><th class="num">Memories</th><th class="num">Remembered</th><th class="num">Forgotten</th><th class="num">Kept</th><th>Key prefixes</th></tr></thead>
+<tbody>
+{{range .Clusters}}
+<tr><td><a href="{{url $.Path .Path}}"{{if .Unlabeled}} class="unlabeled"{{end}}>{{.Label}}</a></td><td class="num">{{.Size}}</td><td class="num">{{.Remembered}}</td><td class="num">{{.Forgotten}}</td><td class="num">{{.KeptPercent}}%</td><td>{{.PrefixMix}}</td></tr>
+{{end}}
+</tbody>
+</table>
+</details>
+{{if .Orphaned}}
+<p class="orphaned-note">Labels that no longer match a cluster after re-clustering: {{range $i, $l := .Orphaned}}{{if $i}}, {{end}}<em>{{$l}}</em>{{end}}. They stay in <code>topic-labels.jsonl</code> until relabeled or removed.</p>
+{{end}}
+{{else}}
+<p class="lede">No topic clusters yet. The topics page needs <code>embeddings.jsonl</code>, produced by <code>angr-memories embed</code> against a local Ollama server and committed alongside <code>memories.jsonl</code>.</p>
+{{end}}
+</article>
+</main>
+{{template "footer" .}}
+</body>
+</html>
+{{end}}

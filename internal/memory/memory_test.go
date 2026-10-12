@@ -2,6 +2,7 @@ package memory
 
 import (
 	"bytes"
+	"github.com/jcrussell/angr-memories/internal/atomicfile"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -442,10 +443,7 @@ func TestSave_untracksPendingOnSuccess(t *testing.T) {
 		t.Fatalf("Save: %v", err)
 	}
 
-	pendingMu.Lock()
-	n := len(pendingPaths)
-	pendingMu.Unlock()
-	if n != 0 {
+	if n := atomicfile.PendingCount(); n != 0 {
 		t.Errorf("expected no pending paths after a successful Save, got %d", n)
 	}
 }
