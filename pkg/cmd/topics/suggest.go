@@ -32,6 +32,7 @@ type SuggestOptions struct {
 	EmbeddingsPath string
 	LabelsPath     string
 	K              int
+	MinSize        int
 	Endpoint       string
 	ChatModel      string
 	Only           int
@@ -75,7 +76,7 @@ at the result, commit.`,
 			return suggestRun(c.Context(), opts)
 		},
 	}
-	addCorpusFlags(cmd, &opts.MemoriesPath, &opts.EmbeddingsPath, &opts.LabelsPath, &opts.K)
+	addCorpusFlags(cmd, &opts.MemoriesPath, &opts.EmbeddingsPath, &opts.LabelsPath, &opts.K, &opts.MinSize)
 	cmd.Flags().StringVar(&opts.Endpoint, "endpoint", ollamaclient.EndpointFromEnv(), "Ollama server URL")
 	cmd.Flags().StringVar(&opts.ChatModel, "chat-model", DefaultChatModel, "chat model name (as `ollama pull` knows it)")
 	cmd.Flags().IntVar(&opts.Only, "only", 0, "suggest for this cluster index only")
@@ -85,7 +86,7 @@ at the result, commit.`,
 }
 
 func (o *SuggestOptions) Validate() error {
-	if err := validateCorpusFlags(o.MemoriesPath, o.EmbeddingsPath, o.LabelsPath, o.K); err != nil {
+	if err := validateCorpusFlags(o.MemoriesPath, o.EmbeddingsPath, o.LabelsPath, o.K, o.MinSize); err != nil {
 		return err
 	}
 	if _, err := ollamaclient.ParseEndpoint(o.Endpoint); err != nil {
@@ -112,7 +113,7 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 	if err := opts.Validate(); err != nil {
 		return err
 	}
-	c, err := load(opts.IO, opts.MemoriesPath, opts.EmbeddingsPath, opts.LabelsPath, opts.K)
+	c, err := load(opts.IO, opts.MemoriesPath, opts.EmbeddingsPath, opts.LabelsPath, opts.K, opts.MinSize)
 	if err != nil {
 		return err
 	}
@@ -175,7 +176,7 @@ func suggestRun(ctx context.Context, opts *SuggestOptions) error {
 		}
 		fmt.Fprintf(opts.IO.ErrOut, "cluster %d (%d/%d): %q\n", cl.Index, n+1, len(targets), text)
 		taken[normLabel(text)] = true
-		l := topics.Label{Text: text, Anchors: anchors, LabeledBy: by, At: opts.Now().UTC().Format(time.RFC3339)}
+		l := topics.Label{Text: text, Anchors: anchors, LabeledBy: by, At: opts.Now().UTC().Format(time.RFC3339), EmbedModel: c.model}
 		c.labels.Upsert(l, current[i])
 		drafted++
 		r.Label, r.Unlabeled, r.LabeledBy, r.LabeledAt = text, false, by, l.At
@@ -266,10 +267,26 @@ func excerpt(body string) string {
 	return chart.Truncate(strings.Join(strings.Fields(body), " "), excerptChars+1)
 }
 
-// exampleLabels picks a few existing labels to show the style, human ones first.
+// styleExamples is shown to the model when the labels file has nothing to
+// show yet (a fresh file, or one being regenerated from scratch): names in
+// the house style, kept from the first hand-written set.
+var styleExamples = []string{
+	"Paged memory & permissions",
+	"Z3 solver & context discipline",
+	"Native syscall dispatch",
+	"Clippy, fmt & lint workflow",
+	"Register offsets & archinfo",
+	"Snapshots & pbounce",
+}
+
+// exampleLabels picks a few existing labels to show the style, human ones
+// first, falling back to styleExamples when the file has none.
 func (c *corpus) exampleLabels() []string {
 	var human, llm []string
 	for _, l := range c.labels.Labels {
+		if !l.ForModel(c.model) {
+			continue
+		}
 		if strings.HasPrefix(l.LabeledBy, "llm:") {
 			llm = append(llm, l.Text)
 		} else {
@@ -279,6 +296,9 @@ func (c *corpus) exampleLabels() []string {
 	sort.Strings(human)
 	sort.Strings(llm)
 	all := append(human, llm...)
+	if len(all) == 0 {
+		all = append([]string(nil), styleExamples...)
+	}
 	if len(all) > exampleCount {
 		all = all[:exampleCount]
 	}

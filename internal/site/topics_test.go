@@ -36,7 +36,7 @@ func topicsFixture(t *testing.T) (string, Options) {
 	recs = append(recs, &memory.Memory{Key: "avoid-novector", Body: "x", FirstSeen: "2026-06-01T00:00:00Z"})
 	path := writeMemoriesFixture(t, recs)
 	labels := []topics.Label{
-		{Text: "Z3 things", Anchors: []string{"z3-c", "z3-d", "z3-g", "nope-1"}, LabeledBy: "human", At: "2026-10-01T00:00:00Z"},
+		{Text: "Z3 things", Anchors: []string{"z3-c", "z3-d", "z3-g"}, LabeledBy: "human", At: "2026-10-01T00:00:00Z"},
 		{Text: "Orphan label", Anchors: []string{"gone-1", "gone-2", "gone-3"}, LabeledBy: "llm:x"},
 	}
 	return path, Options{TopicK: 3, Labels: labels, Vectors: vecs, Model: "fake"}

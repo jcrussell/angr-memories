@@ -116,3 +116,68 @@ func TestCutTree_TwelvePointsSizes(t *testing.T) {
 		}
 	}
 }
+
+func TestCutMinSize_SixPoints(t *testing.T) {
+	docs := pointDocs(sixPoints, 2)
+	merges := wardLinkage(docs)
+	n := len(docs)
+
+	// Three pairs, minimum 2: identical to the K=3 cut, tree included.
+	root, members := cutMinSize(merges, n, 2, docs)
+	wantRoot, wantMembers := cutTree(merges, n, 3)
+	if diff := cmp.Diff(sortedMembers(wantMembers), sortedMembers(members)); diff != "" {
+		t.Errorf("members (-want +got):\n%s", diff)
+	}
+	if diff := cmp.Diff(wantRoot, root); diff != "" {
+		t.Errorf("tree (-want +got):\n%s", diff)
+	}
+
+	// Minimum 3: the far pair {4,5} is a splinter at the root, the other
+	// four are below 2*3 so they are one leaf; everything ends up in it.
+	root, members = cutMinSize(merges, n, 3, docs)
+	if len(members) != 1 || len(members[0]) != 6 {
+		t.Fatalf("members = %v", members)
+	}
+	if diff := cmp.Diff(&Node{Size: 6, Leaf: 0}, root); diff != "" {
+		t.Errorf("tree (-want +got):\n%s", diff)
+	}
+
+	// Minimum 1 never folds anything: one leaf per point.
+	_, members = cutMinSize(merges, n, 1, docs)
+	if len(members) != n {
+		t.Errorf("minSize=1: %d leaves", len(members))
+	}
+	// Minimum 0 is treated as 1.
+	_, members = cutMinSize(merges, n, 0, docs)
+	if len(members) != n {
+		t.Errorf("minSize=0: %d leaves", len(members))
+	}
+}
+
+// TestCutMinSize_SplinterGoesToNearestLeaf: a splinter is folded into the
+// nearest leaf *under its sibling*, not into just any leaf.
+func TestCutMinSize_SplinterGoesToNearestLeaf(t *testing.T) {
+	// Two tight groups of 3 at x=0 and x=10; a lone point at x=12 that the
+	// linkage attaches last. With minSize 3 the lone point is a splinter at
+	// the root and must land in the x=10 group.
+	pts := [][]float64{{0, 0}, {0, 1}, {0, 2}, {10, 0}, {10, 1}, {10, 2}, {12, 30}}
+	docs := pointDocs(pts, 2)
+	merges := wardLinkage(docs)
+	root, members := cutMinSize(merges, len(docs), 3, docs)
+	if len(members) != 2 {
+		t.Fatalf("members = %v", sortedMembers(members))
+	}
+	for _, m := range members {
+		s := append([]int(nil), m...)
+		sort.Ints(s)
+		if s[0] == 3 && !cmp.Equal(s, []int{3, 4, 5, 6}) {
+			t.Errorf("splinter 6 should join the x=10 group: %v", s)
+		}
+		if s[0] == 0 && !cmp.Equal(s, []int{0, 1, 2}) {
+			t.Errorf("x=0 group changed: %v", s)
+		}
+	}
+	if root.Size != 7 || root.Left == nil || root.Left.Size+root.Right.Size != 7 {
+		t.Errorf("root sizes: %+v", root)
+	}
+}

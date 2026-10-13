@@ -26,24 +26,24 @@ func fakeResult(groups ...[]string) *Result {
 
 func TestAssign_PluralityAndThreshold(t *testing.T) {
 	res := fakeResult(
-		[]string{"a1", "a2", "a3", "a4"},
-		[]string{"b1", "b2", "b3", "b4"},
+		[]string{"a1", "a2", "a3", "a4", "a5", "a6"},
+		[]string{"b1", "b2", "b3", "b4", "b5", "b6"},
 		[]string{"c1", "c2"},
 	)
 	labels := []Label{
-		{Text: "A", Anchors: []string{"a1", "a2", "a3", "b1"}},      // 3 hits on 0, 1 on 1
-		{Text: "weak", Anchors: []string{"b1", "b2", "zzz", "yyy"}}, // 2 hits: below threshold
-		{Text: "C", Anchors: []string{"c1", "c2", "a4"}},            // never reaches 3
-		{Text: "B", Anchors: []string{"b2", "b3", "b4", "b4"}},      // duplicate anchor counts once -> 3
+		{Text: "A", Anchors: []string{"a1", "a2", "a3", "a4", "a5", "b1"}},        // 5 hits on 0, 1 on 1
+		{Text: "weak", Anchors: []string{"b1", "b2", "zzz", "yyy", "xxx", "www"}}, // 2 of 6 hits: below half
+		{Text: "C", Anchors: []string{"c1", "x", "y"}},                            // 3 anchors need 2 hits; gets 1
+		{Text: "B", Anchors: []string{"b2", "b3", "b4", "b5", "b6", "b6"}},        // duplicate anchor counts once -> 5
 	}
-	by, orphaned := Assign(labels, res)
+	by, orphaned := Assign(labels, res, "")
 	if len(by) != 3 {
 		t.Fatalf("len(byCluster) = %d", len(by))
 	}
-	if by[0].Label == nil || by[0].Label.Text != "A" || by[0].Hits != 3 {
+	if by[0].Label == nil || by[0].Label.Text != "A" || by[0].Hits != 5 {
 		t.Errorf("cluster 0: %+v", by[0])
 	}
-	if by[1].Label == nil || by[1].Label.Text != "B" || by[1].Hits != 3 {
+	if by[1].Label == nil || by[1].Label.Text != "B" || by[1].Hits != 5 {
 		t.Errorf("cluster 1: %+v", by[1])
 	}
 	if by[2].Label != nil {
@@ -64,16 +64,16 @@ func TestAssign_PluralityAndThreshold(t *testing.T) {
 
 func TestAssign_GreedyConflict(t *testing.T) {
 	res := fakeResult(
-		[]string{"a1", "a2", "a3", "a4", "a5"},
-		[]string{"b1", "b2", "b3"},
+		[]string{"a1", "a2", "a3", "a4", "a5", "a6", "a7"},
+		[]string{"b1", "b2", "b3", "b4", "b5"},
 	)
 	labels := []Label{
-		{Text: "three", Anchors: []string{"a1", "a2", "a3"}},
-		{Text: "four", Anchors: []string{"a1", "a2", "a3", "a4"}},
+		{Text: "five", Anchors: []string{"a1", "a2", "a3", "a4", "a5"}},
+		{Text: "six", Anchors: []string{"a1", "a2", "a3", "a4", "a5", "a6"}},
 	}
-	by, orphaned := Assign(labels, res)
-	if by[0].Label == nil || by[0].Label.Text != "four" || by[0].Hits != 4 {
-		t.Errorf("cluster 0: %+v, want 'four' with 4 hits", by[0])
+	by, orphaned := Assign(labels, res, "")
+	if by[0].Label == nil || by[0].Label.Text != "six" || by[0].Hits != 6 {
+		t.Errorf("cluster 0: %+v, want 'six' with 6 hits", by[0])
 	}
 	if by[1].Label != nil {
 		t.Errorf("cluster 1 should be unlabeled")
@@ -84,10 +84,10 @@ func TestAssign_GreedyConflict(t *testing.T) {
 
 	// Equal hits: higher fraction wins; equal fraction: earlier label wins.
 	labels = []Label{
-		{Text: "diluted", Anchors: []string{"a1", "a2", "a3", "x", "y"}},
-		{Text: "tight", Anchors: []string{"a1", "a2", "a3"}},
+		{Text: "diluted", Anchors: []string{"a1", "a2", "a3", "a4", "a5", "x", "y"}},
+		{Text: "tight", Anchors: []string{"a1", "a2", "a3", "a4", "a5"}},
 	}
-	by, orphaned = Assign(labels, res)
+	by, orphaned = Assign(labels, res, "")
 	if by[0].Label == nil || by[0].Label.Text != "tight" {
 		t.Errorf("cluster 0: %+v, want 'tight'", by[0])
 	}
@@ -96,10 +96,10 @@ func TestAssign_GreedyConflict(t *testing.T) {
 	}
 
 	labels = []Label{
-		{Text: "first", Anchors: []string{"a1", "a2", "a3"}},
-		{Text: "second", Anchors: []string{"a3", "a4", "a5"}},
+		{Text: "first", Anchors: []string{"a1", "a2", "a3", "a4", "a5"}},
+		{Text: "second", Anchors: []string{"a3", "a4", "a5", "a6", "a7"}},
 	}
-	by, orphaned = Assign(labels, res)
+	by, orphaned = Assign(labels, res, "")
 	if by[0].Label == nil || by[0].Label.Text != "first" {
 		t.Errorf("cluster 0: %+v, want 'first'", by[0])
 	}
@@ -109,23 +109,44 @@ func TestAssign_GreedyConflict(t *testing.T) {
 
 	// One label matching two clusters attaches to the one with more hits.
 	res = fakeResult(
-		[]string{"a1", "a2", "a3"},
-		[]string{"a4", "a5", "a6", "a7"},
+		[]string{"a1", "a2", "a3", "a4", "a5"},
+		[]string{"a6", "a7", "a8", "a9", "a10", "a11"},
 	)
-	labels = []Label{{Text: "spread", Anchors: []string{"a1", "a2", "a3", "a4", "a5", "a6", "a7"}}}
-	by, orphaned = Assign(labels, res)
-	if by[0].Label != nil || by[1].Label == nil || by[1].Hits != 4 || len(orphaned) != 0 {
+	labels = []Label{{Text: "spread", Anchors: []string{"a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10", "a11"}}}
+	by, orphaned = Assign(labels, res, "")
+	if by[0].Label != nil || by[1].Label == nil || by[1].Hits != 6 || len(orphaned) != 0 {
 		t.Errorf("spread: by=%+v orphaned=%+v", by, orphaned)
+	}
+}
+
+func TestAssign_EmbedModel(t *testing.T) {
+	res := fakeResult([]string{"a", "b", "c"})
+	anchors := []string{"a", "b", "c"}
+	// Every anchor hits, but the label was written against another model's
+	// tree: it must not attach, however good the overlap looks.
+	by, orphaned := Assign([]Label{{Text: "stale", Anchors: anchors, EmbedModel: "tfidf-prototype"}}, res, "nomic-embed-text")
+	if by[0].Label != nil || len(orphaned) != 1 || orphaned[0].Text != "stale" {
+		t.Errorf("foreign model: by=%+v orphaned=%+v", by, orphaned)
+	}
+	// Same model attaches; a legacy label with no model recorded attaches too.
+	for _, m := range []string{"nomic-embed-text", ""} {
+		by, orphaned = Assign([]Label{{Text: "ok", Anchors: anchors, EmbedModel: m}}, res, "nomic-embed-text")
+		if by[0].Label == nil || len(orphaned) != 0 {
+			t.Errorf("model %q: by=%+v orphaned=%+v", m, by, orphaned)
+		}
+	}
+	if !(Label{}).ForModel("x") || !(Label{EmbedModel: "x"}).ForModel("x") || (Label{EmbedModel: "y"}).ForModel("x") {
+		t.Errorf("ForModel")
 	}
 }
 
 func TestAssign_Empty(t *testing.T) {
 	res := fakeResult([]string{"a1"}, []string{"b1"})
-	by, orphaned := Assign(nil, res)
+	by, orphaned := Assign(nil, res, "")
 	if len(by) != 2 || by[0].Label != nil || by[1].Label != nil || len(orphaned) != 0 {
 		t.Errorf("by=%+v orphaned=%+v", by, orphaned)
 	}
-	by, orphaned = Assign([]Label{{Text: "none"}}, res)
+	by, orphaned = Assign([]Label{{Text: "none"}}, res, "")
 	if len(by) != 2 || len(orphaned) != 1 {
 		t.Errorf("by=%+v orphaned=%+v", by, orphaned)
 	}
@@ -299,13 +320,13 @@ func TestAssign_TieBreakPrefersHumanThenNewer(t *testing.T) {
 	anchors := []string{"a", "b", "c"}
 	llm := Label{Text: "Alpha draft", Anchors: anchors, LabeledBy: "llm:x", At: "2026-10-12T00:00:00Z"}
 	human := Label{Text: "Zulu by hand", Anchors: anchors, LabeledBy: "human", At: "2026-10-01T00:00:00Z"}
-	by, orphaned := Assign([]Label{llm, human}, res)
+	by, orphaned := Assign([]Label{llm, human}, res, "")
 	if by[0].Label == nil || by[0].Label.Text != "Zulu by hand" || len(orphaned) != 1 {
 		t.Errorf("human label should win the tie regardless of order/spelling: %+v orphaned=%v", by[0], orphaned)
 	}
 	older := Label{Text: "Older", Anchors: anchors, LabeledBy: "human", At: "2026-09-01T00:00:00Z"}
 	newer := Label{Text: "Newer", Anchors: anchors, LabeledBy: "human", At: "2026-10-01T00:00:00Z"}
-	by, _ = Assign([]Label{older, newer}, res)
+	by, _ = Assign([]Label{older, newer}, res, "")
 	if by[0].Label.Text != "Newer" {
 		t.Errorf("newer human label should win: %+v", by[0])
 	}
@@ -315,7 +336,7 @@ func TestAssign_ResultsSurviveLaterFileEdits(t *testing.T) {
 	docs := []Doc{{Key: "a"}, {Key: "b"}, {Key: "c"}}
 	res := &Result{Docs: docs, Clusters: []Cluster{{Index: 1, Members: []int{0, 1, 2}}}}
 	f := &LabelsFile{SchemaVersion: 1, Labels: []Label{{Text: "first", Anchors: []string{"a", "b", "c"}}}}
-	by, _ := Assign(f.Labels, res)
+	by, _ := Assign(f.Labels, res, "")
 	f.Upsert(Label{Text: "second", Anchors: []string{"a", "b", "c"}}, "first")
 	if by[0].Label.Text != "first" {
 		t.Errorf("assignment must not change under a later Upsert, got %q", by[0].Label.Text)
@@ -325,8 +346,8 @@ func TestAssign_ResultsSurviveLaterFileEdits(t *testing.T) {
 func TestAssign_ThresholdScalesWithTinyLabels(t *testing.T) {
 	docs := []Doc{{Key: "a"}, {Key: "b"}, {Key: "c"}}
 	res := &Result{Docs: docs, Clusters: []Cluster{{Index: 1, Members: []int{0}}, {Index: 2, Members: []int{1, 2}}}}
-	by, orphaned := Assign([]Label{{Text: "single", Anchors: []string{"a"}}, {Text: "pair", Anchors: []string{"b", "c"}}}, res)
+	by, orphaned := Assign([]Label{{Text: "single", Anchors: []string{"a"}}, {Text: "pair", Anchors: []string{"b", "c"}}}, res, "")
 	if by[0].Label == nil || by[0].Label.Text != "single" || by[1].Label == nil || by[1].Label.Text != "pair" || len(orphaned) != 0 {
-		t.Errorf("labels with fewer than %d anchors must attach when all of them hit: %+v orphaned=%v", MinAnchorHits, by, orphaned)
+		t.Errorf("labels with one or two anchors must attach when all of them hit: %+v orphaned=%v", by, orphaned)
 	}
 }

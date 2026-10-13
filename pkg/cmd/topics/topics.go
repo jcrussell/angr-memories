@@ -25,6 +25,7 @@ type Options struct {
 	EmbeddingsPath string
 	LabelsPath     string
 	K              int
+	MinSize        int
 	Unlabeled      bool
 	JSON           string // comma-separated field list; empty = table
 }
@@ -34,20 +35,26 @@ func NewCmdTopics(f *cmdutil.Factory, runF func(context.Context, *Options) error
 	cmd := &cobra.Command{
 		Use:   "topics",
 		Short: "List the topic clusters and their labels",
-		Long: `Cluster the corpus exactly as the site build does (from the committed
+		Long: fmt.Sprintf(`Cluster the corpus exactly as the site build does (from the committed
 embeddings.jsonl) and print one line per cluster: its index (the /topics/<n>/
 page number), label, size, kept share, key-prefix mix and the keys nearest
 its centre. Clusters without a label show "(unlabeled)".
+
+How many clusters there are is decided by the data: the tree is split for
+as long as both halves hold at least --min-topic-size memories (default
+%d), so the count grows with the corpus. --topics N forces a fixed count
+instead. Either way the same flags must be given to the site build.
 
 Labels are data in topic-labels.jsonl, written by a person ("topics label")
 or drafted by a local chat model ("topics suggest"). Each label is anchored
 to the memories that were in its cluster when it was written, so it follows
 them when the tree is recomputed after a sync; a label whose memories no
-longer form a cluster is reported as orphaned.
+longer form a cluster, or that was written against a different embedding
+model, is reported as orphaned.
 
 --json takes an explicit field list (for example --json index,label,members)
 and prints a JSON array, which is how an agent can label clusters without
-reading the site.`,
+reading the site.`, topics.DefaultMinSize),
 		Example: `  # what still needs a name
   angr-memories topics --unlabeled
 
@@ -65,7 +72,7 @@ reading the site.`,
 			return topicsRun(c.Context(), opts)
 		},
 	}
-	addCorpusFlags(cmd, &opts.MemoriesPath, &opts.EmbeddingsPath, &opts.LabelsPath, &opts.K)
+	addCorpusFlags(cmd, &opts.MemoriesPath, &opts.EmbeddingsPath, &opts.LabelsPath, &opts.K, &opts.MinSize)
 	cmd.Flags().BoolVar(&opts.Unlabeled, "unlabeled", false, "only clusters without a label")
 	cmd.Flags().StringVar(&opts.JSON, "json", "", "print a JSON array with these comma-separated fields: "+strings.Join(jsonFields, ","))
 	cmd.AddCommand(NewCmdLabel(f, nil))
@@ -73,26 +80,33 @@ reading the site.`,
 	return cmd
 }
 
-func addCorpusFlags(cmd *cobra.Command, mem, emb, labels *string, k *int) {
+func addCorpusFlags(cmd *cobra.Command, mem, emb, labels *string, k, minSize *int) {
 	cmd.Flags().StringVar(mem, "memories", "memories.jsonl", "path to memories.jsonl")
 	cmd.Flags().StringVar(emb, "embeddings", "embeddings.jsonl", "path to the committed embedding vectors")
 	cmd.Flags().StringVar(labels, "topic-labels", "topic-labels.jsonl", "path to the topic labels file")
-	cmd.Flags().IntVar(k, "topics", topics.DefaultK, "number of clusters (must match the site build; 0 = default)")
+	cmd.Flags().IntVar(k, "topics", 0, "fixed number of clusters (0 = as many as --min-topic-size allows; must match the site build)")
+	cmd.Flags().IntVar(minSize, "min-topic-size", 0, fmt.Sprintf("smallest cluster the automatic cut may produce (0 = default %d; not with --topics; must match the site build)", topics.DefaultMinSize))
 }
 
-func validateCorpusFlags(mem, emb, labels string, k int) error {
+func validateCorpusFlags(mem, emb, labels string, k, minSize int) error {
 	if mem == "" || emb == "" || labels == "" {
 		return cmdutil.FlagErrorf("--memories, --embeddings and --topic-labels must not be empty")
 	}
 	if k < 0 {
-		return cmdutil.FlagErrorf("--topics must be >= 0 (0 = default %d), got %d", topics.DefaultK, k)
+		return cmdutil.FlagErrorf("--topics must be >= 0 (0 = automatic), got %d", k)
+	}
+	if minSize < 0 {
+		return cmdutil.FlagErrorf("--min-topic-size must be >= 0 (0 = default %d), got %d", topics.DefaultMinSize, minSize)
+	}
+	if k > 0 && minSize > 0 {
+		return cmdutil.FlagErrorf("--topics and --min-topic-size are different ways to decide how many clusters there are; give one")
 	}
 	return nil
 }
 
 // Validate checks flag values before any IO.
 func (o *Options) Validate() error {
-	if err := validateCorpusFlags(o.MemoriesPath, o.EmbeddingsPath, o.LabelsPath, o.K); err != nil {
+	if err := validateCorpusFlags(o.MemoriesPath, o.EmbeddingsPath, o.LabelsPath, o.K, o.MinSize); err != nil {
 		return err
 	}
 	_, err := parseJSONFields(o.JSON)
@@ -122,7 +136,7 @@ func topicsRun(_ context.Context, opts *Options) error {
 	if err := opts.Validate(); err != nil {
 		return err
 	}
-	c, err := load(opts.IO, opts.MemoriesPath, opts.EmbeddingsPath, opts.LabelsPath, opts.K)
+	c, err := load(opts.IO, opts.MemoriesPath, opts.EmbeddingsPath, opts.LabelsPath, opts.K, opts.MinSize)
 	if err != nil {
 		return err
 	}

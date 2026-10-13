@@ -55,7 +55,7 @@ angr-memories sync     --source ~/repos/angr --memories memories.jsonl  # pull t
 angr-memories search   <query> [--prefix] [--all] [--fuzzy] [--no-cache] [--limit 20]  # ranked search over memories.jsonl
 
 angr-memories embed    [--model nomic-embed-text] [--dry-run]      # refresh embeddings.jsonl via local Ollama
-angr-memories topics   [--unlabeled] [--json index,label,members]  # list the topic clusters and their labels
+angr-memories topics   [--unlabeled] [--json index,label,members] [--min-topic-size 15 | --topics N]  # list the topic clusters and their labels
 angr-memories topics label <index> "<text>"                        # name one cluster (writes topic-labels.jsonl)
 angr-memories topics suggest [--only N] [--relabel] [--dry-run]    # let a local chat model draft labels
 
@@ -130,8 +130,16 @@ clustered by meaning. Three committed files feed it:
   (`angr-memories topics label`) or drafted by a local chat model
   (`angr-memories topics suggest`, then review). Each label is anchored to
   the memories it described, so it follows them when the tree is
-  recomputed; clusters nobody has named yet show their nearest-centre keys
-  and are listed by `angr-memories topics --unlabeled`.
+  recomputed after a sync, and records the embedding model it was written
+  against, so it is set aside rather than misapplied if the vectors are
+  ever regenerated with a different model. Clusters nobody has named yet
+  show their nearest-centre keys and are listed by `angr-memories topics
+  --unlabeled`.
+
+How many topics there are is not a fixed number: the tree is split for as
+long as both halves hold at least 15 memories (`--min-topic-size`), so the
+count follows the corpus. `--topics N` forces an exact count instead. The
+`site` and `topics` commands take the same two flags and must agree.
 
 The build itself is offline and pure Go: CI never talks to a model.
 

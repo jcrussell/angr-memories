@@ -8,7 +8,7 @@
 <p class="breadcrumb"><a href="{{url .Path "/"}}">Home</a> / <span>Topics</span></p>
 <h1>Topics</h1>
 {{with .Site.Topics}}
-<p class="lede">{{.Docs}} memories (remembered and forgotten) clustered by meaning: each memory's key and body is embedded with <code>{{.Model}}</code>, the vectors are joined by Ward linkage, and the tree is cut at {{.K}} clusters. Labels are written by a person or a local language model and stay attached to the memories they describe when the tree is recomputed.{{if .Unlabeled}} {{.Unlabeled}} of {{.K}} clusters are unlabeled and show their nearest-centre keys instead.{{end}} Hover a row for its make-up; click it for every member.</p>
+<p class="lede">{{.Docs}} memories (remembered and forgotten) clustered by meaning: each memory's key and body is embedded with <code>{{.Model}}</code>, the vectors are joined by Ward linkage, and the tree is {{if .MinSize}}split for as long as both halves hold at least {{.MinSize}} memories, which gives {{.K}} clusters{{else}}cut at {{.K}} clusters{{end}}. Labels are written by a person or a local language model and stay attached to the memories they describe when the tree is recomputed.{{if .Unlabeled}} {{.Unlabeled}} of {{.K}} clusters are unlabeled and show their nearest-centre keys instead.{{end}} Hover a row for its make-up; click it for every member.</p>
 
 <p class="legend"><span class="legend-swatch remembered"></span>Remembered <span class="legend-swatch forgotten"></span>Forgotten</p>
 <div class="dendro-scroll">{{.Dendrogram}}</div>

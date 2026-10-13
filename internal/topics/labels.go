@@ -15,17 +15,28 @@ import (
 
 // Label is a human- or LLM-written name for a topic, anchored to the member
 // keys that were in the cluster when it was labeled. Anchors, not cluster
-// indices, let a label follow its topic across re-clusterings.
+// indices, let a label follow its topic across the small re-clusterings a
+// sync causes. EmbedModel records which embedding model produced the tree
+// the label was written against: anchors mean nothing under a different
+// model's geometry, so Assign treats such labels as orphaned rather than
+// letting a chance overlap of a few keys carry an old name onto a new
+// cluster (which is how the first set of labels, written for a TF-IDF
+// prototype, ended up naming clusters they did not describe).
 type Label struct {
-	Text      string   `json:"label"`
-	Anchors   []string `json:"anchors"`
-	LabeledBy string   `json:"labeled_by"` // "human" or "llm:<model>"
-	At        string   `json:"at"`         // RFC3339
+	Text       string   `json:"label"`
+	Anchors    []string `json:"anchors"`
+	LabeledBy  string   `json:"labeled_by"`            // "human" or "llm:<model>"
+	At         string   `json:"at"`                    // RFC3339
+	EmbedModel string   `json:"embed_model,omitempty"` // embeddings.jsonl header model; "" = unknown (legacy)
 }
 
-// MinAnchorHits is the minimum number of a label's anchors that must be
-// members of a cluster for the label to attach to it.
-const MinAnchorHits = 3
+// MinHits is the number of a label's anchors that must be members of a
+// cluster for the label to attach to it: at least half of them, rounded up
+// (5 of the usual 10; 3 of 6 for a cluster with few remembered members).
+// Half keeps the label on the bulk of what it described, where a flat 3 let
+// it follow a minority of its old members into a cluster about something
+// else, and a flat 5 would demand nearly all of a short anchor list.
+func MinHits(nAnchors int) int { return max(1, (nAnchors+1)/2) }
 
 // Assignment is a cluster's attached label (nil when unlabeled) and how many
 // of its anchors the cluster contains.
@@ -35,13 +46,14 @@ type Assignment struct {
 }
 
 // Assign attaches labels to clusters. For every (label, cluster) pair it
-// counts anchors ∩ member keys and keeps pairs with hits >= MinAnchorHits;
+// counts anchors ∩ member keys and keeps pairs with hits >= MinHits(anchors);
 // pairs are sorted by hits desc, then hits/len(anchors) desc, then label
 // order, then cluster index, and taken greedily while both the label and
-// the cluster are still free. It returns one Assignment per cluster (nil
-// Label when unlabeled) and the labels that attached nowhere, in input
-// order.
-func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Label) {
+// the cluster are still free. A label whose EmbedModel is set and differs
+// from embedModel (the current embeddings file's model) never attaches. It
+// returns one Assignment per cluster (nil Label when unlabeled) and the
+// labels that attached nowhere, in input order.
+func Assign(labels []Label, res *Result, embedModel string) (byCluster []Assignment, orphaned []Label) {
 	byCluster = make([]Assignment, len(res.Clusters))
 
 	memberKeys := make([]map[string]bool, len(res.Clusters))
@@ -60,6 +72,9 @@ func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Lab
 	}
 	var pairs []pair
 	for li, l := range labels {
+		if !l.ForModel(embedModel) {
+			continue
+		}
 		anchors := uniqueStrings(l.Anchors)
 		if len(anchors) == 0 {
 			continue
@@ -71,7 +86,7 @@ func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Lab
 					hits++
 				}
 			}
-			if hits >= min(MinAnchorHits, len(anchors)) {
+			if hits >= MinHits(len(anchors)) {
 				pairs = append(pairs, pair{li, ci, hits, float64(hits) / float64(len(anchors))})
 			}
 		}
@@ -116,6 +131,12 @@ func Assign(labels []Label, res *Result) (byCluster []Assignment, orphaned []Lab
 		}
 	}
 	return byCluster, orphaned
+}
+
+// ForModel reports whether l's anchors are meaningful under embedModel: its
+// EmbedModel is unset (written before models were recorded) or equal.
+func (l Label) ForModel(embedModel string) bool {
+	return l.EmbedModel == "" || l.EmbedModel == embedModel
 }
 
 // maxAnchors caps the anchors recorded when a cluster is labeled.

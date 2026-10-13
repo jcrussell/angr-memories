@@ -15,7 +15,8 @@ import (
 // Topics is the /topics/ section: the corpus clustered by embedding
 // similarity, one Topic per cluster, plus the pre-rendered dendrogram.
 type Topics struct {
-	K          int
+	K          int // number of clusters
+	MinSize    int // minimum topic size the automatic cut honoured; 0 when K was fixed by flag
 	Docs       int
 	Model      string
 	Clusters   []*Topic // dendrogram leaf order; Index = position+1
@@ -72,20 +73,16 @@ func (t *Topic) LabelCommand() string {
 // clustering failure is a real error and fails the build.
 func buildTopics(records []*memory.Memory, keyPage map[string]string, opts Options) (*Topics, error) {
 	docs := topics.DocsFrom(records, opts.Vectors)
-	k := opts.TopicK
-	if k <= 0 {
-		k = topics.DefaultK
-	}
-	res, err := topics.Run(docs, topics.Options{K: k})
+	res, err := topics.Run(docs, topics.Options{K: opts.TopicK, MinSize: opts.TopicMinSize})
 	if errors.Is(err, topics.ErrTooSmall) {
 		return nil, nil
 	}
 	if err != nil {
 		return nil, fmt.Errorf("clustering topics: %w", err)
 	}
-	assigned, orphaned := topics.Assign(opts.Labels, res)
+	assigned, orphaned := topics.Assign(opts.Labels, res, opts.Model)
 
-	t := &Topics{K: len(res.Clusters), Docs: len(docs), Model: opts.Model, root: res.Root}
+	t := &Topics{K: len(res.Clusters), MinSize: res.MinSize, Docs: len(docs), Model: opts.Model, root: res.Root}
 	for i, c := range res.Clusters {
 		tp := &Topic{
 			Index:      c.Index,

@@ -11,10 +11,11 @@ import (
 // Options tunes the optional topics section. Zero-value Options (Walk's
 // default) produces a site without topics.
 type Options struct {
-	TopicK  int                  // clusters to cut the tree at; 0 = topics.DefaultK
-	Labels  []topics.Label       // human/LLM labels, anchored to member keys
-	Vectors map[string][]float32 // key -> unit embedding; keys without one are left out of clustering
-	Model   string               // embedding model name, shown on the topics page
+	TopicK       int                  // fixed cluster count; 0 = cut by TopicMinSize
+	TopicMinSize int                  // smallest topic the automatic cut may produce; 0 = topics.DefaultMinSize
+	Labels       []topics.Label       // human/LLM labels, anchored to member keys
+	Vectors      map[string][]float32 // key -> unit embedding; keys without one are left out of clustering
+	Model        string               // embedding model name, shown on the topics page
 }
 
 // defaultChunkCap uses memory.AlphaSplit (the same alpha-split algorithm as

@@ -1,8 +1,9 @@
 // Package topics clusters memory embedding vectors into topics.
 //
 // It runs Ward-linkage hierarchical clustering (an NN-chain over centroids,
-// so no n² distance matrix is ever materialised), cuts the dendrogram to K
-// clusters, summarises each cluster (members, exemplars nearest the
+// so no n² distance matrix is ever materialised), cuts the dendrogram either
+// to a fixed K or, by default, as finely as a minimum topic size allows (see
+// Options), summarises each cluster (members, exemplars nearest the
 // centroid, key-prefix counts, remembered/forgotten tallies) and offers a
 // key-anchored labelling mechanism so human- or LLM-written labels survive
 // re-clustering: a label is attached to whichever cluster still contains
@@ -28,16 +29,29 @@ type Doc struct {
 	Vec        []float32
 }
 
-// Options tunes Run. K<=0 selects DefaultK.
+// Options tunes Run. K > 0 cuts the tree to exactly K clusters. K <= 0
+// (the default) lets the data decide: the tree is split top-down for as
+// long as both halves hold at least MinSize members, so K is whatever
+// number of topics of that size the corpus supports and tracks the corpus
+// as it grows. MinSize <= 0 selects DefaultMinSize.
 type Options struct {
-	K int
+	K       int
+	MinSize int
 }
 
-// DefaultK is the number of clusters Run cuts to when Options.K <= 0.
-const DefaultK = 48
+// DefaultMinSize is the smallest topic the automatic cut will produce. A
+// corpus with fewer than twice this many docs is one topic.
+//
+// The value is a readability choice, not a statistic: on this corpus every
+// standard "choose K" criterion (silhouette, Calinski-Harabasz,
+// Davies-Bouldin, BIC, gap statistic, subsample stability, knee of the
+// dispersion curve) is monotone or range-dependent because the Ward tree
+// is self-similar, so the only thing that can fix K is the size a reader
+// wants a topic to have.
+const DefaultMinSize = 15
 
-// DefaultOptions returns the default Options.
-func DefaultOptions() Options { return Options{K: DefaultK} }
+// DefaultOptions returns the default Options: automatic K at DefaultMinSize.
+func DefaultOptions() Options { return Options{} }
 
 // Merge is one scipy-style linkage row. Leaves have ids 0..n-1; merge i has
 // id n+i. A < B always.
@@ -90,6 +104,7 @@ type Result struct {
 	Merges   []Merge   // n-1 rows, sorted by height like scipy
 	Clusters []Cluster // leaf order; Clusters[i].Index == i+1
 	Root     *Node     // truncated dendrogram
+	MinSize  int       // the minimum topic size the cut honoured; 0 when K was fixed
 }
 
 // ErrTooSmall is returned by Run when there is nothing to cluster.
@@ -101,8 +116,9 @@ const maxExemplars = 6
 // maxPrefixes is the number of prefix counts recorded per cluster.
 const maxPrefixes = 4
 
-// Run clusters docs into K topics. It returns ErrTooSmall when there are
-// fewer than two docs or the vectors are empty. K is clamped to len(docs).
+// Run clusters docs into topics (see Options for how many). It returns
+// ErrTooSmall when there are fewer than two docs or the vectors are empty.
+// A fixed K is clamped to len(docs).
 func Run(docs []Doc, opts Options) (*Result, error) {
 	n := len(docs)
 	if n < 2 {
@@ -117,22 +133,27 @@ func Run(docs []Doc, opts Options) (*Result, error) {
 			return nil, fmt.Errorf("topics: doc %d (%q) has %d dims, want %d", i, d.Key, len(d.Vec), dims)
 		}
 	}
-	k := opts.K
-	if k <= 0 {
-		k = DefaultK
-	}
-	if k > n {
-		k = n
-	}
-
 	merges := wardLinkage(docs)
-	root, members := cutTree(merges, n, k)
+	var (
+		root    *Node
+		members [][]int
+		minSize int
+	)
+	if opts.K > 0 {
+		root, members = cutTree(merges, n, min(opts.K, n))
+	} else {
+		minSize = opts.MinSize
+		if minSize <= 0 {
+			minSize = DefaultMinSize
+		}
+		root, members = cutMinSize(merges, n, minSize, docs)
+	}
 
 	clusters := make([]Cluster, len(members))
 	for i, mem := range members {
 		clusters[i] = summarize(i+1, mem, docs)
 	}
-	return &Result{Docs: docs, Merges: merges, Clusters: clusters, Root: root}, nil
+	return &Result{Docs: docs, Merges: merges, Clusters: clusters, Root: root, MinSize: minSize}, nil
 }
 
 // summarize builds the Cluster summary for one leaf's members.

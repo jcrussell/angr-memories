@@ -193,13 +193,16 @@ func TestRun_TooSmall(t *testing.T) {
 
 func TestRun_KClamped(t *testing.T) {
 	docs, _ := plantedDocs()
-	for _, k := range []int{0, -1, 100, len(docs)} {
+	for _, k := range []int{100, len(docs)} {
 		res, err := Run(docs, Options{K: k})
 		if err != nil {
 			t.Fatalf("K=%d: %v", k, err)
 		}
 		if len(res.Clusters) != len(docs) {
 			t.Errorf("K=%d: got %d clusters, want %d", k, len(res.Clusters), len(docs))
+		}
+		if res.MinSize != 0 {
+			t.Errorf("K=%d: MinSize = %d, want 0 for a fixed cut", k, res.MinSize)
 		}
 		for _, c := range res.Clusters {
 			if len(c.Members) != 1 || len(c.Exemplars) != 1 {
@@ -214,9 +217,145 @@ func TestRun_KClamped(t *testing.T) {
 	if len(res.Clusters) != 1 || len(res.Clusters[0].Members) != 2 {
 		t.Errorf("2 docs K=1: %+v", res.Clusters)
 	}
-	if DefaultOptions().K != DefaultK {
-		t.Errorf("DefaultOptions().K = %d", DefaultOptions().K)
+	if d := DefaultOptions(); d.K != 0 || d.MinSize != 0 {
+		t.Errorf("DefaultOptions() = %+v, want the automatic cut", d)
 	}
+	// K <= 0 is the automatic cut; 15 docs cannot hold two topics of
+	// DefaultMinSize, so they are one.
+	for _, k := range []int{0, -1} {
+		res, err := Run(docs, Options{K: k})
+		if err != nil {
+			t.Fatalf("K=%d: %v", k, err)
+		}
+		if len(res.Clusters) != 1 || len(res.Clusters[0].Members) != len(docs) || res.MinSize != DefaultMinSize {
+			t.Errorf("K=%d: %d clusters, MinSize %d", k, len(res.Clusters), res.MinSize)
+		}
+	}
+}
+
+// TestRun_MinSize exercises the automatic cut on the planted groups (5, 7
+// and 3 docs).
+func TestRun_MinSize(t *testing.T) {
+	docs, groups := plantedDocs()
+	groupOf := map[string]int{}
+	for g, keys := range groups {
+		for _, k := range keys {
+			groupOf[k] = g
+		}
+	}
+	check := func(t *testing.T, res *Result) {
+		seen := map[string]int{}
+		for _, c := range res.Clusters {
+			for _, di := range c.Members {
+				seen[docs[di].Key]++
+			}
+		}
+		if len(seen) != len(docs) {
+			t.Errorf("%d of %d docs placed", len(seen), len(docs))
+		}
+		for k, n := range seen {
+			if n != 1 {
+				t.Errorf("%s placed %d times", k, n)
+			}
+		}
+		// Leaf order and sizes in the truncated tree agree with Clusters.
+		next := 0
+		var walk func(nd *Node) int
+		walk = func(nd *Node) int {
+			if nd.Left == nil && nd.Right == nil {
+				if nd.Leaf != next {
+					t.Errorf("leaf order: got %d, want %d", nd.Leaf, next)
+				}
+				next++
+				if nd.Size != len(res.Clusters[nd.Leaf].Members) || nd.Height != 0 {
+					t.Errorf("leaf %d: size %d height %g, cluster has %d", nd.Leaf, nd.Size, nd.Height, len(res.Clusters[nd.Leaf].Members))
+				}
+				return nd.Size
+			}
+			sz := walk(nd.Left) + walk(nd.Right)
+			if nd.Size != sz {
+				t.Errorf("internal node size %d, children sum %d", nd.Size, sz)
+			}
+			return sz
+		}
+		if walk(res.Root) != len(docs) || next != len(res.Clusters) {
+			t.Errorf("tree covers %d leaves, want %d", next, len(res.Clusters))
+		}
+	}
+
+	t.Run("MinSize=3 keeps the planted groups apart", func(t *testing.T) {
+		res, err := Run(docs, Options{MinSize: 3})
+		if err != nil {
+			t.Fatal(err)
+		}
+		check(t, res)
+		if res.MinSize != 3 || len(res.Clusters) < 3 {
+			t.Errorf("got %d clusters, MinSize %d", len(res.Clusters), res.MinSize)
+		}
+		for _, c := range res.Clusters {
+			if len(c.Members) < 3 {
+				t.Errorf("cluster %d has %d members, below the minimum", c.Index, len(c.Members))
+			}
+			g := groupOf[docs[c.Members[0]].Key]
+			for _, di := range c.Members {
+				if groupOf[docs[di].Key] != g {
+					t.Errorf("cluster %d mixes planted groups: %v", c.Index, keysOf(docs, c.Members))
+				}
+			}
+		}
+	})
+
+	t.Run("MinSize=4 folds the 3-doc group into a neighbour", func(t *testing.T) {
+		res, err := Run(docs, Options{MinSize: 4})
+		if err != nil {
+			t.Fatal(err)
+		}
+		check(t, res)
+		if len(res.Clusters) != 2 {
+			t.Fatalf("got %d clusters, want 2: %+v", len(res.Clusters), res.Clusters)
+		}
+		// The omega docs are a splinter: too small to stand alone, kept
+		// together, and placed in exactly one of the two clusters.
+		home := -1
+		for ci, c := range res.Clusters {
+			if len(c.Members) < 4 {
+				t.Errorf("cluster %d has %d members", c.Index, len(c.Members))
+			}
+			for _, di := range c.Members {
+				if groupOf[docs[di].Key] == 2 {
+					if home >= 0 && home != ci {
+						t.Errorf("omega docs split across clusters")
+					}
+					home = ci
+				}
+			}
+		}
+		if home < 0 {
+			t.Errorf("omega docs missing")
+		}
+	})
+
+	t.Run("MinSize too large for two topics gives one", func(t *testing.T) {
+		res, err := Run(docs, Options{MinSize: 8})
+		if err != nil {
+			t.Fatal(err)
+		}
+		check(t, res)
+		if len(res.Clusters) != 1 || res.Root.Left != nil || res.Root.Size != len(docs) {
+			t.Errorf("clusters %d root %+v", len(res.Clusters), res.Root)
+		}
+	})
+
+	t.Run("MinSize=1 is every doc alone", func(t *testing.T) {
+		res, err := Run(docs, Options{MinSize: 1})
+		if err != nil {
+			t.Fatal(err)
+		}
+		check(t, res)
+		if len(res.Clusters) != len(docs) {
+			t.Errorf("got %d clusters", len(res.Clusters))
+		}
+	})
 }
 
 func TestRun_Deterministic(t *testing.T) {

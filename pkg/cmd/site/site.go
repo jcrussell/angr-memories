@@ -27,6 +27,7 @@ type Options struct {
 	BaseURL        string
 	RepoURL        string
 	TopicK         int
+	TopicMinSize   int
 	AllowStale     bool
 }
 
@@ -66,7 +67,8 @@ out-of-date keys out of the clustering.`,
 	cmd.Flags().StringVar(&opts.OutDir, "out", "_site", "output directory")
 	cmd.Flags().StringVar(&opts.BaseURL, "base-url", "", "URL prefix for absolute links")
 	cmd.Flags().StringVar(&opts.RepoURL, "repo-url", "https://github.com/jcrussell/angr-memories", "repo URL for the header link")
-	cmd.Flags().IntVar(&opts.TopicK, "topics", topics.DefaultK, "number of topic clusters to cut the tree at (0 = default)")
+	cmd.Flags().IntVar(&opts.TopicK, "topics", 0, "fixed number of topic clusters (0 = as many as --min-topic-size allows)")
+	cmd.Flags().IntVar(&opts.TopicMinSize, "min-topic-size", 0, fmt.Sprintf("smallest topic the automatic cut may produce (0 = default %d; not with --topics)", topics.DefaultMinSize))
 	cmd.Flags().BoolVar(&opts.AllowStale, "allow-stale-embeddings", false, "build even if embeddings.jsonl lags memories.jsonl (stale keys are left out of topics)")
 	return cmd
 }
@@ -77,7 +79,13 @@ func (o *Options) Validate() error {
 		return cmdutil.FlagErrorf("--memories and --out must not be empty")
 	}
 	if o.TopicK < 0 {
-		return cmdutil.FlagErrorf("--topics must be >= 0 (0 = default %d), got %d", topics.DefaultK, o.TopicK)
+		return cmdutil.FlagErrorf("--topics must be >= 0 (0 = automatic), got %d", o.TopicK)
+	}
+	if o.TopicMinSize < 0 {
+		return cmdutil.FlagErrorf("--min-topic-size must be >= 0 (0 = default %d), got %d", topics.DefaultMinSize, o.TopicMinSize)
+	}
+	if o.TopicK > 0 && o.TopicMinSize > 0 {
+		return cmdutil.FlagErrorf("--topics and --min-topic-size are different ways to decide how many topics there are; give one")
 	}
 	return nil
 }
@@ -134,10 +142,11 @@ func topicOptions(opts *Options, records []*memory.Memory) (*sitepkg.Options, er
 		return nil, err
 	}
 	return &sitepkg.Options{
-		TopicK:  opts.TopicK,
-		Labels:  labels.Labels,
-		Vectors: embeddings.Vectors(records, f, true),
-		Model:   f.Header.Model,
+		TopicK:       opts.TopicK,
+		TopicMinSize: opts.TopicMinSize,
+		Labels:       labels.Labels,
+		Vectors:      embeddings.Vectors(records, f, true),
+		Model:        f.Header.Model,
 	}, nil
 }
 

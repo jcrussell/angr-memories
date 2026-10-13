@@ -15,7 +15,7 @@ import (
 )
 
 // corpus is the clustered state every topics subcommand works from. It is
-// computed exactly as the site build computes it (same inputs, same K), so
+// computed exactly as the site build computes it (same inputs, same cut), so
 // the cluster indices printed here are the /topics/<n>/ indices.
 type corpus struct {
 	records  []*memory.Memory
@@ -27,7 +27,7 @@ type corpus struct {
 	model    string
 }
 
-func load(io *iostreams.IOStreams, memPath, embPath, labelsPath string, k int) (*corpus, error) {
+func load(io *iostreams.IOStreams, memPath, embPath, labelsPath string, k, minSize int) (*corpus, error) {
 	records, err := memory.Load(memPath)
 	if err != nil {
 		return nil, err
@@ -48,11 +48,11 @@ func load(io *iostreams.IOStreams, memPath, embPath, labelsPath string, k int) (
 		return nil, err
 	}
 	docs := topics.DocsFrom(records, embeddings.Vectors(records, f, true))
-	res, err := topics.Run(docs, topics.Options{K: k})
+	res, err := topics.Run(docs, topics.Options{K: k, MinSize: minSize})
 	if err != nil {
 		return nil, err
 	}
-	assigned, orphaned := topics.Assign(labels.Labels, res)
+	assigned, orphaned := topics.Assign(labels.Labels, res, f.Header.Model)
 	return &corpus{records: records, latest: memory.Latest(records), labels: labels, res: res,
 		assigned: assigned, orphaned: orphaned, model: f.Header.Model}, nil
 }
@@ -147,10 +147,20 @@ func (c *corpus) warnOrphaned(io *iostreams.IOStreams) {
 	if len(c.orphaned) == 0 {
 		return
 	}
-	texts := make([]string, len(c.orphaned))
-	for i, l := range c.orphaned {
-		texts[i] = l.Text
+	var texts, foreign []string
+	for _, l := range c.orphaned {
+		if !l.ForModel(c.model) {
+			foreign = append(foreign, fmt.Sprintf("%s (%s)", l.Text, l.EmbedModel))
+			continue
+		}
+		texts = append(texts, l.Text)
 	}
 	sort.Strings(texts)
-	fmt.Fprintf(io.ErrOut, "warning: %d label(s) no longer match any cluster: %s\n", len(texts), strings.Join(texts, "; "))
+	sort.Strings(foreign)
+	if len(texts) > 0 {
+		fmt.Fprintf(io.ErrOut, "warning: %d label(s) no longer match any cluster: %s\n", len(texts), strings.Join(texts, "; "))
+	}
+	if len(foreign) > 0 {
+		fmt.Fprintf(io.ErrOut, "warning: %d label(s) were written against a different embedding model than %s and are ignored: %s\n", len(foreign), c.model, strings.Join(foreign, "; "))
+	}
 }

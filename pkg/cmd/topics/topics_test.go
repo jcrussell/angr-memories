@@ -155,7 +155,7 @@ func TestTopicsRun_MissingEmbeddingsIsHinted(t *testing.T) {
 func unlabeledIndex(t *testing.T, p paths, prefix string) int {
 	t.Helper()
 	io, _, _ := newIO()
-	c, err := load(io, p.mem, p.emb, p.labels, 3)
+	c, err := load(io, p.mem, p.emb, p.labels, 3, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -225,6 +225,8 @@ func TestLabelOptions_Validate(t *testing.T) {
 		"long text":  func(o *LabelOptions) { o.Text = strings.Repeat("x", 81) },
 		"index 0":    func(o *LabelOptions) { o.Index = 0 },
 		"no by":      func(o *LabelOptions) { o.By = "" },
+		"neg size":   func(o *LabelOptions) { o.MinSize = -1 },
+		"k and size": func(o *LabelOptions) { o.MinSize = 20 },
 	} {
 		o := ok
 		mut(&o)
@@ -389,7 +391,7 @@ func TestSuggestRun_OnlyAcceptsTheClustersOwnCurrentLabel(t *testing.T) {
 	// Find the z3 cluster (labeled "Z3 solver discipline") and ask the model
 	// again; answering with the same label must be accepted, not retried.
 	io, _, _ := newIO()
-	c, err := load(io, p.mem, p.emb, p.labels, 3)
+	c, err := load(io, p.mem, p.emb, p.labels, 3, 0)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -429,7 +431,7 @@ func TestSuggestRun_OnlyAcceptsTheClustersOwnCurrentLabel(t *testing.T) {
 func TestSuggestRun_OnlyRefusesToOverwriteHumanLabelWithoutRelabel(t *testing.T) {
 	p := fixture(t)
 	io, _, _ := newIO()
-	c, err := load(io, p.mem, p.emb, p.labels, 3)
+	c, err := load(io, p.mem, p.emb, p.labels, 3, 0)
 	if err != nil {
 		t.Fatal(err)
 	}

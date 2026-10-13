@@ -24,6 +24,7 @@ type LabelOptions struct {
 	EmbeddingsPath string
 	LabelsPath     string
 	K              int
+	MinSize        int
 	Index          int
 	Text           string
 	By             string
@@ -39,7 +40,10 @@ and in the /topics/<n>/ URL). The label is stored in topic-labels.jsonl
 together with anchor keys derived from the cluster -- its nearest-centre
 memories plus a few remembered members -- so it keeps pointing at the same
 material when the tree is recomputed. A previous label for the same
-material (or with the same text) is replaced. Commit the file afterwards.`,
+material (or with the same text) is replaced. The embedding model is
+recorded too: anchors only mean something under the geometry they were
+chosen in, so the label is set aside if the vectors are ever regenerated
+with a different model. Commit the file afterwards.`,
 		Example: `  angr-memories topics label 12 "Register proxy & state sync"`,
 		Args:    cobra.ExactArgs(2),
 		RunE: func(c *cobra.Command, args []string) error {
@@ -54,13 +58,13 @@ material (or with the same text) is replaced. Commit the file afterwards.`,
 			return labelRun(c.Context(), opts)
 		},
 	}
-	addCorpusFlags(cmd, &opts.MemoriesPath, &opts.EmbeddingsPath, &opts.LabelsPath, &opts.K)
+	addCorpusFlags(cmd, &opts.MemoriesPath, &opts.EmbeddingsPath, &opts.LabelsPath, &opts.K, &opts.MinSize)
 	cmd.Flags().StringVar(&opts.By, "by", "human", "who wrote the label (recorded as labeled_by)")
 	return cmd
 }
 
 func (o *LabelOptions) Validate() error {
-	if err := validateCorpusFlags(o.MemoriesPath, o.EmbeddingsPath, o.LabelsPath, o.K); err != nil {
+	if err := validateCorpusFlags(o.MemoriesPath, o.EmbeddingsPath, o.LabelsPath, o.K, o.MinSize); err != nil {
 		return err
 	}
 	if o.Index < 1 {
@@ -90,7 +94,7 @@ func labelRun(_ context.Context, opts *LabelOptions) error {
 	if err := opts.Validate(); err != nil {
 		return err
 	}
-	c, err := load(opts.IO, opts.MemoriesPath, opts.EmbeddingsPath, opts.LabelsPath, opts.K)
+	c, err := load(opts.IO, opts.MemoriesPath, opts.EmbeddingsPath, opts.LabelsPath, opts.K, opts.MinSize)
 	if err != nil {
 		return err
 	}
@@ -100,10 +104,11 @@ func labelRun(_ context.Context, opts *LabelOptions) error {
 	}
 	anchors := topics.AnchorsFor(cl, c.res.Docs)
 	l := topics.Label{
-		Text:      strings.TrimSpace(opts.Text),
-		Anchors:   anchors,
-		LabeledBy: opts.By,
-		At:        opts.Now().UTC().Format(time.RFC3339),
+		Text:       strings.TrimSpace(opts.Text),
+		Anchors:    anchors,
+		LabeledBy:  opts.By,
+		At:         opts.Now().UTC().Format(time.RFC3339),
+		EmbedModel: c.model,
 	}
 	c.labels.Upsert(l, c.currentLabel(opts.Index-1))
 	if err := topics.WriteLabels(opts.LabelsPath, c.labels); err != nil {
