@@ -128,7 +128,9 @@ clustered by meaning. Three committed files feed it:
   edited keys are embedded.
 - `topic-labels.jsonl` — the cluster names, written by a person
   (`angr-memories topics label`) or drafted by a local chat model
-  (`angr-memories topics suggest`, then review). Each label is anchored to
+  (`angr-memories topics suggest`, then review). A label written by any
+  other model goes through `topics label --by llm:<model>`, so the
+  `labeled_by` field always says who named the cluster. Each label is anchored to
   the memories it described, so it follows them when the tree is
   recomputed after a sync, and records the embedding model it was written
   against, so it is set aside rather than misapplied if the vectors are
